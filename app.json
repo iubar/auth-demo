@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "auth-demo",
+    "name": "Auth Demo",
     "slug": "auth-demo",
     "platforms": [
       "ios",
