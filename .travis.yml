@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - lts/*
+cache:
+  directories:
+    - ~/.npm
+before_script:
+  - npm install -g npm@latest
+  - npm install -g expo-cli
+script:
+  - echo 'Installing the dependencies...'
+  - yarn install --non-interactive
+  - expo --version # expo-cli version
+  - yarn list expo
+  - echo 'Analysing app config...'
+  - expo doctor --non-interactive
+  - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
+  - expo publish --non-interactive --quiet --release-channel default
+notifications:
+  email:
+    recipients:
+      - ${EMAIL_BORGO}
+      - ${EMAIL_DANIELE}
+    on_success: change  # options: [always|never|change] default: changes
+    on_failure: always  # options: [always|never|change] default: always
