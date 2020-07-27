@@ -7,7 +7,7 @@ Testing authorization Code Grant flow for an Expo client
 Live version: https://snack.expo.io/@git/github.com/iubar/auth-demo
 
 
-Client
+### Client
 
 	Expo
 
@@ -15,11 +15,11 @@ Client
 	* https://docs.expo.io/guides/authentication/
 
 
-Server
+### Server
 
  * https://laravel.com/docs/master/passport#code-grant-pkce
 
-Docs
+### Docs
 
 * https://tools.ietf.org/html/rfc6749
 
@@ -41,8 +41,10 @@ Docs
  * https://auth0.com/docs/protocols/oauth2
  * https://blog.oauth.io/oauth2-flow-grant-types-in-pictures/
 
-Issues 
+### Issues 
 
+(Laravel)
  * https://github.com/laravel/passport/issues/984
- * https://github.com/thephpleague/oauth2-server/issues/889
- 
+ * https://github.com/thephpleague/oauth2-server/issues/889 
+(SDK)
+ * https://github.com/facebook/react-native/issues/28844

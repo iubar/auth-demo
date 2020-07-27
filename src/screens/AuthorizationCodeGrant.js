@@ -22,7 +22,8 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    redirect_uri: '',
 	    code: '',
 	    access_token: '',
-	    api_response: ''	
+	    api_response: '',
+		expanded: false
     }
 
     updateConfig = async (itemValue) => {
@@ -33,7 +34,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		// The result is
 		// For a managed app: https://auth.expo.io/@your-username/your-app-slug/redirect
 		// For a web app: https://localhost:19006/redirect		
-		this.setState({client_id: client_id, redirect_uri: redirect_uri});
+		this.setState({client_id: client_id, redirect_uri: redirect_uri, expanded: false});
     }
 
     randomString = (length, chars) => {
@@ -42,43 +43,70 @@ export default class AuthorizationCodeGrant extends React.Component {
         return result;
     }
 
+/**
+* The code verifier should be a random string of between 43 and 128 characters containing letters, numbers and "-", ".", "_", "~"
+*/
     calcVerifier = async () => {
-        let randomBytes = await Random.getRandomBytesAsync(128);
-        var randomString = this.randomString(128, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        // let randomBytes = await Random.getRandomBytesAsync(128);
+        let randomString = this.randomString(43, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
         return randomString;
+ 
     }
-
+	
+	
+/**
+* The code challenge should be a Base64 encoded string with URL and filename-safe characters. 
+* The trailing '=' characters should be removed and no line breaks, whitespace, or other additional characters should be present.
+*
+* PHP:
+* $encoded = base64_encode(hash('sha256', $code_verifier, true));
+* $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
+*
+*/
     calcCodeChallenge  = async (verifier) => {
-        let hash = await this.calcSha256(verifier);
-        let codeChallenge = this.base64URLEncode(hash);
-        return codeChallenge;
+		
+		let h = await this.calcSha256(verifier); // OK
+		let hash2 = this.base64(h); // se lo statement non è utilizzato rimuovere la dipendneza Base64 da questo file sorgente e dal file package.json
+		let hash = await this.calcSha256asBase64(verifier); 
+		console.log('h: ' + h);
+		console.log('hash2: ' + hash2);
+		console.log('hash: ' + hash);
+		
+        return this.toURLEncode(hash2);
+		
     }
+	
+    toURLEncode = (str) => {
+		let encoded = str.replace(/\+/g, '-').replace(/\//g, '_');
+		encoded = encoded.replace(/=/g, ''); // FIXME: solo in coda ?
+		return encoded;
+    }    	
 
     calcSha256 = async (buffer) => {
-	    console.log('buffer: ' + buffer);
-        const digest = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, buffer);
+		let cryptoDigestOptions = { encoding: Crypto.CryptoEncoding.HEX }; // dafault value
+		//let cryptoDigestOptions = { encoding: Crypto.CryptoEncoding.BASE64 };		
+        let digest = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, buffer, cryptoDigestOptions);		
 	    return digest;
     }
-    
-    calcState = async () => {
-        let randomBytes = await Random.getRandomBytesAsync(40);
-        var randomString = this.randomString(40, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+	
+       calcSha256asBase64 = async (buffer) => {
+		let cryptoDigestOptions = { encoding: Crypto.CryptoEncoding.BASE64 };		
+        let digest = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, buffer, cryptoDigestOptions);		
+	    return digest;
+    }
+	
+    calcState = () => {
+        // let randomBytes = await Random.getRandomBytesAsync(10);
+        let randomString = this.randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
         return randomString;
     }	
 
-    base64URLEncode = (str) => {
-		console.log('to base64 encode: ' + str);
+    base64 = (str) => {
         let base64 = Base64.btoa(str);
-        let base64UrlEncoded = this.toURLEncode(base64);
-                  console.log('base64: ' + base64);
-            return base64UrlEncoded;
+        return base64;
     }
-    toURLEncode = (str) => {
-		console.log('toURLEncode: ' + str);
-		return str.replace(/\+/g, '-')
-			.replace(/\//g, '_')
-			.replace(/=/g, '');
-    }    
+	
+
     
     buildUrl = (url, parameters) => {
         var qs = "";
@@ -97,14 +125,21 @@ export default class AuthorizationCodeGrant extends React.Component {
 
     authCodeGrant1  = async () => {  
         let verifier = await this.calcVerifier();
+		console.log('verifier: ' + verifier); 
+		let verifierBase64 =  this.base64(verifier);
+		console.log('verifierBase64: ' + verifierBase64); 
+		let verifierBase64Encoded =  this.toURLEncode(verifierBase64);
+		console.log('verifierBase64Encoded: ' + verifierBase64Encoded); 
         let codeChallenge = await this.calcCodeChallenge(verifier);
-        let state = await this.calcState();
+ 
+        let state = this.calcState();
+	 
         let url = 'https://hr.iubar.it/oauth/authorize';     
         let config = { // AuthRequestConfig
             clientId: this.state.client_id,
             redirectUri: this.state.redirect_uri,
             responseType: 'code',
-            scopes: ['*'],
+            scopes: [], // ['*'],
             state: state,
             codeChallengeMethod: 'S256',
             codeChallenge: codeChallenge,	
@@ -121,25 +156,49 @@ export default class AuthorizationCodeGrant extends React.Component {
      
         // Get the URL to invoke
         const url3 = await request.makeAuthUrlAsync(issuerOrDiscovery); // Get the built authorization URL
+		console.log('********************');
         console.log('url3: ' + JSON.stringify(url3));
+		console.log('********************');
     
         // Get the URL to invoke
         const parsed = result.url;
+		console.log('********************');
         console.log('parsed: ' + JSON.stringify(parsed));
+		console.log('********************');
          
         let code = result.params.code;
+		console.log('********************');
         console.log('code: ' + JSON.stringify(code));          
-          
-        if (code){
-            let access_token = await this.exchangeToken(verifier, code);
+		console.log('********************');
+   /*       
+		let result2 = await fetch(parsed, {
+            method: 'GET',
+		    headers: this.getHeaders()
+        });	
+	 
+        const statusCode2 = result2.status;
+        console.log('statusCode2: ' + statusCode2);          
+        let json2 = await result2.json();
+        console.log('json2: ' + JSON.stringify(json2));
+ */
+		
+        if (true){
+            let access_token = await this.exchangeToken(verifier, code, state);
             this.setState({access_token: access_token});
         }
     }
 
     authCodeGrant2 = async () => {
         let verifier = await this.calcVerifier();
-	    let codeChallenge = await this.calcCodeChallenge(verifier);
-	    let state = await this.calcState();
+		console.log('verifier: ' + verifier); 
+		let verifierBase64 =  this.base64(verifier);
+		console.log('verifierBase64: ' + verifierBase64);
+		let verifierBase64Encoded =  this.toURLEncode(verifierBase64);
+		console.log('verifierBase64Encoded: ' + verifierBase64Encoded); 		
+        let codeChallenge = await this.calcCodeChallenge(verifier);
+		
+	    let state = this.calcState(); 
+ 
 	    let url = 'https://hr.iubar.it/oauth/authorize';
 		let config = {	 
 			client_id: this.state.client_id,
@@ -174,37 +233,40 @@ export default class AuthorizationCodeGrant extends React.Component {
        let code = discovery.params.code;
        console.log('code: ' + JSON.stringify(code));
 	    if (code){
-            let access_token = await this.exchangeToken(verifier, code);
+            let access_token = await this.exchangeToken(verifier, code, state);
 		    this.setState({access_token: access_token});
 	    }		
     }
-
+ 
     /**
     * exchange the authorization code for an access token.
     */
-    exchangeToken = async (verifier, code) => {	        
+    exchangeToken = async (verifier, code, state) => {	        
         let url = 'https://hr.iubar.it/oauth/token';
-        let verifierBase64 = this.base64URLEncode(verifier);
-        console.log('verifierBase64 len: ' + verifierBase64.length); // should be 43        
+		console.log('verifier: ' + verifier); 
+		console.log('verifier len: ' + verifier.length); // should be 40 
+
+        
+	   
         let data = {	  
             client_id: this.state.client_id,
-            code: code,		
-            grant_type: 'authorization_code',
             redirect_uri: this.state.redirect_uri,
+            grant_type: 'authorization_code',			
+            code: code,		
             code_verifier: verifier
         };
-
+ 
+ 
         console.log('data: ' + JSON.stringify(data));
   
         let result = await fetch(url, {
             method: 'POST',
             headers: this.getHeaders(),
-            body: JSON.stringify(data),
+            body:  JSON.stringify(data) ,
         });
      
         const statusCode = result.status;
-        console.log('statusCode: ' + statusCode);     
-     
+        console.log('! statusCode: ' + statusCode);          
         let json = await result.json();
         console.log('json: ' + JSON.stringify(json));
      
@@ -243,14 +305,18 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    console.log('json: ' + JSON.stringify(json));
     }
 
+handlePress = () =>
+    this.setState({
+      expanded: !this.state.expanded 
+ 
+    });
+	
     render() {
 		return (
             <ScrollView style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
 	            <Title>Config</Title>	  
                 <List.Section title="Client type">
-                    <List.Accordion
-                        title={this.state.client_id}
-                    >
+                    <List.Accordion title={this.state.client_id} expanded={this.state.expanded} onPress={this.handlePress}>
                         <List.Item title="2 - Code Grant for Expo (dev app)" onPress={() => this.updateConfig(2)} />
                         <List.Item title="3 - Code Grant for Expo (web)" onPress={() => this.updateConfig(3)} />
                         <List.Item title="4 - Code Grant for Expo (standalone managed app)" onPress={() => this.updateConfig(4)} />

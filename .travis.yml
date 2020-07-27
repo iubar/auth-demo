@@ -2,19 +2,22 @@ language: node_js
 node_js:
   - lts/*
 cache:
-  directories:
-    - ~/.npm
+  npm: true
+  yarn: true
+  #directories: # don't need it, see https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
+  #  - ~/.npm
 before_script:
   - npm install -g npm@latest
   - npm install -g expo-cli
-script:
+install:
   - echo 'Installing the dependencies...'
-  - yarn install --non-interactive
-  - yarn list expo # expo sdk version
+  - npm install --non-interactive
   - expo diagnostics #  expo --version # expo-cli version
+  - npm list expo # expo sdk version  
+script:
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
-  - npm run test
+  - npm run test || travis_terminate 1;
   - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
   - expo publish --non-interactive --quiet --release-channel default
 notifications:
