@@ -50,11 +50,15 @@ export default class AuthorizationCodeGrant extends React.Component {
         // let randomBytes = await Random.getRandomBytesAsync(128);
         let randomString = this.randomString(43, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
         return randomString;
- 
+    }
+	    calcVerifier2 = async () => {
+		return 'OENZUUJGNXJDOUIzVGJITkJ6Q3A3V2kycG1jbDFJYnRFcExnblFLQ0ZOZQ';
     }
 	
-	
 /**
+*
+* Proof Key for Code Exchange by OAuth Public Clients: https://tools.ietf.org/html/rfc7636
+*
 * The code challenge should be a Base64 encoded string with URL and filename-safe characters. 
 * The trailing '=' characters should be removed and no line breaks, whitespace, or other additional characters should be present.
 *
@@ -62,18 +66,16 @@ export default class AuthorizationCodeGrant extends React.Component {
 * $encoded = base64_encode(hash('sha256', $code_verifier, true));
 * $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
 *
+* TEST IT ON: https://tonyxu-io.github.io/pkce-generator/
+*
 */
-    calcCodeChallenge  = async (verifier) => {
-		
-		let h = await this.calcSha256(verifier); // OK
-		let hash2 = this.base64(h); // se lo statement non è utilizzato rimuovere la dipendneza Base64 da questo file sorgente e dal file package.json
-		let hash = await this.calcSha256asBase64(verifier); 
-		console.log('h: ' + h);
-		console.log('hash2: ' + hash2);
-		console.log('hash: ' + hash);
-		
-        return this.toURLEncode(hash2);
-		
+    calcCodeChallenge  = async (verifier) => {		
+		let hash = await this.calcSha256asBase64(verifier); 		
+        return this.toURLEncode(hash);
+    }
+ 
+ 	    calcCodeChallenge2  = async (verifier) => {		
+        return 'CUsFvFDG_Q8AtartzgKEEX3vjHuan-a-4iBmvqSJ72E'
     }
 	
 	/**
@@ -127,48 +129,30 @@ export default class AuthorizationCodeGrant extends React.Component {
     }
 
     authCodeGrant1  = async () => {  
-        let verifier = await this.calcVerifier();
+        let verifier = await this.calcVerifier2();
 		console.log('verifier: ' + verifier); 
-		let verifierBase64 =  this.base64(verifier);
-		console.log('verifierBase64: ' + verifierBase64); 
-		let verifierBase64Encoded =  this.toURLEncode(verifierBase64);
-		console.log('verifierBase64Encoded: ' + verifierBase64Encoded); 
-        let codeChallenge = await this.calcCodeChallenge(verifier);
- 
+        let codeChallenge = await this.calcCodeChallenge2(verifier);
+		console.log('codeChallenge: ' + codeChallenge);
         let state = this.calcState();
-	 
+		console.log('state: ' + state);
         let url = 'https://hr.iubar.it/oauth/authorize';     
-        let config = { // AuthRequestConfig
+		// AuthRequestConfig
+        let config = {
             clientId: this.state.client_id,
             redirectUri: this.state.redirect_uri,
             responseType: 'code',
-            scopes: [], // ['*'],
+            scopes: ['*'],
             state: state,
             codeChallengeMethod: 'S256',
             codeChallenge: codeChallenge,	
             usePKCE: true,
             //	prompt: 'SelectAccount' // None Login Consent SelectAccount
         };         
-        console.log('OK');
-        let issuerOrDiscovery = {authorizationEndpoint: url}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
+        let issuerOrDiscovery = {authorizationEndpoint: url, tokenEndpoint: 'https://hr.iubar.it/oauth/token'}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
         let request = await AuthSession.loadAsync(config, issuerOrDiscovery)		 
-        console.log('OK 2');
-        // Prompt for an auth code
         const result = await request.promptAsync({useProxy: true}); // When invoked, a web browser will open up and prompt the user for authentication. 
         console.log('result: ' + JSON.stringify(result));
      
-        // Get the URL to invoke
-        const url3 = await request.makeAuthUrlAsync(issuerOrDiscovery); // Get the built authorization URL
-		console.log('********************');
-        console.log('url3: ' + JSON.stringify(url3));
-		console.log('********************');
-    
-        // Get the URL to invoke
-        const parsed = result.url;
-		console.log('********************');
-        console.log('parsed: ' + JSON.stringify(parsed));
-		console.log('********************');
-         
         let code = result.params.code;
 		console.log('********************');
         console.log('code: ' + JSON.stringify(code));          
@@ -183,14 +167,10 @@ export default class AuthorizationCodeGrant extends React.Component {
     authCodeGrant2 = async () => {
         let verifier = await this.calcVerifier();
 		console.log('verifier: ' + verifier); 
-		let verifierBase64 =  this.base64(verifier);
-		console.log('verifierBase64: ' + verifierBase64);
-		let verifierBase64Encoded =  this.toURLEncode(verifierBase64);
-		console.log('verifierBase64Encoded: ' + verifierBase64Encoded); 		
         let codeChallenge = await this.calcCodeChallenge(verifier);
-		
-	    let state = this.calcState(); 
- 
+		console.log('codeChallenge: ' + codeChallenge);
+        let state = this.calcState();
+		console.log('state: ' + state);
 	    let url = 'https://hr.iubar.it/oauth/authorize';
 		let config = {	 
 			client_id: this.state.client_id,
@@ -235,9 +215,7 @@ export default class AuthorizationCodeGrant extends React.Component {
     */
     exchangeToken = async (verifier, code, state) => {	        
         let url = 'https://hr.iubar.it/oauth/token';
-		console.log('verifier: ' + verifier); 
-		console.log('verifier len: ' + verifier.length); // should be 40 
- 
+  
         let data = {	  
             client_id: this.state.client_id,
             redirect_uri: this.state.redirect_uri,
