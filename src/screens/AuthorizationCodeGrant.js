@@ -76,9 +76,12 @@ export default class AuthorizationCodeGrant extends React.Component {
 		
     }
 	
+	/**
+	* RFC 4648 (see https://tools.ietf.org/html/rfc4648)
+	*/
     toURLEncode = (str) => {
 		let encoded = str.replace(/\+/g, '-').replace(/\//g, '_');
-		encoded = encoded.replace(/=/g, ''); // FIXME: solo in coda ?
+		encoded = encoded.replace(/=/g, '');
 		return encoded;
     }    	
 
@@ -170,17 +173,6 @@ export default class AuthorizationCodeGrant extends React.Component {
 		console.log('********************');
         console.log('code: ' + JSON.stringify(code));          
 		console.log('********************');
-   /*       
-		let result2 = await fetch(parsed, {
-            method: 'GET',
-		    headers: this.getHeaders()
-        });	
-	 
-        const statusCode2 = result2.status;
-        console.log('statusCode2: ' + statusCode2);          
-        let json2 = await result2.json();
-        console.log('json2: ' + JSON.stringify(json2));
- */
 		
         if (true){
             let access_token = await this.exchangeToken(verifier, code, state);
@@ -245,9 +237,7 @@ export default class AuthorizationCodeGrant extends React.Component {
         let url = 'https://hr.iubar.it/oauth/token';
 		console.log('verifier: ' + verifier); 
 		console.log('verifier len: ' + verifier.length); // should be 40 
-
-        
-	   
+ 
         let data = {	  
             client_id: this.state.client_id,
             redirect_uri: this.state.redirect_uri,
@@ -255,7 +245,6 @@ export default class AuthorizationCodeGrant extends React.Component {
             code: code,		
             code_verifier: verifier
         };
- 
  
         console.log('data: ' + JSON.stringify(data));
   
@@ -290,8 +279,7 @@ export default class AuthorizationCodeGrant extends React.Component {
             'Content-Type': 'application/json',
             Accept: 'application/json',
             Authorization: 'Bearer ' + this.state.access_token,
-        };
-        
+        };        
         return headers;
     }
 
