@@ -19,7 +19,8 @@
     "expo-crypto": "~8.2.1",
     "expo-random": "~8.2.1",
     "expo-auth-session": "~1.4.1",
-    "@react-native-community/picker": "^1.6.5"
+    "@react-native-community/picker": "^1.6.5",
+    "react-native-paper": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
