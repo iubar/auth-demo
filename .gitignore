@@ -14,3 +14,4 @@ web-build/
 
 # Iubar
 package-lock.json
+yarn.lock
