@@ -10,11 +10,12 @@ before_script:
 script:
   - echo 'Installing the dependencies...'
   - yarn install --non-interactive
-  - expo --version # expo-cli version
-  - yarn list expo
+  - yarn list expo # expo sdk version
+  - expo diagnostics #  expo --version # expo-cli version
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
-  - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
+  - npm run test
+  - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
   - expo publish --non-interactive --quiet --release-channel default
 notifications:
   email:
