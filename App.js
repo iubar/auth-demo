@@ -1,12 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, ScrollView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
 import {Picker} from '@react-native-community/picker';
-
+import { Title } from 'react-native-paper';
+import { Subheading } from 'react-native-paper';
+import { Paragraph } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
+import { List } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
+import { BottomNavigation } from 'react-native-paper';
 
 export default class App extends React.Component {	
 
@@ -244,8 +250,8 @@ If you call AuthSession.startAsync more than once before the first call has retu
 	let url = 'https://hr.iubar.it/oauth/authorize';
  
  let OAUTH_CLIENT_SECRECT = '';
-   let email = '';
-      let password = '';
+   let email = this.state.username;
+      let password = this.state.password;
 	 
       let result = await fetch(url, {
         method: 'POST',
@@ -329,77 +335,67 @@ updateConfig = async (itemValue) => {
 		this.setState({client_id: client_id, redirect_uri: redirect_uri});
 }
 
+setUsername(username) {
+    this.setState({username: username});
+}
 
+setPassword(password) {
+    this.setState({password: password});
+}
     render(){
 		return (
-    <View style={styles.container}>
-      
-	  {/*
-      <Button
-          title="Press me"          
-          onPress={() => Alert.alert('Hello')}
-        />
-	  */}
-	  
-	  <Text>Config</Text>	  
- 
-  <Text>Client type</Text>	
-<Picker
-  selectedValue={this.state.client_id}
-  style={{height: 50, width: 100}}
-  onValueChange={(itemValue, itemIndex) => this.updateConfig(itemValue)}>
-  <Picker.Item label="Code Grant for Expo (dev app)" value="2" />
-  <Picker.Item label="Code Grant for Expo (web)" value="3" />
-  <Picker.Item label="Code Grant for Expo (standalone managed app)" value="4" />
-  <Picker.Item label="Password credential" value="5" />  
-</Picker>
-
-	<Text>Client id</Text>
-	<Text>{this.state.client_id}</Text>
-		  <Text>Redirect uri</Text>
-	  <Text>{this.state.redirect_uri}</Text>
-	  
-	<Text>---------------------------</Text>
-	<Text>Authorization Code Grant with PKCE</Text>
-      <Button
-          title="Authorize 1"          
-          onPress={this.authCodeGrant1}
-        />		
-      <Button
-          title="Authorize 2"          
-          onPress={this.authCodeGrant2}
-        />
-		<Text>---------------------------</Text>
-		<Text>Password Grant</Text>
-		<Text>User</Text>
-		<Text>Password</Text>
-		      <Button
-          title="Login"          
-          onPress={this.authPasswordGrant}
-        />
-		
-		<Text>---------------------------</Text>
-		<Text>Authorization code (solo per auth code grant)</Text>
-		<Text>{this.state.code}</Text>
-		
-		<Text>Access token</Text>
-		<Text>{this.state.access_token}</Text>
-		
-		<Text>Api response</Text>
-		<Text>{this.state.api_response}</Text>
- 
-	
-      <StatusBar style="auto" />
-    </View>
+            <ScrollView style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
+	            <Title>Config</Title>	  
+                <List.Section title="Client type">
+                    <List.Accordion
+                        title={this.state.client_id}
+                    >
+                        <List.Item title="Code Grant for Expo (dev app)" onPress={() => this.updateConfig(2)} />
+                        <List.Item title="Code Grant for Expo (web)" onPress={() => this.updateConfig(3)} />
+                        <List.Item title="Code Grant for Expo (standalone managed app)" onPress={() => this.updateConfig(4)} />
+                        <List.Item title="Password credential" onPress={() => this.updateConfig(5)} />  
+                    </List.Accordion>
+                </List.Section>
+	            <Paragraph>Client id: {this.state.client_id}</Paragraph>
+		        <Paragraph>Redirect uri: {this.state.redirect_uri}</Paragraph>
+                <Divider />
+	            <Subheading>Authorization Code Grant with PKCE</Subheading>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                    <Button
+                        title="Authorize 1"          
+                        onPress={this.authCodeGrant1}
+                    />
+                    <Button
+                        title="Authorize 2"          
+                        onPress={this.authCodeGrant2}
+                    />
+                </View>
+		        <Divider />
+		        <Subheading>Password Grant</Subheading>
+                    <TextInput
+                        label="Username"
+                        value={this.state.username}
+                        onChangeText={text => this.setUsername(text)}
+                    />
+                    <View>
+                    <TextInput
+                        label="Password"
+                        secureTextEntry
+                        value={this.state.password}
+                        onChangeText={text => this.setPassword(text)}
+                    />
+                </View>
+		        <Button
+                    title="Login"          
+                    onPress={this.authPasswordGrant}
+                />		
+		        <Divider />
+		        <Subheading>Authorization code (solo per auth code grant)</Subheading>
+		        <Paragraph>{this.state.code}</Paragraph>
+		        <Paragraph>Access token: {this.state.access_token}</Paragraph>
+		        <Paragraph>Api response: {this.state.api_response}</Paragraph>
+                <StatusBar style="auto" />
+            </ScrollView>
 		)
 	}
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
