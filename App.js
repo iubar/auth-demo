@@ -139,8 +139,14 @@ console.log('result: ' + JSON.stringify(result));
 	  
 }
 
-callApi = () => {
-	 let url = 'https://hr.iubar.it/area-personale/licenza?code=' + code; // see http://192.168.0.103:90/iubar/hr-laravel/public/docs/#api-Frontend-Area_personale_-_Licenza
+callApi = async () => {
+	 let url = 'https://hr.iubar.it/area-personale/licenza'; // see http://192.168.0.103:90/iubar/hr-laravel/public/docs/#api-Frontend-Area_personale_-_Licenza
+      let result = await fetch(url, {
+        method: 'GET',
+		headers: this.getHeaders2()
+      });	
+	      let json = await result.json();
+	  console.log('json: ' + JSON.stringify(json));
 }
 
 /**
@@ -220,7 +226,7 @@ If you call AuthSession.startAsync more than once before the first call has retu
 
 */
 		
- 
+ 	let code = null;
 	 if(code){
 		let access_token = await this.exchangeToken(verifier, code);
 		this.setState({access_token: access_token});
