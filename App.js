@@ -5,7 +5,6 @@ import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
 import {Picker} from '@react-native-community/picker';
 
 
@@ -21,8 +20,6 @@ state = {
 
 	async componentDidMount(){
 		console.log('Welcome');
-		// WebBrowser.maybeCompleteAuthSession(); // Use WebBrowser.maybeCompleteAuthSession() to dismiss the web popup. If you forget to add this then the popup window will not close.
-
 	}
 	
 getHeaders = () => {		  
@@ -142,8 +139,14 @@ console.log('result: ' + JSON.stringify(result));
 	  
 }
 
-callApi = () => {
-	 let url = 'https://hr.iubar.it/area-personale/licenza?code=' + code; // see http://192.168.0.103:90/iubar/hr-laravel/public/docs/#api-Frontend-Area_personale_-_Licenza
+callApi = async () => {
+	 let url = 'https://hr.iubar.it/area-personale/licenza'; // see http://192.168.0.103:90/iubar/hr-laravel/public/docs/#api-Frontend-Area_personale_-_Licenza
+      let result = await fetch(url, {
+        method: 'GET',
+		headers: this.getHeaders2()
+      });	
+	      let json = await result.json();
+	  console.log('json: ' + JSON.stringify(json));
 }
 
 /**
@@ -223,7 +226,7 @@ If you call AuthSession.startAsync more than once before the first call has retu
 
 */
 		
- 
+ 	let code = null;
 	 if(code){
 		let access_token = await this.exchangeToken(verifier, code);
 		this.setState({access_token: access_token});
