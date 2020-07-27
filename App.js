@@ -5,7 +5,6 @@ import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
 import {Picker} from '@react-native-community/picker';
 
 
@@ -21,8 +20,6 @@ state = {
 
 	async componentDidMount(){
 		console.log('Welcome');
-		// WebBrowser.maybeCompleteAuthSession(); // Use WebBrowser.maybeCompleteAuthSession() to dismiss the web popup. If you forget to add this then the popup window will not close.
-
 	}
 	
 getHeaders = () => {		  
