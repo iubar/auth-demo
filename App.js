@@ -347,7 +347,7 @@ updateConfig = async (itemValue) => {
   onValueChange={(itemValue, itemIndex) => this.updateConfig(itemValue)}>
   <Picker.Item label="Code Grant for Expo (dev app)" value="2" />
   <Picker.Item label="Code Grant for Expo (web)" value="3" />
-  <Picker.Item label="Code Grant for Expo (standalone/managed app)" value="4" />
+  <Picker.Item label="Code Grant for Expo (standalone managed app)" value="4" />
   <Picker.Item label="Password credential" value="5" />  
 </Picker>
 
