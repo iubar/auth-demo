@@ -5,7 +5,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest",
+    "updateSnapshots": "jest -u --coverage=false"
   },
   "dependencies": {
     "expo": "^38.0.8",
@@ -17,11 +19,25 @@
     "expo-crypto": "~8.2.1",
     "expo-random": "~8.2.1",
     "expo-auth-session": "~1.4.1",
-    "@react-native-community/picker": "1.6.0"
+    "@react-native-community/picker": "^1.6.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.6",
-    "babel-preset-expo": "^8.2.3"
+    "@babel/core": "^7.10.5",
+    "babel-preset-expo": "^8.2.3",
+    "eslint": "^7.5.0",
+    "eslint-config-universe": "^4.0.0",
+    "jest-expo": "^38.0.2",
+    "prettier": "^2.0.5",
+    "react-test-renderer": "^16.13.1"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "universe/native"
   },
   "private": true
 }
