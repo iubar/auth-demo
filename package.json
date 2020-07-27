@@ -7,7 +7,12 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest",
-    "updateSnapshots": "jest -u --coverage=false"
+    "updateSnapshots": "jest -u --coverage=false",
+    "lint": "node ./node_modules/eslint/bin/eslint.js --ext .js src/",
+    "lint-js": "eslint --ext .jsx --ext .js src/",
+    "lint-js:fix": "npm run lint-js -- --fix",
+    "prettier": "prettier \"src/**/*.js\"",
+    "prettier:fix": "npm run prettier  -- --write"
   },
   "dependencies": {
     "expo": "^38.0.8",
@@ -19,7 +24,8 @@
     "expo-crypto": "~8.2.1",
     "expo-random": "~8.2.1",
     "expo-auth-session": "~1.4.1",
-    "@react-native-community/picker": "^1.6.5"
+    "@react-native-community/picker": "^1.6.5",
+    "react-native-paper": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
