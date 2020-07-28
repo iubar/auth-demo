@@ -23,19 +23,48 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    code: '',
 	    access_token: '',
 	    api_response: '',
-		expanded: false
+		expanded: false,
+		useProxy: false,
     }
 
+/**
+* see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
+*/
     updateConfig = async (itemValue) => {
 		console.log('item selected: ' + JSON.stringify(itemValue));
 		let client_id = parseInt(itemValue);
-  		let redirect_uri = await AuthSession.makeRedirectUri(); 
-		redirect_uri = redirect_uri  + '/--/expo-auth-session';
+		let redirect_uri = null;
+		
+		
+		// This service is responsible for:
+		// - redirecting traffic from your application to the authentication service
+		// - redirecting response from the auth service to your application using a deep link
+
+		let useProxy = false;		
+		if(client_id==2){ // expo client
+			// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
+			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });
+			redirect_uri = redirect_uri  + '/--/expo-auth-session';
+		}else if(client_id==3){
+			useProxy = true;
+			// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
+			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });  // The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
+		}else if(client_id==4){			
+			// redirect_uri = 'mycoolredirect://';
+			redirect_uri = AuthSession.makeRedirectUri({ native: 'mycoolredirect://' });
+		}else if(client_id==5){ // expo client
+			// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
+			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });
+		}else if(client_id==9){			
+			// redirect_uri = 'mycoolredirect://';
+			redirect_uri = AuthSession.makeRedirectUri({ native: '/' });
+		}
+		
 		console.log('redirect_uri; ' + JSON.stringify(redirect_uri));
 		// The result is
 		// For a managed app: https://auth.expo.io/@your-username/your-app-slug/redirect
 		// For a web app: https://localhost:19006/redirect				
-		this.setState({client_id: client_id, redirect_uri: redirect_uri, expanded: false});
+		this.setState({client_id: client_id, redirect_uri: redirect_uri, useProxy: useProxy, expanded: false});
 		 
 	 	
     }
@@ -150,28 +179,20 @@ export default class AuthorizationCodeGrant extends React.Component {
         let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 		let state = request.state;
 		let verifier = request.codeVerifier;
-        const result = await request.promptAsync(issuerOrDiscovery, {useProxy: true}); // When invoked, a web browser will open up and prompt the user for authentication. 
+		let  redirectUri = this.state.redirect_uri;
+        const result = await request.promptAsync(issuerOrDiscovery, {useProxy: this.state.useProxy, redirectUri }); // When invoked, a web browser will open up and prompt the user for authentication. 
         
      
-	 	const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
-		console.log('urlAuth: ' + urlAuth);
-		const requestConfig = await request.getAuthRequestConfigAsync();
-		console.log('requestConfig: ' + JSON.stringify(requestConfig));
+	 	// const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
+		// console.log('urlAuth: ' + urlAuth);
+		// const requestConfig = await request.getAuthRequestConfigAsync();
+		// console.log('requestConfig: ' + JSON.stringify(requestConfig));
 	
 	console.log('result***: ' + JSON.stringify(result));
 		
  
-        let code;
- /*
-        let resultAuth = await fetch(urlAuth, {
-            method: 'GET',
-		    headers: this.getHeaders()
-        });	
-	    let json = await resultAuth.json();
-	    console.log('json: ' + JSON.stringify(json));
-		*/
- 
-		
+       let code = result.params.code;
+       console.log('code: ' + JSON.stringify(code));
         if (code){
             let access_token = await this.exchangeToken(verifier, code, state);
             this.setState({access_token: access_token});
@@ -202,7 +223,14 @@ export default class AuthorizationCodeGrant extends React.Component {
 						
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  
-		let discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
+		
+		let discovery = null;
+		if(this.state.client_id==3){
+			  discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
+		}else{
+			  discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
+		}
+		
 		console.log('discovery: ' + JSON.stringify(discovery));
 
         /*
@@ -297,14 +325,16 @@ handlePress = () =>
 	            <Title>Config</Title>	  
                 <List.Section title="Client type">
                     <List.Accordion title={this.state.client_id} expanded={this.state.expanded} onPress={this.handlePress}>
-                        <List.Item title="2 - Code Grant for Expo (dev app)" onPress={() => this.updateConfig(2)} />
-                        <List.Item title="3 - Code Grant for Expo (web)" onPress={() => this.updateConfig(3)} />
-                        <List.Item title="4 - Code Grant for Expo (standalone managed app)" onPress={() => this.updateConfig(4)} />
-                        <List.Item title="5 - Password credential" onPress={() => this.updateConfig(5)} />  
+                        <List.Item title="2 - no proxy, long redirect" onPress={() => this.updateConfig(2)} />
+                        <List.Item title="3 - proxy" onPress={() => this.updateConfig(3)} />
+                        <List.Item title="4 - native 1" onPress={() => this.updateConfig(4)} />
+                        <List.Item title="5 - no proxy, short redirect" onPress={() => this.updateConfig(5)} />  
+						<List.Item title="9 - native 2" onPress={() => this.updateConfig(5)} />  
                     </List.Accordion>
                 </List.Section>
 	            <Paragraph>Client id: {this.state.client_id}</Paragraph>
 		        <Paragraph>Redirect uri: {this.state.redirect_uri}</Paragraph>
+				<Paragraph>Use proxy: {this.state.useProxy.toString()}</Paragraph>
                 <Divider />
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Button
