@@ -197,7 +197,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 						
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  
-		let discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
+		let discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
 		console.log('discovery: ' + JSON.stringify(discovery));
 
         /*
