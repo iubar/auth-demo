@@ -14,11 +14,13 @@ import { List } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
 import { BottomNavigation } from 'react-native-paper';
 import Base64 from 'Base64';
+import * as SecureStore from 'expo-secure-store';
 
 export default class AuthorizationCodeGrant extends React.Component {
 
     state = {
-	    client_id: 2,
+        client_id: 2,
+        client_desc: '',
 	    redirect_uri: '',
 	    code: '',
 	    access_token: '',
@@ -27,40 +29,53 @@ export default class AuthorizationCodeGrant extends React.Component {
 		useProxy: false,
     }
 
+    clients = [];
+
     constructor(props){
         super(props);
+        this.initClients();
+    }
+
+    initClients(){
+        this.clients[2] = 'no proxy, long redirect';
+        this.clients[3] = 'proxy';
+        this.clients[4] = 'native 1';
+        this.clients[5] = 'no proxy, short redirect';
+        this.clients[9] = 'native 2';
+    }
+
+    componentDidMount(){
         this.updateConfig(2);
     }
 
-/**
-* see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
-*/
+    /**
+    * see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
+    */
     updateConfig = async (itemValue) => {
 		console.log('item selected: ' + JSON.stringify(itemValue));
 		let client_id = parseInt(itemValue);
 		let redirect_uri = null;
-		
-		
+				
 		// This service is responsible for:
 		// - redirecting traffic from your application to the authentication service
 		// - redirecting response from the auth service to your application using a deep link
 
 		let useProxy = false;		
-		if(client_id==2){ // expo client
+		if (client_id == 2){ // expo client
 			// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
 			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });
 			redirect_uri = redirect_uri  + '/--/expo-auth-session';
-		}else if(client_id==3){
+		} else if (client_id == 3){
 			useProxy = true;
 			// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
 			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });  // The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
-		}else if(client_id==4){			
+		} else if (client_id == 4){			
 			// redirect_uri = 'mycoolredirect://';
 			redirect_uri = AuthSession.makeRedirectUri({ native: 'mycoolredirect://' });
-		}else if(client_id==5){ // expo client
+		} else if (client_id == 5){ // expo client
 			// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
 			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });
-		}else if(client_id==9){			
+		} else if (client_id == 9){			
 			// redirect_uri = 'mycoolredirect://';
 			redirect_uri = AuthSession.makeRedirectUri({ native: '/' });
 		}
@@ -68,10 +83,9 @@ export default class AuthorizationCodeGrant extends React.Component {
 		console.log('redirect_uri; ' + JSON.stringify(redirect_uri));
 		// The result is
 		// For a managed app: https://auth.expo.io/@your-username/your-app-slug/redirect
-		// For a web app: https://localhost:19006/redirect				
-		this.setState({client_id: client_id, redirect_uri: redirect_uri, useProxy: useProxy, expanded: false});
-		 
-	 	
+        // For a web app: https://localhost:19006/redirect			
+        let client_desc = client_id + ' ' + this.clients[client_id]	;
+		this.setState({client_id: client_id, client_desc: client_desc, redirect_uri: redirect_uri, useProxy: useProxy, expanded: false});
     }
 
     randomString = (length, chars) => {
@@ -80,38 +94,39 @@ export default class AuthorizationCodeGrant extends React.Component {
         return result;
     }
 
-/**
-* The code verifier should be a random string of between 43 and 128 characters containing letters, numbers and "-", ".", "_", "~"
-*/
+    /**
+    * The code verifier should be a random string of between 43 and 128 characters containing letters, numbers and "-", ".", "_", "~"
+    */
     calcVerifier = async () => {
         // let randomBytes = await Random.getRandomBytesAsync(128);
         let randomString = this.randomString(43, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
         return randomString;
     }
-	    calcVerifierMock = async () => {
+    
+    calcVerifierMock = async () => {
 		return 'OENZUUJGNXJDOUIzVGJITkJ6Q3A3V2kycG1jbDFJYnRFcExnblFLQ0ZOZQ';
     }
 	
-/**
-*
-* Proof Key for Code Exchange by OAuth Public Clients: https://tools.ietf.org/html/rfc7636
-*
-* The code challenge should be a Base64 encoded string with URL and filename-safe characters. 
-* The trailing '=' characters should be removed and no line breaks, whitespace, or other additional characters should be present.
-*
-* PHP:
-* $encoded = base64_encode(hash('sha256', $code_verifier, true));
-* $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
-*
-* TEST IT ON: https://tonyxu-io.github.io/pkce-generator/
-*
-*/
+    /**
+    *
+    * Proof Key for Code Exchange by OAuth Public Clients: https://tools.ietf.org/html/rfc7636
+    *
+    * The code challenge should be a Base64 encoded string with URL and filename-safe characters. 
+    * The trailing '=' characters should be removed and no line breaks, whitespace, or other additional characters should be present.
+    *
+    * PHP:
+    * $encoded = base64_encode(hash('sha256', $code_verifier, true));
+    * $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
+    *
+    * TEST IT ON: https://tonyxu-io.github.io/pkce-generator/
+    *
+    */
     calcCodeChallenge  = async (verifier) => {		
 		let hash = await this.calcSha256asBase64(verifier); 		
         return this.toURLEncode(hash);
     }
  
- 	    calcCodeChallengeMock  = async (verifier) => {		
+ 	calcCodeChallengeMock  = async (verifier) => {		
         return 'CUsFvFDG_Q8AtartzgKEEX3vjHuan-a-4iBmvqSJ72E'
     }
 	
@@ -131,7 +146,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    return digest;
     }
 	
-       calcSha256asBase64 = async (buffer) => {
+    calcSha256asBase64 = async (buffer) => {
 		let cryptoDigestOptions = { encoding: Crypto.CryptoEncoding.BASE64 };		
         let digest = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, buffer, cryptoDigestOptions);		
 	    return digest;
@@ -147,9 +162,7 @@ export default class AuthorizationCodeGrant extends React.Component {
         let base64 = Base64.btoa(str);
         return base64;
     }
-	
 
-    
     buildUrl = (url, parameters) => {
         var qs = "";
         for (var key in parameters) {
@@ -165,9 +178,7 @@ export default class AuthorizationCodeGrant extends React.Component {
         return url;
     }
 
-    authCodeGrant1  = async () => {  
- 
-		
+    authCodeGrant1  = async () => {  		
         let url = 'https://hr.iubar.it/oauth/authorize';     
 		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
         let config = { 
@@ -179,28 +190,27 @@ export default class AuthorizationCodeGrant extends React.Component {
             codeChallengeMethod: 'S256',
             usePKCE: true,
             //	prompt: 'SelectAccount' // None Login Consent SelectAccount
-        };         
+        };
         let issuerOrDiscovery = {authorizationEndpoint: url}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
         let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 		let state = request.state;
 		let verifier = request.codeVerifier;
 		let  redirectUri = this.state.redirect_uri;
         const result = await request.promptAsync(issuerOrDiscovery, {useProxy: this.state.useProxy, redirectUri }); // When invoked, a web browser will open up and prompt the user for authentication. 
-        
-     
+             
 	 	// const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
 		// console.log('urlAuth: ' + urlAuth);
 		// const requestConfig = await request.getAuthRequestConfigAsync();
 		// console.log('requestConfig: ' + JSON.stringify(requestConfig));
 	
-	console.log('result***: ' + JSON.stringify(result));
-		
- 
-       let code = result.params.code;
-       console.log('code: ' + JSON.stringify(code));
-        if (code){
-            let access_token = await this.exchangeToken(verifier, code, state);
-            this.setState({access_token: access_token});
+        console.log('result***: ' + JSON.stringify(result)); 
+        if (result.param !== undefined){
+            let code = result.params.code;
+            console.log('code: ' + JSON.stringify(code));
+            if (code){
+                let access_token = await this.exchangeToken(verifier, code, state);
+                this.setState({access_token: access_token});
+            }
         }
     }
 
@@ -230,9 +240,9 @@ export default class AuthorizationCodeGrant extends React.Component {
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  
 		
 		let discovery = null;
-		if(this.state.client_id==3){
+		if (this.state.client_id==3){
 			  discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
-		}else{
+		} else {
 			  discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
 		}
 		
@@ -248,13 +258,15 @@ export default class AuthorizationCodeGrant extends React.Component {
             If the authentication flow is returns an error, the result is {type: 'error', params: Object, errorCode: string, event: Object }
             If you call AuthSession.startAsync more than once before the first call has returned, the result is {type: 'locked'}, because only one AuthSession can be in progress at any time.
         */
-		
-       let code = discovery.params.code;
-       console.log('code: ' + JSON.stringify(code));
-	    if (code){
-            let access_token = await this.exchangeToken(verifier, code, state);
-		    this.setState({access_token: access_token});
-	    }		
+        
+       if (discovery.param !== undefined){
+            let code = discovery.params.code;
+            console.log('code: ' + JSON.stringify(code));
+            if (code){
+                let access_token = await this.exchangeToken(verifier, code, state);
+                this.setState({access_token: access_token});
+            }	
+        }	
     }
  
     /**
@@ -286,6 +298,8 @@ export default class AuthorizationCodeGrant extends React.Component {
      
         let accessToken = json.access_token; 
         console.log('accessToken: ' + JSON.stringify(accessToken));
+
+        SecureStore.setItemAsync('accessToken', accessToken);
     
         return accessToken;
     }
@@ -299,65 +313,37 @@ export default class AuthorizationCodeGrant extends React.Component {
         return headers;
     }
 
-    getHeaders2 = () => {		  
-        let headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + this.state.access_token,
-        };        
-        return headers;
-    }
-
-    callApi = async () => {
-	    let url = 'https://hr.iubar.it/api/user'; // see http://192.168.0.103:90/iubar/hr-laravel/public/docs/#api-Frontend-Area_personale_-_Licenza
-        let result = await fetch(url, {
-            method: 'GET',
-		    headers: this.getHeaders2()
-        });	
-	    let json = await result.json();
-	    console.log('json: ' + JSON.stringify(json));
-    }
-
-handlePress = () =>
-    this.setState({
-      expanded: !this.state.expanded 
- 
-    });
+    handlePress = () => this.setState({expanded: !this.state.expanded });
 	
     render() {
 		return (
             <ScrollView style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
 	            <Title>Config</Title>	  
                 <List.Section title="Client type">
-                    <List.Accordion title={this.state.client_id} expanded={this.state.expanded} onPress={this.handlePress}>
-                        <List.Item title="2 - no proxy, long redirect" onPress={() => this.updateConfig(2)} />
-                        <List.Item title="3 - proxy" onPress={() => this.updateConfig(3)} />
-                        <List.Item title="4 - native 1" onPress={() => this.updateConfig(4)} />
-                        <List.Item title="5 - no proxy, short redirect" onPress={() => this.updateConfig(5)} />  
-						<List.Item title="9 - native 2" onPress={() => this.updateConfig(5)} />  
+                    <List.Accordion title={this.state.client_desc} expanded={this.state.expanded} onPress={this.handlePress}>
+                        {this.clients.map((desc, index) => {
+                            if (desc !== null){
+                                return <List.Item key={index} title={index + ' - ' + desc} onPress={() => this.updateConfig(index)} />  
+                            }
+                        })}
                     </List.Accordion>
                 </List.Section>
+                <Divider style={{marginVertical: 20}} />
 	            <Paragraph>Client id: {this.state.client_id}</Paragraph>
 		        <Paragraph>Redirect uri: {this.state.redirect_uri}</Paragraph>
 				<Paragraph>Use proxy: {this.state.useProxy.toString()}</Paragraph>
-                <Divider />
+                <Divider style={{marginVertical: 20}} />
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Button
                         title="Authorize 1"          
-                        onPress={this.authCodeGrant1}
+                        onPress={() => this.authCodeGrant1()}
                     />
                     <Button
                         title="Authorize 2"          
-                        onPress={this.authCodeGrant2}
+                        onPress={() => this.authCodeGrant2()}
                     />
                 </View>
-                <Divider style={{marginTop: 20}} />
-                <Button
-                    title="Call api"
-                    onPress={this.callApi}
-                    disabled={this.state.access_token === '' || this.state.access_token === undefined}
-                />
-                <Divider />
+                <Divider style={{marginVertical: 20}} />
                 <Subheading>Authorization code</Subheading>
                 <Paragraph>{this.state.code}</Paragraph>
                 <Paragraph>Access token: {this.state.access_token}</Paragraph>
