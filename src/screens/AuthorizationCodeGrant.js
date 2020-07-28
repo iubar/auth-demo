@@ -30,11 +30,14 @@ export default class AuthorizationCodeGrant extends React.Component {
 		console.log('item selected: ' + JSON.stringify(itemValue));
 		let client_id = parseInt(itemValue);
   		let redirect_uri = await AuthSession.makeRedirectUri(); 
+		redirect_uri = redirect_uri  + '/--/expo-auth-session';
 		console.log('redirect_uri; ' + JSON.stringify(redirect_uri));
 		// The result is
 		// For a managed app: https://auth.expo.io/@your-username/your-app-slug/redirect
-		// For a web app: https://localhost:19006/redirect		
+		// For a web app: https://localhost:19006/redirect				
 		this.setState({client_id: client_id, redirect_uri: redirect_uri, expanded: false});
+		 
+	 	
     }
 
     randomString = (length, chars) => {
@@ -163,9 +166,11 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    console.log('json: ' + JSON.stringify(json));
 		
         let code = json.code;
+		if(cose){
 		console.log('********************');
         console.log('code: ' + JSON.stringify(code));          
 		console.log('********************');
+		}
 		
         if (code){
             let access_token = await this.exchangeToken(verifier, code, state);
@@ -197,7 +202,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 						
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  
-		let discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
+		let discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
 		console.log('discovery: ' + JSON.stringify(discovery));
 
         /*
