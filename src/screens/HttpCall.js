@@ -1,19 +1,11 @@
 import React from 'react';
-import { Text } from 'react-native-paper';
-import { StyleSheet, View, Button, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
 import {Picker} from '@react-native-community/picker';
-import { Title } from 'react-native-paper';
-import { Subheading } from 'react-native-paper';
-import { Paragraph } from 'react-native-paper';
-import { Divider } from 'react-native-paper';
-import { List } from 'react-native-paper';
-import { TextInput } from 'react-native-paper';
-import { BottomNavigation } from 'react-native-paper';
-import Base64 from 'Base64';
+import { Paragraph, Divider, Caption, Title, Button, Subheading} from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 
 
@@ -65,25 +57,14 @@ export default class HttpCall extends React.Component {
 	
     render() {
 		return (
-            <ScrollView style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
-
-	            <Title>Storage</Title>	  
-                <Button
-                    title="Read access token"
-                    onPress={() => this.getAccessToken()}
-                />
+            <ScrollView style={{paddingVertical: 40, paddingHorizontal: 20}}>
+ 
+	            <Subheading>Secure store</Subheading>	  
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={() => this.getAccessToken}>Read access token</Button>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={() => this.clearAccessToken}>Clear access token</Button>
                 <Divider style={{marginVertical: 20}} />
-                <Button
-                    title="Clear access token"
-                    onPress={() => this.clearAccessToken()}
-                />
-                <Divider style={{marginVertical: 20}} />
-				<Title>Rest Api</Title>
-                <Button
-                    title="Call route"
-                    onPress={this.callApi}
-                    disabled={this.state.accessToken === '' || this.state.accessToken === null}
-                />         
+				<Subheading>Rest Api</Subheading>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.callApi} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Call route</Button>
             </ScrollView>
         );
     }

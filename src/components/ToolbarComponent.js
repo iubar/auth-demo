@@ -17,7 +17,7 @@ _handleMore = () => {
     return (
     <Appbar.Header>
        <Appbar.Content title="Auth Demo" subtitle="iubar.it" />
-      <Appbar.Action icon="dots-vertical" onPress={this._handleMore} />
+	   {/*<Appbar.Action icon="dots-vertical" onPress={this._handleMore} />*/}
     </Appbar.Header>
     );
   }
