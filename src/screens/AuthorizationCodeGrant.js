@@ -133,7 +133,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 
     authCodeGrant1  = async () => {  
  
-		console.log('state: ' + state);
+		
         let url = 'https://hr.iubar.it/oauth/authorize';     
 		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
         let config = { 
@@ -151,22 +151,16 @@ export default class AuthorizationCodeGrant extends React.Component {
 		let state = request.state;
 		let verifier = request.codeVerifier;
         const result = await request.promptAsync(issuerOrDiscovery, {useProxy: true}); // When invoked, a web browser will open up and prompt the user for authentication. 
-        console.log('result: ' + JSON.stringify(result));
+        console.log('result***: ' + JSON.stringify(result));
      
 	 	const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
 		console.log('urlAuth: ' + urlAuth);
 		const requestConfig = await request.getAuthRequestConfigAsync();
 		console.log('requestConfig: ' + JSON.stringify(requestConfig));
+	
 		
-        let resultAuth = await fetch(urlAuth, {
-            method: 'GET',
-		    headers: this.getHeaders()
-        });	
-	    let json = await resultAuth.json();
-	    console.log('json: ' + JSON.stringify(json));
-		
-        let code = json.code;
-		if(cose){
+        let code = result.code;
+		if(code){
 		console.log('********************');
         console.log('code: ' + JSON.stringify(code));          
 		console.log('********************');
