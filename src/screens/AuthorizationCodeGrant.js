@@ -41,7 +41,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		let redirect_uri = null;
 		
 		
-		// This service is responsible for:
+		// This proxy service is responsible for:
 		// - redirecting traffic from your application to the authentication service
 		// - redirecting response from the auth service to your application using a deep link
 
@@ -185,7 +185,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		let state = request.state;
 		let verifier = request.codeVerifier;
 		let  redirectUri = this.state.redirect_uri;
-        const result = await request.promptAsync(issuerOrDiscovery, {useProxy: this.state.useProxy, redirectUri }); // When invoked, a web browser will open up and prompt the user for authentication. 
+        const result = await request.promptAsync(issuerOrDiscovery, {useProxy: this.state.useProxy }); // When invoked, a web browser will open up and prompt the user for authentication. 
         
      
 	 	// const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
@@ -228,14 +228,14 @@ export default class AuthorizationCodeGrant extends React.Component {
 						
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  
-		
-		let discovery = null;
-		if(this.state.client_id==3){
-			  discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
-		}else{
-			  discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
-		}
-		
+
+			// se returnUrl non è specificato, startAsync() calcolerà il valore di dafault con sessionUrlProvider.getDefaultReturnUrl();
+			 
+		let returnUrl = AuthSession.getDefaultReturnUrl();
+		console.log('returnUrl (default): ' + JSON.stringify(returnUrl));
+			  
+		let discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is ALWAYS used  (it calls openAuthSessionAsync)
+		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
 		console.log('discovery: ' + JSON.stringify(discovery));
 
         /*
@@ -248,7 +248,8 @@ export default class AuthorizationCodeGrant extends React.Component {
             If the authentication flow is returns an error, the result is {type: 'error', params: Object, errorCode: string, event: Object }
             If you call AuthSession.startAsync more than once before the first call has returned, the result is {type: 'locked'}, because only one AuthSession can be in progress at any time.
         */
-		
+	   
+ 
        let code = discovery.params.code;
        console.log('code: ' + JSON.stringify(code));
 	    if (code){
@@ -330,11 +331,11 @@ handlePress = () =>
 	            <Title>Config</Title>	  
                 <List.Section title="Client type">
                     <List.Accordion title={this.state.client_id} expanded={this.state.expanded} onPress={this.handlePress}>
-                        <List.Item title="2 - no proxy, long redirect" onPress={() => this.updateConfig(2)} />
-                        <List.Item title="3 - proxy" onPress={() => this.updateConfig(3)} />
-                        <List.Item title="4 - native 1" onPress={() => this.updateConfig(4)} />
-                        <List.Item title="5 - no proxy, short redirect" onPress={() => this.updateConfig(5)} />  
-						<List.Item title="9 - native 2" onPress={() => this.updateConfig(5)} />  
+                        <List.Item title="2 - no proxy - exp://192.168.0.131:19000/--/expo-auth-session" onPress={() => this.updateConfig(2)} />
+                        <List.Item title="3 - proxy - https://auth.expo.io/@borgo/auth-demo" onPress={() => this.updateConfig(3)} />
+                        <List.Item title="4 - native - micoolredirect://" onPress={() => this.updateConfig(4)} />
+                        <List.Item title="5 - no proxy - exp://192.168.0.131:19000" onPress={() => this.updateConfig(5)} />  
+						<List.Item title="9 - native - exp://192.168.0.131:19000" onPress={() => this.updateConfig(5)} />  
                     </List.Accordion>
                 </List.Section>
 	            <Paragraph>Client id: {this.state.client_id}</Paragraph>
