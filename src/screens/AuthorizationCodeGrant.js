@@ -27,6 +27,11 @@ export default class AuthorizationCodeGrant extends React.Component {
 		useProxy: false,
     }
 
+    constructor(props){
+        super(props);
+        this.updateConfig(2);
+    }
+
 /**
 * see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
 */
