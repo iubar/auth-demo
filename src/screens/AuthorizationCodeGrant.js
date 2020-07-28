@@ -37,11 +37,11 @@ export default class AuthorizationCodeGrant extends React.Component {
     }
 
     initClients(){
-        this.clients[2] = 'no proxy, long redirect';
-        this.clients[3] = 'proxy';
-        this.clients[4] = 'native 1';
-        this.clients[5] = 'no proxy, short redirect';
-        this.clients[9] = 'native 2';
+        this.clients[2] = 'no proxy - exp://192.168.0.131:19000/--/expo-auth-session';
+        this.clients[3] = 'proxy - https://auth.expo.io/@borgo/auth-demo';
+        this.clients[4] = 'native - micoolredirect://';
+        this.clients[5] = 'no proxy - exp://192.168.0.131:19000';
+        this.clients[9] = 'native - exp://192.168.0.131:19000';
     }
 
     componentDidMount(){
@@ -55,8 +55,9 @@ export default class AuthorizationCodeGrant extends React.Component {
 		console.log('item selected: ' + JSON.stringify(itemValue));
 		let client_id = parseInt(itemValue);
 		let redirect_uri = null;
-				
-		// This service is responsible for:
+		
+		
+		// This proxy service is responsible for:
 		// - redirecting traffic from your application to the authentication service
 		// - redirecting response from the auth service to your application using a deep link
 
@@ -190,21 +191,21 @@ export default class AuthorizationCodeGrant extends React.Component {
             codeChallengeMethod: 'S256',
             usePKCE: true,
             //	prompt: 'SelectAccount' // None Login Consent SelectAccount
-        };
+        };         
         let issuerOrDiscovery = {authorizationEndpoint: url}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
         let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 		let state = request.state;
 		let verifier = request.codeVerifier;
 		let  redirectUri = this.state.redirect_uri;
-        const result = await request.promptAsync(issuerOrDiscovery, {useProxy: this.state.useProxy, redirectUri }); // When invoked, a web browser will open up and prompt the user for authentication. 
-             
+        const result = await request.promptAsync(issuerOrDiscovery, {useProxy: this.state.useProxy }); // When invoked, a web browser will open up and prompt the user for authentication. 
+        
 	 	// const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
 		// console.log('urlAuth: ' + urlAuth);
 		// const requestConfig = await request.getAuthRequestConfigAsync();
 		// console.log('requestConfig: ' + JSON.stringify(requestConfig));
 	
         console.log('result***: ' + JSON.stringify(result)); 
-        if (result.param !== undefined){
+        if (result.params !== undefined){
             let code = result.params.code;
             console.log('code: ' + JSON.stringify(code));
             if (code){
@@ -237,15 +238,15 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    console.log('urlAuth: ' + url);
 						
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
-		// console.log('discovery2; ' + JSON.stringify(discovery2))  
-		
-		let discovery = null;
-		if (this.state.client_id==3){
-			  discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
-		} else {
-			  discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
-		}
-		
+		// console.log('discovery2; ' + JSON.stringify(discovery2))  // let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
+
+			// se returnUrl non è specificato, startAsync() calcolerà il valore di dafault con sessionUrlProvider.getDefaultReturnUrl();
+			 
+		let returnUrl = AuthSession.getDefaultReturnUrl();
+		console.log('returnUrl (default): ' + JSON.stringify(returnUrl));
+			  
+		let discovery = await AuthSession.startAsync({authUrl: url}); // The auth.expo.io proxy is ALWAYS used  (it calls openAuthSessionAsync)
+		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
 		console.log('discovery: ' + JSON.stringify(discovery));
 
         /*
@@ -258,15 +259,14 @@ export default class AuthorizationCodeGrant extends React.Component {
             If the authentication flow is returns an error, the result is {type: 'error', params: Object, errorCode: string, event: Object }
             If you call AuthSession.startAsync more than once before the first call has returned, the result is {type: 'locked'}, because only one AuthSession can be in progress at any time.
         */
-        
-       if (discovery.param !== undefined){
+        if (discovery.params !== undefined){
             let code = discovery.params.code;
             console.log('code: ' + JSON.stringify(code));
             if (code){
                 let access_token = await this.exchangeToken(verifier, code, state);
                 this.setState({access_token: access_token});
-            }	
-        }	
+            }
+        }
     }
  
     /**
