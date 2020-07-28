@@ -151,20 +151,26 @@ export default class AuthorizationCodeGrant extends React.Component {
 		let state = request.state;
 		let verifier = request.codeVerifier;
         const result = await request.promptAsync(issuerOrDiscovery, {useProxy: true}); // When invoked, a web browser will open up and prompt the user for authentication. 
-        console.log('result***: ' + JSON.stringify(result));
+        
      
 	 	const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
 		console.log('urlAuth: ' + urlAuth);
 		const requestConfig = await request.getAuthRequestConfigAsync();
 		console.log('requestConfig: ' + JSON.stringify(requestConfig));
 	
+	console.log('result***: ' + JSON.stringify(result));
 		
-        let code = result.code;
-		if(code){
-		console.log('********************');
-        console.log('code: ' + JSON.stringify(code));          
-		console.log('********************');
-		}
+ 
+        let code;
+ /*
+        let resultAuth = await fetch(urlAuth, {
+            method: 'GET',
+		    headers: this.getHeaders()
+        });	
+	    let json = await resultAuth.json();
+	    console.log('json: ' + JSON.stringify(json));
+		*/
+ 
 		
         if (code){
             let access_token = await this.exchangeToken(verifier, code, state);
@@ -300,7 +306,6 @@ handlePress = () =>
 	            <Paragraph>Client id: {this.state.client_id}</Paragraph>
 		        <Paragraph>Redirect uri: {this.state.redirect_uri}</Paragraph>
                 <Divider />
-	            <Subheading>Authorization Code Grant with PKCE</Subheading>
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Button
                         title="Authorize 1"          
@@ -311,17 +316,17 @@ handlePress = () =>
                         onPress={this.authCodeGrant2}
                     />
                 </View>
-                <Divider />
-                <Subheading>Authorization code</Subheading>
-                <Paragraph>{this.state.code}</Paragraph>
-                <Paragraph>Access token: {this.state.access_token}</Paragraph>
-                <Paragraph>Api response: {this.state.api_response}</Paragraph>
-                <Divider />
+                <Divider style={{marginTop: 20}} />
                 <Button
                     title="Call api"
                     onPress={this.callApi}
                     disabled={this.state.access_token === '' || this.state.access_token === undefined}
                 />
+                <Divider />
+                <Subheading>Authorization code</Subheading>
+                <Paragraph>{this.state.code}</Paragraph>
+                <Paragraph>Access token: {this.state.access_token}</Paragraph>
+                <Paragraph>Api response: {this.state.api_response}</Paragraph>                
             </ScrollView>
         );
     }
