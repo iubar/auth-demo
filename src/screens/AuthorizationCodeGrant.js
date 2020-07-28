@@ -166,7 +166,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    console.log('json: ' + JSON.stringify(json));
 		
         let code = json.code;
-		if(cose){
+		if(code){
 		console.log('********************');
         console.log('code: ' + JSON.stringify(code));          
 		console.log('********************');
@@ -306,7 +306,6 @@ handlePress = () =>
 	            <Paragraph>Client id: {this.state.client_id}</Paragraph>
 		        <Paragraph>Redirect uri: {this.state.redirect_uri}</Paragraph>
                 <Divider />
-	            <Subheading>Authorization Code Grant with PKCE</Subheading>
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Button
                         title="Authorize 1"          
@@ -317,17 +316,17 @@ handlePress = () =>
                         onPress={this.authCodeGrant2}
                     />
                 </View>
-                <Divider />
-                <Subheading>Authorization code</Subheading>
-                <Paragraph>{this.state.code}</Paragraph>
-                <Paragraph>Access token: {this.state.access_token}</Paragraph>
-                <Paragraph>Api response: {this.state.api_response}</Paragraph>
-                <Divider />
+                <Divider style={{marginTop: 20}} />
                 <Button
                     title="Call api"
                     onPress={this.callApi}
                     disabled={this.state.access_token === '' || this.state.access_token === undefined}
                 />
+                <Divider />
+                <Subheading>Authorization code</Subheading>
+                <Paragraph>{this.state.code}</Paragraph>
+                <Paragraph>Access token: {this.state.access_token}</Paragraph>
+                <Paragraph>Api response: {this.state.api_response}</Paragraph>                
             </ScrollView>
         );
     }
