@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@react-native-community/picker": "^1.6.5",
+    "@react-navigation/material-bottom-tabs": "^5.2.15",
+    "@react-navigation/native": "^5.7.2",
     "Base64": "^1.1.0",
     "expo": "^38.0.8",
     "expo-auth-session": "~1.4.1",
@@ -27,7 +29,12 @@
     "react-dom": "16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-paper": "^4.0.1",
-    "react-native-web": "~0.13.4"
+    "react-native-web": "~0.13.4",
+    "react-native-gesture-handler": "~1.6.0",
+    "react-native-reanimated": "~1.9.0",
+    "react-native-screens": "~2.9.0",
+    "react-native-safe-area-context": "~3.0.7",
+    "@react-native-community/masked-view": "0.1.10"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",

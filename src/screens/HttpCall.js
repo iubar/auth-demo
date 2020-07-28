@@ -16,6 +16,8 @@ import { BottomNavigation } from 'react-native-paper';
 import Base64 from 'Base64';
 import * as SecureStore from 'expo-secure-store';
 
+
+
 export default class HttpCall extends React.Component {
 
     state = {
@@ -48,12 +50,15 @@ export default class HttpCall extends React.Component {
             method: 'GET',
 		    headers: this.getHeaders()
         });	
-	    let json = await result.json();
-        console.log('json: ' + JSON.stringify(json));
-        const statusCode = result.status;
-        if (statusCode == 200){
-            alert('Http call done');
-        }
+		let json = await result.json();
+        console.log('json: ' + JSON.stringify(json));		
+        const statusCode = result.status;             
+		if (statusCode != 200){
+			Alert.alert('Http error: ' + statusCode, JSON.stringify(json));			
+		}else{			
+			Alert.alert('Ok: ' + statusCode, JSON.stringify(json));
+		}
+
     }
 
     handlePress = () => this.setState({expanded: !this.state.expanded });
@@ -61,19 +66,21 @@ export default class HttpCall extends React.Component {
     render() {
 		return (
             <ScrollView style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
-	            <Title>Http</Title>	  
+
+	            <Title>Storage</Title>	  
                 <Button
-                    title="Get access token from storage"
+                    title="Read access token"
                     onPress={() => this.getAccessToken()}
                 />
                 <Divider style={{marginVertical: 20}} />
                 <Button
-                    title="Clear access token from storage"
+                    title="Clear access token"
                     onPress={() => this.clearAccessToken()}
                 />
                 <Divider style={{marginVertical: 20}} />
+				<Title>Rest Api</Title>
                 <Button
-                    title="Call api"
+                    title="Call route"
                     onPress={this.callApi}
                     disabled={this.state.accessToken === '' || this.state.accessToken === null}
                 />         
