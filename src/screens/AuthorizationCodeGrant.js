@@ -51,7 +51,7 @@ export default class AuthorizationCodeGrant extends React.Component {
         let randomString = this.randomString(43, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
         return randomString;
     }
-	    calcVerifier2 = async () => {
+	    calcVerifierMock = async () => {
 		return 'OENZUUJGNXJDOUIzVGJITkJ6Q3A3V2kycG1jbDFJYnRFcExnblFLQ0ZOZQ';
     }
 	
@@ -74,7 +74,7 @@ export default class AuthorizationCodeGrant extends React.Component {
         return this.toURLEncode(hash);
     }
  
- 	    calcCodeChallenge2  = async (verifier) => {		
+ 	    calcCodeChallengeMock  = async (verifier) => {		
         return 'CUsFvFDG_Q8AtartzgKEEX3vjHuan-a-4iBmvqSJ72E'
     }
 	
@@ -129,36 +129,45 @@ export default class AuthorizationCodeGrant extends React.Component {
     }
 
     authCodeGrant1  = async () => {  
-        let verifier = await this.calcVerifier2();
-		console.log('verifier: ' + verifier); 
-        let codeChallenge = await this.calcCodeChallenge2(verifier);
-		console.log('codeChallenge: ' + codeChallenge);
-        let state = this.calcState();
+ 
 		console.log('state: ' + state);
         let url = 'https://hr.iubar.it/oauth/authorize';     
-		// AuthRequestConfig
-        let config = {
-            clientId: this.state.client_id,
+		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
+        let config = { 
+	        clientId: this.state.client_id,
+			// clientSecret: clientSecret,
             redirectUri: this.state.redirect_uri,
             responseType: 'code',
             scopes: ['*'],
-            state: state,
             codeChallengeMethod: 'S256',
-            codeChallenge: codeChallenge,	
             usePKCE: true,
             //	prompt: 'SelectAccount' // None Login Consent SelectAccount
         };         
-        let issuerOrDiscovery = {authorizationEndpoint: url, tokenEndpoint: 'https://hr.iubar.it/oauth/token'}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
-        let request = await AuthSession.loadAsync(config, issuerOrDiscovery)		 
-        const result = await request.promptAsync({useProxy: true}); // When invoked, a web browser will open up and prompt the user for authentication. 
+        let issuerOrDiscovery = {authorizationEndpoint: url}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
+        let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
+		let state = request.state;
+		let verifier = request.codeVerifier;
+        const result = await request.promptAsync(issuerOrDiscovery, {useProxy: true}); // When invoked, a web browser will open up and prompt the user for authentication. 
         console.log('result: ' + JSON.stringify(result));
      
-        let code = result.params.code;
+	 	const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
+		console.log('urlAuth: ' + urlAuth);
+		const requestConfig = await request.getAuthRequestConfigAsync();
+		console.log('requestConfig: ' + JSON.stringify(requestConfig));
+		
+        let resultAuth = await fetch(urlAuth, {
+            method: 'GET',
+		    headers: this.getHeaders()
+        });	
+	    let json = await resultAuth.json();
+	    console.log('json: ' + JSON.stringify(json));
+		
+        let code = json.code;
 		console.log('********************');
         console.log('code: ' + JSON.stringify(code));          
 		console.log('********************');
 		
-        if (true){
+        if (code){
             let access_token = await this.exchangeToken(verifier, code, state);
             this.setState({access_token: access_token});
         }
@@ -184,11 +193,11 @@ export default class AuthorizationCodeGrant extends React.Component {
         
 	    url = this.buildUrl(url, config)
   
-	    console.log('url; ' + JSON.stringify(url));
+	    console.log('urlAuth: ' + url);
 						
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  
-		let discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used 
+		let discovery = await AuthSession.startAsync({authUrl: url, returnUrl : this.state.redirect_uri, showInRecents: false}); // The auth.expo.io proxy is used  (it calls openAuthSessionAsync)
 		console.log('discovery: ' + JSON.stringify(discovery));
 
         /*
