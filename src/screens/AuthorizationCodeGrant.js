@@ -26,6 +26,11 @@ export default class AuthorizationCodeGrant extends React.Component {
 		expanded: false
     }
 
+    constructor(props){
+        super(props);
+        this.updateConfig(2);
+    }
+
     updateConfig = async (itemValue) => {
 		console.log('item selected: ' + JSON.stringify(itemValue));
 		let client_id = parseInt(itemValue);
