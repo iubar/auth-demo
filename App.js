@@ -46,7 +46,7 @@ export default class App extends React.Component {
       <Tab.Navigator  
 	  	  initialRouteName="AuthorizationCodeGrant"
           screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color }) => { // al Luglio 2020 c'è un bug nella documentazione ufficiale, qui corretto
+          tabBarIcon: ({ focused, color }) => { // a Luglio 2020 c'è un bug nella documentazione ufficiale, qui corretto
             let iconName;
             if (route.name === 'PasswordGrant') {
               iconName = focused ? 'tag' : 'camera';
