@@ -14,7 +14,7 @@ before_install:
   # - npm cache clean # non necessario se si usa npm ci 
 install:
   - echo 'Installing the dependencies...'
-  - npm ci  # see https://docs.npmjs.com/cli/ci.html
+  # - npm ci  # see https://docs.npmjs.com/cli/ci.html
             # richiede package-lock.json
             # in alternativa a : npm install --non-interactive
   - npm install --non-interactive
