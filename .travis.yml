@@ -11,12 +11,12 @@ before_install:
   - npm install -g npm@latest
   - npm install -g expo-cli
   # - rm -rf node_modules # non necessario se si usa npm ci 
-  # - npm cache clean # non necessario se si usa npm ci 
+  # - npm cache clean     # non necessario se si usa npm ci 
 install:
   - echo 'Installing the dependencies...'
-  # - npm ci  # see https://docs.npmjs.com/cli/ci.html
-            # richiede package-lock.json
-            # in alternativa a : npm install --non-interactive
+  # - npm ci # see https://docs.npmjs.com/cli/ci.html
+             # richiede package-lock.json
+             # in alternativa usare : npm install --non-interactive
   - npm install --non-interactive
   - expo diagnostics #  expo --version # expo-cli version
   - npm list expo # show expo sdk version  
@@ -29,7 +29,7 @@ script:
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
   - npm run test-ci || travis_terminate 1;
-  - cat OK > pippo.txt
+  - cat 'OK' > pippo.txt
 deploy:
   - ls -la
   - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
