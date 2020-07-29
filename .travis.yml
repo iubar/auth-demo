@@ -10,8 +10,8 @@ cache:
 before_install:
   - npm install -g npm@latest
   - npm install -g expo-cli
-  # - rm -rf node_modules # non necessario se si usa npm ci 
-  # - npm cache clean     # non necessario se si usa npm ci 
+  # - rm -rf node_modules # non necessario se 1) si usa npm ci 2) "node_modules" non è in cache 
+  # - npm cache clean     # (see the above comment)
 install:
   - echo 'Installing the dependencies...'
   # - npm ci # see https://docs.npmjs.com/cli/ci.html
@@ -20,17 +20,16 @@ install:
   - npm install --non-interactive
   - expo diagnostics #  expo --version # expo-cli version
   - npm list expo # show expo sdk version  
-    # sometimes it returns the following error: 
+    # sometimes (when I chache the "node_modules" folder) it returns the following error: 
     # /home/travis/build/iubar/auth-demo
     #└── UNMET DEPENDENCY expo@^38.0.8
     # npm ERR! missing: expo@^38.0.8, required by auth-demo
-  - echo 'OK' > pippo.txt    
+  
 script:
-  - ls -la
-  - cat pippo.txt
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
-  - npm run test-ci || travis_terminate 1;
+  - npm run test-ci || travis_terminate 1; # TODO: verificare se è possibile togliere "|| travis_terminate 1;"
+after_success:
   - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
   - expo publish --non-interactive --quiet --release-channel default
 notifications:
