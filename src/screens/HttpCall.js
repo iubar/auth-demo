@@ -13,15 +13,17 @@ import * as SecureStore from 'expo-secure-store';
 export default class HttpCall extends React.Component {
 
     state = {
-        accessToken: null
+        accessToken: '',
+		data_to_send: '',
+		response: '',
     }
 
-    async getAccessToken(){
+    getAccessToken = async () => {
         let accessToken = await SecureStore.getItemAsync('accessToken');
         this.setState({accessToken: accessToken});
     }
 
-    async clearAccessToken(){
+    clearAccessToken = async () => {
         await SecureStore.deleteItemAsync('accessToken');
         this.setState({accessToken: null});
     }
@@ -42,14 +44,20 @@ export default class HttpCall extends React.Component {
             method: 'GET',
 		    headers: this.getHeaders()
         });	
+		
+		
+		this.setState({data_to_send: url});
+		
 		let json = await result.json();
         console.log('json: ' + JSON.stringify(json));		
         const statusCode = result.status;             
 		if (statusCode != 200){
-			Alert.alert('Http error: ' + statusCode, JSON.stringify(json));			
+			Alert.alert('Http error: ' + statusCode);			
 		}else{			
-			Alert.alert('Ok: ' + statusCode, JSON.stringify(json));
+			Alert.alert('Ok: ' + statusCode);
 		}
+
+	this.setState({response: JSON.stringify(json)});
 
     }
 
@@ -57,14 +65,20 @@ export default class HttpCall extends React.Component {
 	
     render() {
 		return (
-            <ScrollView style={{paddingVertical: 40, paddingHorizontal: 20}}>
+            <ScrollView style={{paddingHorizontal: 20}}>
  
 	            <Subheading>Secure store</Subheading>	  
-                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={() => this.getAccessToken}>Read access token</Button>
-                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={() => this.clearAccessToken}>Clear access token</Button>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.getAccessToken}>Read access token</Button>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.clearAccessToken}>Clear access token</Button>
                 <Divider style={{marginVertical: 20}} />
 				<Subheading>Rest Api</Subheading>
                 <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.callApi} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Call route</Button>
+				<Divider style={{marginVertical: 20}} />
+		        <Subheading>Request</Subheading>
+				<Paragraph>{this.state.data_to_send}</Paragraph>
+				<Divider style={{marginVertical: 20}} />
+		        <Subheading>Response</Subheading>
+				<Paragraph>{this.state.response}</Paragraph>								
             </ScrollView>
         );
     }

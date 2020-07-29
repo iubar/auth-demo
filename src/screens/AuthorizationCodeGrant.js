@@ -1,19 +1,11 @@
 import React from 'react';
-import { Text } from 'react-native-paper';
-import { StyleSheet, View, Button, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
 import {Picker} from '@react-native-community/picker';
-import { Title } from 'react-native-paper';
-import { Subheading } from 'react-native-paper';
-import { Paragraph } from 'react-native-paper';
-import { Divider } from 'react-native-paper';
-import { List } from 'react-native-paper';
-import { TextInput } from 'react-native-paper';
-import { BottomNavigation } from 'react-native-paper';
-import Base64 from 'Base64';
+import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput} from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 
 export default class AuthorizationCodeGrant extends React.Component {
@@ -22,11 +14,10 @@ export default class AuthorizationCodeGrant extends React.Component {
         client_id: 2,
         client_desc: '',
 	    redirect_uri: '',
-	    code: '',
 	    access_token: '',
-	    api_response: '',
 		expanded: false,
 		useProxy: false,
+		data_to_send: '', 
     }
 
     clients = [];
@@ -159,10 +150,13 @@ export default class AuthorizationCodeGrant extends React.Component {
         return randomString;
     }	
 
-    base64 = (str) => {
-        let base64 = Base64.btoa(str);
-        return base64;
-    }
+    /**
+	* Rihiede: import Base64 from 'Base64'; npm install Base64
+	*/
+    // base64 = (str) => {
+    //    let base64 = Base64.btoa(str);
+    //    return base64;
+    //}
 
     buildUrl = (url, parameters) => {
         var qs = "";
@@ -186,17 +180,16 @@ export default class AuthorizationCodeGrant extends React.Component {
 	        clientId: this.state.client_id,
 			// clientSecret: clientSecret,
             redirectUri: this.state.redirect_uri,
-            responseType: 'code',
+            //responseType: 'code',			// It's the default value
             scopes: ['*'],
-            codeChallengeMethod: 'S256',
+            //codeChallengeMethod: 'S256', 	// It's the default value
             usePKCE: true,
-            //	prompt: 'SelectAccount' // None Login Consent SelectAccount
+            //	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
         };         
         let issuerOrDiscovery = {authorizationEndpoint: url}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
         let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 		let state = request.state;
 		let verifier = request.codeVerifier;
-		let  redirectUri = this.state.redirect_uri;
         const result = await request.promptAsync(issuerOrDiscovery, {useProxy: this.state.useProxy }); // When invoked, a web browser will open up and prompt the user for authentication. 
         
 	 	// const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
@@ -210,7 +203,7 @@ export default class AuthorizationCodeGrant extends React.Component {
             console.log('code: ' + JSON.stringify(code));
             if (code){
                 let access_token = await this.exchangeToken(verifier, code, state);
-                this.setState({access_token: access_token});
+                await this.success(access_token);
             }
         }
     }
@@ -235,6 +228,8 @@ export default class AuthorizationCodeGrant extends React.Component {
         
 	    url = this.buildUrl(url, config)
   
+ 		this.setState({data_to_send: url});
+	 
 	    console.log('urlAuth: ' + url);
 						
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
@@ -262,13 +257,19 @@ export default class AuthorizationCodeGrant extends React.Component {
         if (discovery.params !== undefined){
             let code = discovery.params.code;
             console.log('code: ' + JSON.stringify(code));
-            if (code){
+            if (code){				
                 let access_token = await this.exchangeToken(verifier, code, state);
-                this.setState({access_token: access_token});
+				await this.success(access_token);
             }
         }
     }
- 
+	
+    success = async (access_token) => {		
+        this.setState({access_token: access_token});
+		SecureStore.setItemAsync('accessToken', access_token);
+		Alert.alert('Authentication done: token saved');
+	}
+				
     /**
     * exchange the authorization code for an access token.
     */
@@ -284,7 +285,9 @@ export default class AuthorizationCodeGrant extends React.Component {
         };
  
         console.log('data: ' + JSON.stringify(data));
-  
+ 
+		this.setState({data_to_send: url + ' ' + JSON.stringify(data)});
+ 
         let result = await fetch(url, {
             method: 'POST',
             headers: this.getHeaders(),
@@ -317,8 +320,8 @@ export default class AuthorizationCodeGrant extends React.Component {
 	
     render() {
 		return (
-            <ScrollView style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
-	            <Title>Config</Title>	  
+            <ScrollView style={{ paddingHorizontal: 20 }}>
+	            <Subheading>Athorization Code Grant with PKCE</Subheading>	  
                 <List.Section title="Client type">
                     <List.Accordion title={this.state.client_desc} expanded={this.state.expanded} onPress={this.handlePress}>
                         {this.clients.map((desc, index) => {
@@ -329,25 +332,21 @@ export default class AuthorizationCodeGrant extends React.Component {
                     </List.Accordion>
                 </List.Section>
                 <Divider style={{marginVertical: 20}} />
-	            <Paragraph>Client id: {this.state.client_id}</Paragraph>
 		        <Paragraph>Redirect uri: {this.state.redirect_uri}</Paragraph>
 				<Paragraph>Use proxy: {this.state.useProxy.toString()}</Paragraph>
                 <Divider style={{marginVertical: 20}} />
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                    <Button
-                        title="Authorize 1"          
-                        onPress={() => this.authCodeGrant1()}
-                    />
-                    <Button
-                        title="Authorize 2"          
-                        onPress={() => this.authCodeGrant2()}
-                    />
+                <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>					
+					<Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.authCodeGrant1}>Authorize 1</Button>
+					<Text>[loadAsync() + promptAsync()]</Text>
+					<Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.authCodeGrant2}>Authorize 2</Button>
+					<Text>[startAsync(), it always uses proxy]</Text>
                 </View>
                 <Divider style={{marginVertical: 20}} />
-                <Subheading>Authorization code</Subheading>
-                <Paragraph>{this.state.code}</Paragraph>
-                <Paragraph>Access token: {this.state.access_token}</Paragraph>
-                <Paragraph>Api response: {this.state.api_response}</Paragraph>                
+				<Subheading>Request</Subheading>
+				<Paragraph>{this.state.data_to_send}</Paragraph>
+				<Divider style={{marginVertical: 20}} />
+				<Subheading>Access token</Subheading>
+                <Paragraph>{this.state.access_token}</Paragraph>            
             </ScrollView>
         );
     }

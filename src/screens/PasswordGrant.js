@@ -1,18 +1,12 @@
 import React from 'react';
-import { Text } from 'react-native-paper';
-import { StyleSheet, View, Button, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
 import {Picker} from '@react-native-community/picker';
-import { Title } from 'react-native-paper';
-import { Subheading } from 'react-native-paper';
-import { Paragraph } from 'react-native-paper';
-import { Divider } from 'react-native-paper';
-import { List } from 'react-native-paper';
-import { TextInput } from 'react-native-paper';
-import { BottomNavigation } from 'react-native-paper';
+import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput } from 'react-native-paper';
+
 import * as SecureStore from 'expo-secure-store';
 
 export default class PasswordGrant extends React.Component {
@@ -55,10 +49,9 @@ export default class PasswordGrant extends React.Component {
 		} else if (client_id == 6){ // without client_secret
 			
 		}
-		
-		console.log('data to send: ' + JSON.stringify(data_to_send));
+ 
         let client_desc = client_id + ' ' + this.clients[client_id]	;
-		this.setState({client_id: client_id, client_desc: client_desc, data_to_send: data_to_send});
+		this.setState({client_id: client_id, client_desc: client_desc });
     }
 
     setUsername(username) {
@@ -86,6 +79,8 @@ export default class PasswordGrant extends React.Component {
             data_to_send.username = this.state.username;
             data_to_send.password = this.state.password;
          
+		 this.setState({data_to_send: url + ' ' + JSON.stringify(data)});
+		 
             let result = await fetch(url, {
                 method: 'POST',
                 headers: this.getHeaders(),
@@ -118,10 +113,9 @@ export default class PasswordGrant extends React.Component {
                 let expires_in = json.expires_in;
                 let access_token = json.access_token;
                 let refresh_token = json.refresh_token;
-
+                this.setState({access_token: access_token});
                 SecureStore.setItemAsync('accessToken', access_token);
-                alert('Login done');
-                this.setState({access_token: access_token});        
+                Alert.alert('Authentication done: token saved'); 
             }
         } catch (error) {
             console.log('ERROR', error.message);
@@ -149,7 +143,7 @@ export default class PasswordGrant extends React.Component {
 
     render() {
 		return (
-            <ScrollView style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
+            <ScrollView style={{ paddingHorizontal: 20 }}>
                 <Subheading>Password Grant</Subheading>
                 <List.Section title="Client type">
                     <List.Accordion title={this.state.client_desc} expanded={this.state.expanded} onPress={this.handlePress}>
@@ -174,14 +168,13 @@ export default class PasswordGrant extends React.Component {
                     />
                 </View>
                 <Divider style={{marginVertical: 20}} />
-                <Paragraph>Client id: {this.state.client_id}</Paragraph>
-		        <Paragraph>Data to send: {JSON.stringify(this.state.data_to_send)}</Paragraph>
+				<Button style={{marginHorizontal: 20, marginVertical: 20}} disabled={this.state.username === '' || this.state.password === ''} mode="contained" onPress={this.authPasswordGrant}>Login</Button>
                 <Divider style={{marginVertical: 20}} />
-                <Button
-                    title="Login"
-                    onPress={() => this.authPasswordGrant()}
-                    disabled={this.state.username === '' || this.state.password === ''}
-                />		
+		        <Subheading>Request</Subheading>
+				<Paragraph>{this.state.data_to_send}</Paragraph>
+				<Divider style={{marginVertical: 20}} />
+				<Subheading>Access token</Subheading>
+                <Paragraph>{this.state.access_token}</Paragraph> 
             </ScrollView>
         );
     }

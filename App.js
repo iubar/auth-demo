@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Text, View } from 'react-native-paper';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 import { FontAwesome , Ionicons } from '@expo/vector-icons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme as DarkThemeNav, DefaultTheme as DefaultThemeNav } from '@react-navigation/native';
 import PasswordGrant from './src/screens/PasswordGrant';
 import AuthorizationCodeGrant from './src/screens/AuthorizationCodeGrant';
 import HttpCall from './src/screens/HttpCall';
@@ -11,7 +11,7 @@ import Toolbar from './src/components/ToolbarComponent';
 
  
  
-const theme = {
+const AppTheme = {
   ...DefaultTheme,
   dark: false, 
   mode: 'exact', // ('adaptive' | 'exact') (adaptive where we follow Material design guidelines)
@@ -46,9 +46,9 @@ export default class App extends React.Component {
 
 		
 	  return (
-	  <PaperProvider theme={theme}>
+	  <PaperProvider theme={AppTheme}>
 		
-		<NavigationContainer theme={theme}>
+		<NavigationContainer theme={AppTheme}>
 		<Toolbar />
       <Tab.Navigator	 
 	  	  initialRouteName="AuthorizationCodeGrant"
