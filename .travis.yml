@@ -1,11 +1,12 @@
 language: node_js
-node_js:
-  - lts/*
+node_js: lts/*
 cache:
-  npm: true
-  yarn: true
-  #directories: # don't need it, see https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
-  #  - ~/.npm
+  npm: true # This caches $HOME/.npm or node_modules, depending on the repository’s structure: 
+# 1) This caches $HOME/.npm precisely when npm ci is the default script command. (See above.)
+# 2) In all other cases, this will cache node_modules. Note that npm install will still run on every build and will update/install any new packages added to your package.json file
+
+  
+  yarn: true # This caches $HOME/.cache/yarn.
 before_install:
   - npm install -g npm@latest
   - npm install -g expo-cli
@@ -15,7 +16,6 @@ install:
   - expo diagnostics #  expo --version # expo-cli version
   - npm list expo # expo sdk version  
 script:
-  - npm install --non-interactive
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
   - npm run test-ci || travis_terminate 1;
