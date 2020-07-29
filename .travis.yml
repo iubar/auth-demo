@@ -24,14 +24,13 @@ install:
     # /home/travis/build/iubar/auth-demo
     #└── UNMET DEPENDENCY expo@^38.0.8
     # npm ERR! missing: expo@^38.0.8, required by auth-demo
-npm ERR! missing: expo@^38.0.8, required by auth-demo  
+  - echo 'OK' > pippo.txt    
 script:
+  - ls -la
+  - cat pippo.txt
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
   - npm run test-ci || travis_terminate 1;
-  - echo 'OK' > pippo.txt
-deploy:
-  - ls -la
   - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
   - expo publish --non-interactive --quiet --release-channel default
 notifications:
