@@ -29,7 +29,7 @@ script:
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
   - npm run test-ci || travis_terminate 1;
-  - cat 'OK' > pippo.txt
+  - echo 'OK' > pippo.txt
 deploy:
   - ls -la
   - expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
