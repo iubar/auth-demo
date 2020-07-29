@@ -15,6 +15,7 @@ install:
   - expo diagnostics #  expo --version # expo-cli version
   - npm list expo # expo sdk version  
 script:
+  - npm install --non-interactive
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
   - npm run test-ci || travis_terminate 1;
