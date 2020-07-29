@@ -4,9 +4,9 @@ import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
-import {Picker} from '@react-native-community/picker';
 import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput} from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
+import {Picker} from '@react-native-community/picker';
 
 export default class AuthorizationCodeGrant extends React.Component {
 
@@ -22,9 +22,10 @@ export default class AuthorizationCodeGrant extends React.Component {
 
     clients = [];
 
-    constructor(props){
+    constructor(props){		
         super(props);
-        this.initClients();
+		console.log('Theme: ' + JSON.stringify(this.props.theme));
+        this.initClients();		
     }
 
     initClients(){
@@ -338,7 +339,7 @@ export default class AuthorizationCodeGrant extends React.Component {
                 <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>					
 					<Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.authCodeGrant1}>Authorize 1</Button>
 					<Text>[loadAsync() + promptAsync()]</Text>
-					<Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.authCodeGrant2}>Authorize 2</Button>
+					<Button color={this.props.theme.colors.accent} style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.authCodeGrant2}>Authorize 2</Button>
 					<Text>[startAsync(), it always uses proxy]</Text>
                 </View>
                 <Divider style={{marginVertical: 20}} />
@@ -346,7 +347,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 				<Paragraph>{this.state.data_to_send}</Paragraph>
 				<Divider style={{marginVertical: 20}} />
 				<Subheading>Access token</Subheading>
-                <Paragraph>{this.state.access_token}</Paragraph>            
+                <Paragraph>{this.state.access_token}</Paragraph>   
             </ScrollView>
         );
     }

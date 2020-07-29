@@ -21,7 +21,7 @@ const AppTheme = {
     // primary: '#3498db', // primary color for your app, usually your brand color.
     // accent: '#f1c40f', // secondary color for your app which complements the primary color.
     primary: 'red',
-	// accent: 'rgb(255, 45, 85)',
+	accent: 'rgb(259, 247, 0)',
     background: 'rgb(242, 242, 242)',
     card: 'rgb(255, 255, 255)',
     text: 'rgb(28, 28, 30)',
@@ -37,26 +37,17 @@ const Tab = createMaterialBottomTabNavigator();
  
 export default class App extends React.Component {	
  
-
-
-
- 
 	render() {
 		
-
-		
 	  return (
-	  <PaperProvider theme={AppTheme}>
-		
+	  <PaperProvider theme={AppTheme}>		
 		<NavigationContainer theme={AppTheme}>
 		<Toolbar />
-      <Tab.Navigator	 
+      <Tab.Navigator  
 	  	  initialRouteName="AuthorizationCodeGrant"
-		  tabBarOptions={ {showLabel: false} }
           screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+          tabBarIcon: ({ focused, color }) => { // al Luglio 2020 c'è un bug nella documentazione ufficiale, qui corretto
             let iconName;
-			size = 20;
             if (route.name === 'PasswordGrant') {
               iconName = focused ? 'tag' : 'camera';
             } else if (route.name === 'AuthorizationCodeGrant') {
@@ -64,16 +55,13 @@ export default class App extends React.Component {
             } else if (route.name === 'HttpCall') {
               iconName = focused ? 'tag' : 'camera';
             }
-
             // You can return any component that you like here!
-            return <FontAwesome name={iconName} size={size} color={color} />;
+            return <FontAwesome name={iconName} size={21} color={color} />;
           },
         })}
- 
-      >
- 
+      > 
 			<Tab.Screen options={{tabBarLabel: "Password Grant"}} name="PasswordGrant" component={PasswordGrant} />
-			<Tab.Screen options={{tabBarLabel: "Auth Code Grant"}} name="AuthorizationCodeGrant" component={AuthorizationCodeGrant} />
+			<Tab.Screen options={{tabBarLabel: "Auth Code Grant"}} name="AuthorizationCodeGrant" children={()=><AuthorizationCodeGrant theme={AppTheme} />} />			
 			<Tab.Screen options={{tabBarLabel: "Api call"}} name="HttpCall" component={HttpCall} />
 		  </Tab.Navigator>
 		</NavigationContainer>		

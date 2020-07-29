@@ -4,10 +4,8 @@ import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
-import {Picker} from '@react-native-community/picker';
 import { Paragraph, Divider, Caption, Title, Button, Subheading} from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
-
 
 
 export default class HttpCall extends React.Component {

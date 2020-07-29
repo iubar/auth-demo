@@ -4,10 +4,9 @@ import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
-import {Picker} from '@react-native-community/picker';
 import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput } from 'react-native-paper';
-
 import * as SecureStore from 'expo-secure-store';
+
 
 export default class PasswordGrant extends React.Component {
 
@@ -16,7 +15,8 @@ export default class PasswordGrant extends React.Component {
         client_desc: '',
         data_to_send: [],
         username: '',
-        password: ''
+        password: '',
+		expanded: false,
     }
 
     clients = [];
@@ -141,6 +141,8 @@ export default class PasswordGrant extends React.Component {
         }
     }
 
+    handlePress = () => this.setState({expanded: !this.state.expanded });
+	
     render() {
 		return (
             <ScrollView style={{ paddingHorizontal: 20 }}>
