@@ -1,24 +1,28 @@
 language: node_js
 node_js: lts/*
 cache:
-  npm: true # This caches $HOME/.npm or node_modules, depending on the repository’s structure: 
-# 1) This caches $HOME/.npm precisely when npm ci is the default script command. (See above.)
-# 2) In all other cases, this will cache node_modules. Note that npm install will still run on every build and will update/install any new packages added to your package.json file
-
-  
+  # npm: true # This caches $HOME/.npm or node_modules, depending on the repository’s structure: 
+  # 1) This caches $HOME/.npm precisely when npm ci is the default script command. (See above.)
+  # 2) In all other cases, this will cache node_modules. Note that npm install will still run on every build and will update/install any new packages added to your package.json file
+  directories:
+  - "$HOME/.npm"  
   yarn: true # This caches $HOME/.cache/yarn.
 before_install:
   - npm install -g npm@latest
   - npm install -g expo-cli
-  - ls -lah
-  - ls -lah node_modules  
-  # - rm -rf node_modules
-  # run npm cache clean
+  # - rm -rf node_modules # non necessario se si usa npm ci 
+  # - npm cache clean # non necessario se si usa npm ci 
 install:
   - echo 'Installing the dependencies...'
-  - npm install --non-interactive
+  - npm ci  # see https://docs.npmjs.com/cli/ci.html
+            # in alternativa a : npm install --non-interactive
   - expo diagnostics #  expo --version # expo-cli version
-  - npm list expo # expo sdk version  
+  - npm list expo # show expo sdk version  
+    # sometimes it returns the following error: 
+    # /home/travis/build/iubar/auth-demo
+    #└── UNMET DEPENDENCY expo@^38.0.8
+    # npm ERR! missing: expo@^38.0.8, required by auth-demo
+npm ERR! missing: expo@^38.0.8, required by auth-demo  
 script:
   - echo 'Analysing app config...'
   - expo doctor --non-interactive
