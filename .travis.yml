@@ -10,6 +10,10 @@ cache:
 before_install:
   - npm install -g npm@latest
   - npm install -g expo-cli
+  - ls -lah
+  - ls -lah node_modules  
+  # - rm -rf node_modules
+  # run npm cache clean
 install:
   - echo 'Installing the dependencies...'
   - npm install --non-interactive
