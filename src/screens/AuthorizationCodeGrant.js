@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView, SafeAreaView} from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
@@ -17,7 +17,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	    access_token: '',
 		expanded: false,
 		useProxy: false,
-		data_to_send: '', 
+		data_to_send_printable: '', 
     }
 
     clients = [];
@@ -174,8 +174,8 @@ export default class AuthorizationCodeGrant extends React.Component {
         return url;
     }
 
-    authCodeGrant1  = async () => {  		
-        let url = 'https://hr.iubar.it/oauth/authorize';     
+    authCodeGrant1  = async () => {
+        let url = 'https://hr.iubar.it/oauth/authorize';
 		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
         let config = { 
 	        clientId: this.state.client_id,
@@ -186,7 +186,7 @@ export default class AuthorizationCodeGrant extends React.Component {
             //codeChallengeMethod: 'S256', 	// It's the default value
             usePKCE: true,
             //	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
-        };         
+        };
         let issuerOrDiscovery = {authorizationEndpoint: url}; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)             
         let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 		let state = request.state;
@@ -201,14 +201,16 @@ export default class AuthorizationCodeGrant extends React.Component {
         console.log('result***: ' + JSON.stringify(result)); 
         if (result.params !== undefined){
             let code = result.params.code;
-            console.log('code: ' + JSON.stringify(code));
-            if (code){
-                let access_token = await this.exchangeToken(verifier, code, state);
-                await this.success(access_token);
-            }
+            this.readToken(verifier, code, state);
         }
     }
 
+    /**
+     * When requesting an access token using the authorization code grant, 
+     * consumers should specify their desired scopes as the scope query string parameter. 
+     * The scope parameter should be a space-delimited list of scopes (!)
+     * 
+     */
     authCodeGrant2 = async () => {
         let verifier = await this.calcVerifier();
 		console.log('verifier: ' + verifier); 
@@ -229,7 +231,7 @@ export default class AuthorizationCodeGrant extends React.Component {
         
 	    url = this.buildUrl(url, config)
   
- 		this.setState({data_to_send: url});
+ 		this.setState({data_to_send_printable: 'AuthSession.startAsync({authUrl: ' + url + '})'});
 	 
 	    console.log('urlAuth: ' + url);
 						
@@ -257,19 +259,19 @@ export default class AuthorizationCodeGrant extends React.Component {
         */
         if (discovery.params !== undefined){
             let code = discovery.params.code;
-            console.log('code: ' + JSON.stringify(code));
-            if (code){				
-                let access_token = await this.exchangeToken(verifier, code, state);
-				await this.success(access_token);
-            }
+            this.readToken(verifier, code, state);
         }
     }
-	
-    success = async (access_token) => {		
-        this.setState({access_token: access_token});
-		SecureStore.setItemAsync('accessToken', access_token);
-		Alert.alert('Authentication done: token saved');
-	}
+ 
+    readToken = async (verifier, code, state) => { 
+        console.log('code: ' + JSON.stringify(code));
+        if (code){				
+            let access_token = await this.exchangeToken(verifier, code, state);
+            this.setState({access_token: access_token});
+            SecureStore.setItemAsync('accessToken', access_token);
+            Alert.alert('Authentication done: token saved');
+        }
+    }
 				
     /**
     * exchange the authorization code for an access token.
@@ -277,7 +279,7 @@ export default class AuthorizationCodeGrant extends React.Component {
     exchangeToken = async (verifier, code, state) => {	        
         let url = 'https://hr.iubar.it/oauth/token';
   
-        let data = {	  
+        let data_to_send = {	  
             client_id: this.state.client_id,
             redirect_uri: this.state.redirect_uri,
             grant_type: 'authorization_code',			
@@ -285,14 +287,14 @@ export default class AuthorizationCodeGrant extends React.Component {
             code_verifier: verifier
         };
  
-        console.log('data: ' + JSON.stringify(data));
+        console.log('data_to_send: ' + JSON.stringify(data_to_send));
  
-		this.setState({data_to_send: url + ' ' + JSON.stringify(data)});
+		this.setState({data_to_send_printable: 'POST: ' + url + ' ' + JSON.stringify(data_to_send)});
  
         let result = await fetch(url, {
             method: 'POST',
             headers: this.getHeaders(),
-            body:  JSON.stringify(data) ,
+            body:  JSON.stringify(data_to_send),
         });
      
         const statusCode = result.status;
@@ -321,6 +323,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	
     render() {
 		return (
+            <SafeAreaView>
             <ScrollView style={{ paddingHorizontal: 20 }}>
 	            <Subheading>Athorization Code Grant with PKCE</Subheading>	  
                 <List.Section title="Client type">
@@ -344,11 +347,12 @@ export default class AuthorizationCodeGrant extends React.Component {
                 </View>
                 <Divider style={{marginVertical: 20}} />
 				<Subheading>Request</Subheading>
-				<Paragraph>{this.state.data_to_send}</Paragraph>
+				<Paragraph>{this.state.data_to_send_printable}</Paragraph>
 				<Divider style={{marginVertical: 20}} />
 				<Subheading>Access token</Subheading>
                 <Paragraph>{this.state.access_token}</Paragraph>   
             </ScrollView>
+            </SafeAreaView>
         );
     }
 

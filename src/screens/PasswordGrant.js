@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
@@ -10,10 +10,10 @@ import * as SecureStore from 'expo-secure-store';
 
 export default class PasswordGrant extends React.Component {
 
-    state = {
-        client_id: 1,
+    state = {    
         client_desc: '',
-        data_to_send: [],
+        data_to_send: {},
+        data_to_send_printable: '',
         username: '',
         password: '',
 		expanded: false,
@@ -51,7 +51,7 @@ export default class PasswordGrant extends React.Component {
 		}
  
         let client_desc = client_id + ' ' + this.clients[client_id]	;
-		this.setState({client_id: client_id, client_desc: client_desc });
+		this.setState({data_to_send: data_to_send, client_desc: client_desc }); 
     }
 
     setUsername(username) {
@@ -79,7 +79,7 @@ export default class PasswordGrant extends React.Component {
             data_to_send.username = this.state.username;
             data_to_send.password = this.state.password;
          
-		 this.setState({data_to_send: url + ' ' + JSON.stringify(data)});
+		 this.setState({data_to_send: data_to_send, data_to_send_printable: 'POST: ' + url + ' ' + JSON.stringify(data_to_send)});
 		 
             let result = await fetch(url, {
                 method: 'POST',
@@ -145,6 +145,7 @@ export default class PasswordGrant extends React.Component {
 	
     render() {
 		return (
+            <SafeAreaView>
             <ScrollView style={{ paddingHorizontal: 20 }}>
                 <Subheading>Password Grant</Subheading>
                 <List.Section title="Client type">
@@ -173,11 +174,12 @@ export default class PasswordGrant extends React.Component {
 				<Button style={{marginHorizontal: 20, marginVertical: 20}} disabled={this.state.username === '' || this.state.password === ''} mode="contained" onPress={this.authPasswordGrant}>Login</Button>
                 <Divider style={{marginVertical: 20}} />
 		        <Subheading>Request</Subheading>
-				<Paragraph>{this.state.data_to_send}</Paragraph>
+				<Paragraph>{this.state.data_to_send_printable}</Paragraph>
 				<Divider style={{marginVertical: 20}} />
 				<Subheading>Access token</Subheading>
                 <Paragraph>{this.state.access_token}</Paragraph> 
             </ScrollView>
+            </SafeAreaView>
         );
     }
 

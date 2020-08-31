@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
@@ -13,12 +13,20 @@ export default class HttpCall extends React.Component {
     state = {
         accessToken: '',
 		data_to_send: '',
-		response: '',
+        response: '',
+        
+        client_id: '', 
+        refreshToken: '',
+        client_secret: ''
+                
     }
 
-    getAccessToken = async () => {
+    readTokens = async () => {
         let accessToken = await SecureStore.getItemAsync('accessToken');
-        this.setState({accessToken: accessToken});
+        let refreshToken = await SecureStore.getItemAsync('refreshToken');
+        let client_id = await SecureStore.getItemAsync('clientId');
+        let client_secret = await SecureStore.getItemAsync('clientSecret');
+        this.setState({accessToken: accessToken, refreshToken: refreshToken, client_id: client_id, client_secret: client_secret});
     }
 
     clearAccessToken = async () => {
@@ -34,6 +42,33 @@ export default class HttpCall extends React.Component {
         };   
 
         return headers;
+    }
+
+    refreshToken = async () => {
+  
+        
+        let url = 'https://hr.iubar.it/oauth/token';
+        let data_to_send = {	  
+            
+            grant_type: 'refresh_token',			
+            client_id: this.state.client_id,
+            scope: '',
+            refresh_token: this.state.refreshToken,
+            client_secret: this.state.client_secret,
+        };        
+        let result = await fetch(url, {
+            method: 'POST',
+            headers: this.getHeaders(),
+            body:  JSON.stringify(data_to_send) ,
+        });
+        const statusCode = result.status;
+        console.log('! statusCode: ' + statusCode);          
+        let json = await result.json();
+        console.log('json: ' + JSON.stringify(json));
+     
+        let accessToken = json.access_token; 
+        console.log('accessToken: ' + JSON.stringify(accessToken));        
+
     }
 
     callApi = async () => {
@@ -63,12 +98,19 @@ export default class HttpCall extends React.Component {
 	
     render() {
 		return (
+            <SafeAreaView>
             <ScrollView style={{paddingHorizontal: 20}}>
  
 	            <Subheading>Secure store</Subheading>	  
-                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.getAccessToken}>Read access token</Button>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.readTokens}>Read access token</Button>
                 <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.clearAccessToken}>Clear access token</Button>
                 <Divider style={{marginVertical: 20}} />
+				<Subheading>Token</Subheading>
+                <Paragraph>Access token: {this.state.accessToken}</Paragraph> 
+                <Paragraph>Refresh token: {this.state.refreshToken}</Paragraph> 
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Info</Button>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Refresh</Button>                
+				<Divider style={{marginVertical: 20}} />                
 				<Subheading>Rest Api</Subheading>
                 <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.callApi} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Call route</Button>
 				<Divider style={{marginVertical: 20}} />
@@ -78,6 +120,7 @@ export default class HttpCall extends React.Component {
 		        <Subheading>Response</Subheading>
 				<Paragraph>{this.state.response}</Paragraph>								
             </ScrollView>
+            </SafeAreaView>
         );
     }
 
