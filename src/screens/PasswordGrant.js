@@ -113,8 +113,21 @@ export default class PasswordGrant extends React.Component {
                 let expires_in = json.expires_in;
                 let access_token = json.access_token;
                 let refresh_token = json.refresh_token;
-                this.setState({access_token: access_token});
+
+                console.log('accessToken: ' + access_token);
+                console.log('refreshToken: ' + refresh_token);
+                console.log('expiresIn: ' + expires_in);
+                console.log('clientId: ' + this.state.data_to_send.client_id);
+                console.log('clientSecret: ' + this.state.data_to_send.client_secret);
+                
                 SecureStore.setItemAsync('accessToken', access_token);
+                SecureStore.setItemAsync('refreshToken', refresh_token);
+                SecureStore.setItemAsync('expiresIn', expires_in.toString());
+                SecureStore.setItemAsync('clientId', this.state.data_to_send.client_id.toString());
+                SecureStore.setItemAsync('clientSecret', this.state.data_to_send.client_secret);
+
+                this.setState({access_token: access_token});
+
                 Alert.alert('Authentication done: token saved'); 
             }
         } catch (error) {

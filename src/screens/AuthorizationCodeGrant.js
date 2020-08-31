@@ -6,7 +6,6 @@ import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
 import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput} from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
-import {Picker} from '@react-native-community/picker';
 
 export default class AuthorizationCodeGrant extends React.Component {
 
@@ -268,7 +267,6 @@ export default class AuthorizationCodeGrant extends React.Component {
         if (code){				
             let access_token = await this.exchangeToken(verifier, code, state);
             this.setState({access_token: access_token});
-            SecureStore.setItemAsync('accessToken', access_token);
             Alert.alert('Authentication done: token saved');
         }
     }
@@ -302,10 +300,17 @@ export default class AuthorizationCodeGrant extends React.Component {
         let json = await result.json();
         console.log('json: ' + JSON.stringify(json));
      
-        let accessToken = json.access_token; 
+        let accessToken = json.access_token;
+        let refreshToken = json.refresh_token;
+        let expiresIn = json.expires_in;
+        
         console.log('accessToken: ' + JSON.stringify(accessToken));
 
         SecureStore.setItemAsync('accessToken', accessToken);
+        SecureStore.setItemAsync('refreshToken', refreshToken);
+        SecureStore.setItemAsync('expiresIn', expiresIn.toString());
+        SecureStore.setItemAsync('clientId', this.state.client_id.toString());
+        // Non c'è bisogno di SecureStore.setItemAsync('clientSecret'); perchè i client in questo screen non hanno nessun secret
     
         return accessToken;
     }
