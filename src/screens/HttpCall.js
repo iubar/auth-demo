@@ -13,18 +13,26 @@ export default class HttpCall extends React.Component {
     state = {
         accessToken: '',
         refreshToken: '',
-        expiresIn: '',
-        client_id: '', 
+        expiresIn: 0,
+        client_id: 0,
         client_secret: '',
-		data_to_send: '',
+		data_to_send_printable: '',
         response: ''               
     }
 
     readDataFromStorage = async () => {
         let accessToken = await SecureStore.getItemAsync('accessToken');
         let refreshToken = await SecureStore.getItemAsync('refreshToken');
-        let expiresIn = await SecureStore.getItemAsync('expiresIn');
-        let client_id = await SecureStore.getItemAsync('clientId');
+        let expiresInString = await SecureStore.getItemAsync('expiresIn');
+        let expiresIn = 0;
+        if(expiresInString){
+            expiresIn = parseInt(expiresInString);
+        }
+        let client_id_as_string = await SecureStore.getItemAsync('clientId');
+        let client_id = 0;
+        if(client_id_as_string){
+            client_id = parseInt(client_id_as_string);
+        }
         let client_secret = await SecureStore.getItemAsync('clientSecret');
 
         this.setState({
@@ -72,6 +80,8 @@ export default class HttpCall extends React.Component {
             client_secret: this.state.client_secret,
         };
 
+        this.setState({data_to_send_printable: 'POST: ' + url + ' ' + JSON.stringify(data_to_send)});
+
         let result = await fetch(url, {
             method: 'POST',
             headers: this.getHeaders(),
@@ -83,11 +93,24 @@ export default class HttpCall extends React.Component {
         let json = await result.json();
         console.log('json: ' + JSON.stringify(json));
      
+        this.setState({response: JSON.stringify(json)});
+
         let accessToken = json.access_token; 
         let refreshToken = json.refresh_token; 
         let expiresIn = json.expires_in; 
 
         console.log('accessToken: ' + JSON.stringify(accessToken));
+        console.log('refreshToken: ' + JSON.stringify(refreshToken));
+        console.log('expiresIn: ' + JSON.stringify(expiresIn));
+
+        let msg1 = 'The access token was not changed';
+        if(accessToken!=this.state.accessToken){
+            msg1 = 'The access was changed';
+        }
+        let msg2 = 'The refresh token was not changed';
+        if(refreshToken!=this.state.refreshToken){
+            msg2 = 'The refresh token was changed';
+        }     
 
         SecureStore.setItemAsync('accessToken', accessToken);
         SecureStore.setItemAsync('refreshToken', refreshToken);
@@ -104,7 +127,9 @@ export default class HttpCall extends React.Component {
         });
 
         if (accessToken !== null){
-            Alert.alert('Refresh done: token saved'); 
+            let msg3 = 'Done: tokens saved' + '\n' + msg1 + '\n' + msg2;
+            console.log(msg3);
+            Alert.alert('Done: tokens saved');
         }
     }
 
@@ -114,9 +139,8 @@ export default class HttpCall extends React.Component {
             method: 'GET',
 		    headers: this.getHeaders()
         });	
-		
-		
-		this.setState({data_to_send: url});
+				
+		this.setState({data_to_send_printable: 'GET: ' + url}); 
 		
 		let json = await result.json();
         console.log('json: ' + JSON.stringify(json));		
@@ -127,13 +151,57 @@ export default class HttpCall extends React.Component {
 			Alert.alert('Ok: ' + statusCode);
 		}
 
-	this.setState({response: JSON.stringify(json)});
+	    this.setState({response: JSON.stringify(json)});
 
     }
 
     handlePress = () => this.setState({expanded: !this.state.expanded });
-	
+    
+    formatTime(unix_timestamp_in_ms){
+
+        var date = new Date(unix_timestamp_in_ms);
+
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+        var year = date.getFullYear();
+
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+    
+        // Will display time in 10:30:23 format        
+        var formattedTime = day + "/" + month + "/" + year + ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    
+        console.log(formattedTime);
+
+        return formattedTime;
+    }
+
+    isExpired(exp) {
+        if (Date.now() <= exp * 1000) {
+          console.log(true, 'token is not expired');
+          return false;
+        } else { 
+          console.log(false, 'token is expired');
+          return true;
+        }
+      }    
+        
     render() {
+        let expires = '';
+        if(this.state.expiresIn>0){
+            let expiresAtTime = new Date().getTime() + (this.state.expiresIn * 1000);
+            let expiresAt = this.formatTime(expiresAtTime);
+            let isExpired = '(it\'s not expired yet)';
+            if(this.isExpired(expiresAtTime)){
+                isExpired = '(it\'s expired)';
+            }    
+            expires = this.state.expiresIn + ' seconds, on ' + expiresAt + ' ' + isExpired;
+        }
+
 		return (
             <SafeAreaView>
             <ScrollView style={{paddingHorizontal: 20}}>
@@ -145,7 +213,7 @@ export default class HttpCall extends React.Component {
 				<Subheading>Token</Subheading>
                 <Paragraph>Access token: {this.state.accessToken}</Paragraph> 
                 <Paragraph>Refresh token: {this.state.refreshToken}</Paragraph> 
-                <Paragraph>Expires in: {this.state.expiresIn}</Paragraph> 
+                <Paragraph>Expires in {expires}</Paragraph> 
                 {/* <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Info</Button> */}
                 <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Refresh</Button>                
 				<Divider style={{marginVertical: 20}} />                
@@ -153,7 +221,7 @@ export default class HttpCall extends React.Component {
                 <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.callApi} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Call route</Button>
 				<Divider style={{marginVertical: 20}} />
 		        <Subheading>Request</Subheading>
-				<Paragraph>{this.state.data_to_send}</Paragraph>
+				<Paragraph>{this.state.data_to_send_printable}</Paragraph>
 				<Divider style={{marginVertical: 20}} />
 		        <Subheading>Response</Subheading>
 				<Paragraph>{this.state.response}</Paragraph>								
