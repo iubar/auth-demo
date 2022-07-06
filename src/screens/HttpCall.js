@@ -20,7 +20,7 @@ export default class HttpCall extends React.Component {
         response: ''               
     }
 
-    readDataFromStorage = async () => {
+    readDataFromStore = async () => {
         let accessToken = await SecureStore.getItemAsync('accessToken');
         let refreshToken = await SecureStore.getItemAsync('refreshToken');
         let expiresInString = await SecureStore.getItemAsync('expiresIn');
@@ -44,7 +44,7 @@ export default class HttpCall extends React.Component {
         });
     }
 
-    clearDataFromStorage = async () => {
+    clearDataFromStore = async () => {
         await SecureStore.deleteItemAsync('accessToken');
         await SecureStore.deleteItemAsync('refreshToken');
         await SecureStore.deleteItemAsync('expiresIn');
@@ -56,7 +56,9 @@ export default class HttpCall extends React.Component {
             refreshToken: null,
             expiresIn: null,
             client_id: null,
-            client_secret: null
+            client_secret: null,
+            response: null,
+            data_to_send_printable: null,
         });
     }
 
@@ -207,15 +209,15 @@ export default class HttpCall extends React.Component {
             <ScrollView style={{paddingHorizontal: 20}}>
  
 	            <Subheading>Secure store</Subheading>	  
-                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.readDataFromStorage}>Read data</Button>
-                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.clearDataFromStorage}>Clear data</Button>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.readDataFromStore}>Read data from store</Button>
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.clearDataFromStore}>Clear data in store</Button>
                 <Divider style={{marginVertical: 20}} />
 				<Subheading>Token</Subheading>
                 <Paragraph>Access token: {this.state.accessToken}</Paragraph> 
                 <Paragraph>Refresh token: {this.state.refreshToken}</Paragraph> 
-                <Paragraph>Expires in {expires}</Paragraph> 
+                <Paragraph>Expires in: {expires}</Paragraph> 
                 {/* <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Info</Button> */}
-                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Refresh</Button>                
+                <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Refresh token</Button>                
 				<Divider style={{marginVertical: 20}} />                
 				<Subheading>Rest Api</Subheading>
                 <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.callApi} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Call route</Button>

@@ -4,7 +4,7 @@ import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
-import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput} from 'react-native-paper';
+import { Text, Title, Subheading, Button, Paragraph, Divider, List} from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 
 export default class AuthorizationCodeGrant extends React.Component {
@@ -28,11 +28,12 @@ export default class AuthorizationCodeGrant extends React.Component {
     }
 
     initClients(){
-        this.clients[2] = 'no proxy - exp://192.168.0.131:19000/--/expo-auth-session';
+        let myIp = '192.168.0.131';
+        this.clients[2] = 'no proxy - exp://' + myIp + ':19000/--/expo-auth-session';
         this.clients[3] = 'proxy - https://auth.expo.io/@borgo/auth-demo';
         this.clients[4] = 'native - micoolredirect://';
-        this.clients[5] = 'no proxy - exp://192.168.0.131:19000';
-        this.clients[9] = 'native - exp://192.168.0.131:19000';
+        this.clients[5] = 'no proxy - exp://' + myIp + ':19000';
+        this.clients[9] = 'native - exp://' + myIp + ':19000';
     }
 
     componentDidMount(){
@@ -46,8 +47,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		console.log('item selected: ' + JSON.stringify(itemValue));
 		let client_id = parseInt(itemValue);
 		let redirect_uri = null;
-		
-		
+				
 		// This proxy service is responsible for:
 		// - redirecting traffic from your application to the authentication service
 		// - redirecting response from the auth service to your application using a deep link
@@ -196,11 +196,17 @@ export default class AuthorizationCodeGrant extends React.Component {
 		// console.log('urlAuth: ' + urlAuth);
 		// const requestConfig = await request.getAuthRequestConfigAsync();
 		// console.log('requestConfig: ' + JSON.stringify(requestConfig));
-	
-        console.log('result***: ' + JSON.stringify(result)); 
-        if (result.params !== undefined){
+        console.log('verifier : ' + JSON.stringify(verifier));
+        console.log('result : ' + JSON.stringify(result)); 
+        if (result.type == 'dismiss'){        
+            console.log('login panel dismissed'); 
+        }else if (result.params !== undefined){
+            console.log('result.params !== undefined'); 
             let code = result.params.code;
+            console.log('code : ' + JSON.stringify(code));
             this.readToken(verifier, code, state);
+        }else{
+            console.log('result.params == undefined'); 
         }
     }
 
@@ -320,13 +326,13 @@ export default class AuthorizationCodeGrant extends React.Component {
             'Content-Type': 'application/json',
             Accept: 'application/json',
         };
-
         return headers;
     }
 
     handlePress = () => this.setState({expanded: !this.state.expanded });
 	
     render() {
+        console.log('rendering....');
 		return (
             <SafeAreaView>
             <ScrollView style={{ paddingHorizontal: 20 }}>
