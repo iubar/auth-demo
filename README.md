@@ -1,6 +1,7 @@
 # auth-demo
 
-[![Build Status](https://travis-ci.org/iubar/auth-demo.svg?branch=master)](https://travis-ci.org/iubar/auth-demo)
+[![Build Status](https://app.travis-ci.com/iubar/auth-demo.svg?branch=master)](https://app.travis-ci.com/github/iubar/auth-demo)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a7f66179f78c4e5aa9cdaea3c20782a9)](https://www.codacy.com/gh/iubar/auth-demo/dashboard)
 
 Testing authorization Code Grant flow for an Expo client
 
