@@ -82,6 +82,8 @@ export default class HttpCall extends React.Component {
             client_secret: this.state.client_secret,
         };
 
+        console.log('data_to_send: ' + JSON.stringify(data_to_send));
+
         this.setState({data_to_send_printable: 'POST: ' + url + ' ' + JSON.stringify(data_to_send)});
 
         let result = await fetch(url, {
@@ -91,7 +93,7 @@ export default class HttpCall extends React.Component {
         });
 
         const statusCode = result.status;
-        console.log('! statusCode: ' + statusCode);          
+        console.log('status: ' + statusCode);          
         let json = await result.json();
         console.log('json: ' + JSON.stringify(json));
      
