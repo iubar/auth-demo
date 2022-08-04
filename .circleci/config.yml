@@ -1,4 +1,5 @@
 version: 2.1
+# see https://circleci.com/blog/ci-for-react-apps/
 jobs:
   build:
     working_directory: ~/repo
@@ -20,5 +21,8 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: Run tests
-          command: npm run test-ci
+          name: Code style check
+          command: npm run format-check
+      - run:
+          name: Run linter
+          command: npm run lint                      
