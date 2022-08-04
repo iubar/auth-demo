@@ -1,0 +1,26 @@
+version: 2.1
+workflows:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    jobs:
+      build:
+        working_directory: ~/repo
+        docker:
+          - image: circleci/node:10.16.3
+        steps:
+          - checkout
+          - run:
+              name: Update NPM
+              command: "sudo npm install -g npm@5"
+          - restore_cache:
+              key: dependency-cache-{{ checksum "package-lock.json" }}
+          - run:
+              name: Install Dependencies
+              command: npm install
+          - save_cache:
+              key: dependency-cache-{{ checksum "package-lock.json" }}
+              paths:
+                - ./node_modules
+          - run:
+              name: Run tests
+              command: npm run test-ci

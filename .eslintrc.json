@@ -1,0 +1,7 @@
+{ 
+    "extends": "@react-native-community", 
+    "rules" : {
+        "no-unused-vars" : 1,
+        "no-undef" : 2
+    }
+}
