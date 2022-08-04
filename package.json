@@ -13,8 +13,8 @@
     "test-update": "jest --updateSnapshot  --coverage=false",
     "lint": "eslint --color --ext .js,.jsx src",
     "lint-fix": "npm run lint -- --fix",
-    "format-check": "prettier \"src/**/*.js\"",
-    "format-write": "npm run format-check -- --write",
+    "format-write": "prettier --write \"src/**/*{.js,.jsx}\"",
+    "format-check": "prettier --check \"src/**/*{.js,.jsx}\"",
     "clean-node": "rimraf node_modules"
   },
   "dependencies": {
