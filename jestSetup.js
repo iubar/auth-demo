@@ -19,6 +19,7 @@ jest.mock('@react-navigation/native/lib/commonjs/useLinking.native', () => ({
 }));
 */
 
+
 /*
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.mock('react-native-reanimated', () => {

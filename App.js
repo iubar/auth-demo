@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { 
-  DefaultTheme, 
-  // DarkTheme, 
-  Provider as PaperProvider 
+import {
+	DefaultTheme,
+	// DarkTheme,
+	Provider as PaperProvider,
 } from 'react-native-paper';
-import { 
-  FontAwesome, 
-  //Ionicons 
+import {
+	FontAwesome,
+	//Ionicons
 } from '@expo/vector-icons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import {

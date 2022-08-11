@@ -1,14 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
 import * as Crypto from 'expo-crypto';
-import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
-import * as Linking from 'expo-linking';
 import { Text, Title, Subheading, Button, Paragraph, Divider, List } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 
 export default class AuthorizationCodeGrant extends React.Component {
 	state = {
+		clients: [],
 		client_id: 2,
 		client_desc: '',
 		redirect_uri: '',
@@ -18,8 +17,6 @@ export default class AuthorizationCodeGrant extends React.Component {
 		data_to_send_printable: '',
 	};
 
-	clients = [];
-
 	constructor(props) {
 		super(props);
 		console.log('Theme: ' + JSON.stringify(this.props.theme));
@@ -28,11 +25,13 @@ export default class AuthorizationCodeGrant extends React.Component {
 
 	initClients() {
 		let myIp = '192.168.0.131';
-		this.clients[2] = 'no proxy - exp://' + myIp + ':19000/--/expo-auth-session';
-		this.clients[3] = 'proxy - https://auth.expo.io/@borgo/auth-demo';
-		this.clients[4] = 'native - micoolredirect://';
-		this.clients[5] = 'no proxy - exp://' + myIp + ':19000';
-		this.clients[9] = 'native - exp://' + myIp + ':19000';
+		let clients = [];
+		clients[2] = 'no proxy - exp://' + myIp + ':19000/--/expo-auth-session';
+		clients[3] = 'proxy - https://auth.expo.io/@borgo/auth-demo';
+		clients[4] = 'native - micoolredirect://';
+		clients[5] = 'no proxy - exp://' + myIp + ':19000';
+		clients[9] = 'native - exp://' + myIp + ':19000';
+		this.state.clients = clients;
 	}
 
 	async componentDidMount() {
@@ -43,6 +42,9 @@ export default class AuthorizationCodeGrant extends React.Component {
 	 * see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
 	 */
 	updateConfig = async (itemValue) => {
+		if (!itemValue) {
+			itemValue = 1;
+		}
 		console.log('item selected: ' + JSON.stringify(itemValue));
 		let client_id = parseInt(itemValue);
 		let redirect_uri = null;
@@ -77,7 +79,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		// The result is
 		// For a managed app: https://auth.expo.io/@your-username/your-app-slug/redirect
 		// For a web app: https://localhost:19006/redirect
-		let client_desc = client_id + ' ' + this.clients[client_id];
+		let client_desc = client_id + ' ' + this.state.clients[client_id];
 		this.setState({
 			client_id: client_id,
 			client_desc: client_desc,
@@ -88,8 +90,10 @@ export default class AuthorizationCodeGrant extends React.Component {
 	};
 
 	randomString = (length, chars) => {
-		var result = '';
-		for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+		let result = '';
+		for (let i = length; i > 0; --i) {
+			result += chars[Math.floor(Math.random() * chars.length)];
+		}
 		return result;
 	};
 
@@ -128,16 +132,20 @@ export default class AuthorizationCodeGrant extends React.Component {
 		return this.toURLEncode(hash);
 	};
 
-	calcCodeChallengeMock = async (verifier) => {
+	calcCodeChallengeMock = async () => {
 		return 'CUsFvFDG_Q8AtartzgKEEX3vjHuan-a-4iBmvqSJ72E';
 	};
 
 	/**
 	 * RFC 4648 (see https://tools.ietf.org/html/rfc4648)
+	 *
+	 * Using standard Base64 in URL requires encoding of '+', '/' and '=' characters
+	 * vedi commento del metodo calcCodeChallenge()
+	 *
 	 */
 	toURLEncode = (str) => {
 		let encoded = str.replace(/\+/g, '-').replace(/\//g, '_');
-		encoded = encoded.replace(/=/g, '');
+		encoded = encoded.replace(/=/g, ''); // questo statement dovrebbe sostituire solo l'ultimo carattere '=', ma in realtà essendocene uno solo è corretto
 		return encoded;
 	};
 
@@ -367,7 +375,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 							title={this.state.client_desc}
 							expanded={this.state.expanded}
 							onPress={this.handlePress}>
-							{this.clients.map((desc, index) => {
+							{this.state.clients.map((desc, index) => {
 								if (desc !== null) {
 									return (
 										<List.Item
