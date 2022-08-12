@@ -15,7 +15,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm install
+          command: npm ci
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -25,4 +25,25 @@ jobs:
           command: npm run format-check
       - run:
           name: Run linter
-          command: npm run lint                      
+          command: npm run lint
+#      - run:
+#          name: Testing
+#          command: npm run test-ci
+      - run:
+          name: Publish
+          command: |
+            expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
+            expo publish --non-interactive --quiet --release-channel default
+# see https://circleci.com/docs/configuration-reference#example
+## https://circleci.com/docs/variables
+
+##TODO:
+#https://app.circleci.com/settings/user/notifications
+#https://circleci.com/blog/circleci-slack-integration/
+#https://github.com/CircleCI-Public/slack-orb/wiki
+#https://circleci.com/developer/orbs/orb/circleci/slack
+#https://circleci.com/blog/continuous-integration-slack-twilio/
+
+## REF
+#https://circleci.com/developer/orbs
+

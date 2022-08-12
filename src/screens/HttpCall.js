@@ -3,7 +3,6 @@ import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native'
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
-import * as Linking from 'expo-linking';
 import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 

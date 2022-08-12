@@ -3,7 +3,6 @@ import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native'
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
-import * as Linking from 'expo-linking';
 import {
 	Text,
 	Title,
@@ -18,6 +17,7 @@ import * as SecureStore from 'expo-secure-store';
 
 export default class PasswordGrant extends React.Component {
 	state = {
+		clients: [],
 		client_desc: '',
 		data_to_send: {},
 		data_to_send_printable: '',
@@ -26,16 +26,16 @@ export default class PasswordGrant extends React.Component {
 		expanded: false,
 	};
 
-	clients = [];
-
 	constructor(props) {
 		super(props);
 		this.initClients();
 	}
 
 	initClients() {
-		this.clients[1] = 'with client_secret';
-		this.clients[6] = 'without client_secret';
+		let clients = [];
+		clients[1] = 'with client_secret';
+		clients[6] = 'without client_secret';
+		this.state.clients = clients;
 	}
 
 	async componentDidMount() {
@@ -58,7 +58,7 @@ export default class PasswordGrant extends React.Component {
 			// without client_secret
 		}
 
-		let client_desc = client_id + ' ' + this.clients[client_id];
+		let client_desc = client_id + ' ' + this.state.clients[client_id];
 		this.setState({ data_to_send: data_to_send, client_desc: client_desc });
 	};
 
@@ -177,7 +177,7 @@ export default class PasswordGrant extends React.Component {
 							title={this.state.client_desc}
 							expanded={this.state.expanded}
 							onPress={this.handlePress}>
-							{this.clients.map((desc, index) => {
+							{this.state.clients.map((desc, index) => {
 								if (desc !== null) {
 									return (
 										<List.Item
