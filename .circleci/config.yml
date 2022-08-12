@@ -34,7 +34,7 @@ jobs:
           command: |
             npm install --global expo-cli
             expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
-            expo publish --non-interactive --quiet --release-channel default
+            sudo expo publish --non-interactive --quiet --release-channel default
 # see https://circleci.com/docs/configuration-reference#example
 ## https://circleci.com/docs/variables
 
