@@ -100,7 +100,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	/**
 	 * The code verifier should be a random string of between 43 and 128 characters containing letters, numbers and "-", ".", "_", "~"
 	 */
-	calcVerifier = async () => {
+	calcVerifier = () => {
 		// let randomBytes = await Random.getRandomBytesAsync(128);
 		let randomString = this.randomString(
 			43,
@@ -109,7 +109,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		return randomString;
 	};
 
-	calcVerifierMock = async () => {
+	calcVerifierMock = () => {
 		return 'OENZUUJGNXJDOUIzVGJITkJ6Q3A3V2kycG1jbDFJYnRFcExnblFLQ0ZOZQ';
 	};
 
@@ -132,7 +132,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		return this.toURLEncode(hash);
 	};
 
-	calcCodeChallengeMock = async () => {
+	calcCodeChallengeMock = () => {
 		return 'CUsFvFDG_Q8AtartzgKEEX3vjHuan-a-4iBmvqSJ72E';
 	};
 
@@ -248,7 +248,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	 *
 	 */
 	authCodeGrant2 = async () => {
-		let verifier = await this.calcVerifier();
+		let verifier = this.calcVerifier();
 		console.log('verifier: ' + verifier);
 		let codeChallenge = await this.calcCodeChallenge(verifier);
 		console.log('codeChallenge: ' + codeChallenge);
@@ -267,9 +267,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 
 		url = this.buildUrl(url, config);
 
-		this.setState({ data_to_send_printable: 'AuthSession.startAsync({authUrl: ' + url + '})' });
-
-		console.log('urlAuth: ' + url);
+		console.log('authUrl: ' + url);
 
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  // let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
@@ -278,6 +276,8 @@ export default class AuthorizationCodeGrant extends React.Component {
 
 		let returnUrl = AuthSession.getDefaultReturnUrl();
 		console.log('returnUrl (default): ' + JSON.stringify(returnUrl));
+
+		this.state.data_to_send_printable = 'AuthSession.startAsync({authUrl: ' + url + '})';
 
 		let discovery = await AuthSession.startAsync({ authUrl: url }); // The auth.expo.io proxy is ALWAYS used  (it calls openAuthSessionAsync)
 		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
@@ -296,6 +296,8 @@ export default class AuthorizationCodeGrant extends React.Component {
 		if (discovery.params !== undefined) {
 			let code = discovery.params.code;
 			this.readToken(verifier, code, state);
+		} else {
+			console.log('panel dismissed or undefined value');
 		}
 	};
 
