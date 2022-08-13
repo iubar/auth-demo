@@ -5,7 +5,9 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: cimg/node:18.7.0 
-      # see https://circleci.com/developer/images/image/cimg/node
+      # https://github.com/CircleCI-Public/cimg-node
+      # https://hub.docker.com/r/cimg/node
+      # https://circleci.com/developer/images/image/cimg/node
     steps:
       - checkout
       - run:
@@ -32,19 +34,34 @@ jobs:
       - run:
           name: Publish
           command: |
-            sudo npm install --global expo-cli
+            # sudo npm install --global expo-cli
             npx expo-cli login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
             npx expo-cli publish --non-interactive --quiet --release-channel default
-# see https://circleci.com/docs/configuration-reference#example
-## https://circleci.com/docs/variables
 
-##TODO:
-#https://app.circleci.com/settings/user/notifications
-#https://circleci.com/blog/circleci-slack-integration/
-#https://github.com/CircleCI-Public/slack-orb/wiki
-#https://circleci.com/developer/orbs/orb/circleci/slack
-#https://circleci.com/blog/continuous-integration-slack-twilio/
+# https://circleci.com/docs/variables
+# 
 
-## REF
-#https://circleci.com/developer/orbs
-
+# 
+# Visual Editor: https://circleci-public.github.io/visual-config-editor/
+# References: 
+#   https://circleci.com/continuous-integration/
+#   https://circleci.com/docs/configuration-reference 
+#   https://app.circleci.com/settings/user/notifications
+# Immagini:
+#   https://circleci.com/docs/circleci-images
+#   https://circleci.com/blog/announcing-our-next-generation-convenience-images-smaller-faster-more-deterministic/
+#   https://hub.docker.com/u/cimg
+#   https://github.com/circleci/circleci-images
+#   https://circleci.com/developer/images 
+# Integrazioni:
+#   https://circleci.com/blog/circleci-slack-integration/
+#   https://circleci.com/blog/continuous-integration-slack-twilio/
+# Orb Registry: https://circleci.com/developer/orbs
+# Orbs:
+#   https://github.com/woltsu/telegram-orb
+#   https://circleci.com/developer/orbs/orb/woltsu/telegram
+#   https://circleci.com/developer/orbs/orb/circleci/slack
+#   https://github.com/CircleCI-Public/slack-orb/wiki
+# Examples
+#   https://github.com/CircleCI-Public/circleci-demo-react-native/blob/master/.circleci/config.yml
+#   https://github.com/orgs/CircleCI-Public/repositories?type=all
