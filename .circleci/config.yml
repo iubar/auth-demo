@@ -38,15 +38,15 @@ jobs:
             npx expo-cli login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
             npx expo-cli publish --non-interactive --quiet --release-channel default
 
-# https://circleci.com/docs/variables
 # 
-
+# 
 # 
 # Visual Editor: https://circleci-public.github.io/visual-config-editor/
 # References: 
 #   https://circleci.com/continuous-integration/
 #   https://circleci.com/docs/configuration-reference 
 #   https://app.circleci.com/settings/user/notifications
+#   https://circleci.com/docs/variables
 # Immagini:
 #   https://circleci.com/docs/circleci-images
 #   https://circleci.com/blog/announcing-our-next-generation-convenience-images-smaller-faster-more-deterministic/
@@ -54,6 +54,7 @@ jobs:
 #   https://github.com/circleci/circleci-images
 #   https://circleci.com/developer/images 
 # Integrazioni:
+#   https://circleci.com/docs/webhooks
 #   https://circleci.com/blog/circleci-slack-integration/
 #   https://circleci.com/blog/continuous-integration-slack-twilio/
 # Orb Registry: https://circleci.com/developer/orbs
@@ -65,3 +66,15 @@ jobs:
 # Examples
 #   https://github.com/CircleCI-Public/circleci-demo-react-native/blob/master/.circleci/config.yml
 #   https://github.com/orgs/CircleCI-Public/repositories?type=all
+# Languages
+#   Java
+#     https://circleci.com/docs/language-java-maven
+#     https://circleci.com/docs/language-java
+#   Android
+#     https://circleci.com/docs/language-android
+#   Php
+#     https://circleci.com/docs/language-php
+#   JS
+#     https://circleci.com/docs/language-javascript
+# DB
+#   https://circleci.com/docs/postgres-config#example-mysql-project

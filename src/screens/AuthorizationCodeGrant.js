@@ -4,6 +4,8 @@ import * as Crypto from 'expo-crypto';
 import * as AuthSession from 'expo-auth-session';
 import { Text, Title, Subheading, Button, Paragraph, Divider, List } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
+import HttpCall from '../HttpCall';
+import { URL_OAUTH_LOGIN, URL_AUTH } from '../Consts';
 
 export default class AuthorizationCodeGrant extends React.Component {
 	state = {
@@ -20,6 +22,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	constructor(props) {
 		super(props);
 		console.log('Theme: ' + JSON.stringify(this.props.theme));
+		this.api = new HttpCall();
 		this.initClients();
 	}
 
@@ -203,7 +206,6 @@ export default class AuthorizationCodeGrant extends React.Component {
 	};
 
 	authCodeGrant1 = async () => {
-		let url = 'https://hr.iubar.it/oauth/authorize';
 		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
 		let config = {
 			clientId: this.state.client_id,
@@ -215,7 +217,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 			usePKCE: true,
 			//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
 		};
-		let issuerOrDiscovery = { authorizationEndpoint: url }; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)
+		let issuerOrDiscovery = { authorizationEndpoint: URL_AUTH }; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)
 		let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 		let state = request.state;
 		let verifier = request.codeVerifier;
@@ -254,7 +256,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		console.log('codeChallenge: ' + codeChallenge);
 		let state = this.calcState();
 		console.log('state: ' + state);
-		let url = 'https://hr.iubar.it/oauth/authorize';
+
 		let config = {
 			client_id: this.state.client_id,
 			redirect_uri: this.state.redirect_uri,
@@ -265,7 +267,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 			code_challenge: codeChallenge,
 		};
 
-		url = this.buildUrl(url, config);
+		let url = this.buildUrl(URL_AUTH, config);
 
 		console.log('authUrl: ' + url);
 
@@ -301,10 +303,10 @@ export default class AuthorizationCodeGrant extends React.Component {
 		}
 	};
 
-	readToken = async (verifier, code, state) => {
+	readToken = async (verifier, code) => {
 		console.log('code: ' + JSON.stringify(code));
 		if (code) {
-			let access_token = await this.exchangeToken(verifier, code, state);
+			let access_token = await this.exchangeToken(verifier, code);
 			this.setState({ access_token: access_token });
 			Alert.alert('Authentication done: token saved');
 		}
@@ -313,9 +315,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 	/**
 	 * exchange the authorization code for an access token.
 	 */
-	exchangeToken = async (verifier, code, state) => {
-		let url = 'https://hr.iubar.it/oauth/token';
-
+	exchangeToken = async (verifier, code) => {
 		let data_to_send = {
 			client_id: this.state.client_id,
 			redirect_uri: this.state.redirect_uri,
@@ -323,45 +323,31 @@ export default class AuthorizationCodeGrant extends React.Component {
 			code: code,
 			code_verifier: verifier,
 		};
-
 		console.log('data_to_send: ' + JSON.stringify(data_to_send));
-
 		this.setState({
-			data_to_send_printable: 'POST: ' + url + ' ' + JSON.stringify(data_to_send),
+			data_to_send_printable: 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send),
 		});
+		let accessToken = null;
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+		if (result.status != 200) {
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
+			console.log(errorMsg);
+			Alert.alert(errorMsg);
+		} else {
+			let data = result.data;
+			accessToken = data.access_token;
+			let refreshToken = data.refresh_token;
+			let expiresIn = data.expires_in;
 
-		let result = await fetch(url, {
-			method: 'POST',
-			headers: this.getHeaders(),
-			body: JSON.stringify(data_to_send),
-		});
+			console.log('accessToken: ' + JSON.stringify(accessToken));
 
-		const statusCode = result.status;
-		console.log('! statusCode: ' + statusCode);
-		let json = await result.json();
-		console.log('json: ' + JSON.stringify(json));
-
-		let accessToken = json.access_token;
-		let refreshToken = json.refresh_token;
-		let expiresIn = json.expires_in;
-
-		console.log('accessToken: ' + JSON.stringify(accessToken));
-
-		SecureStore.setItemAsync('accessToken', accessToken);
-		SecureStore.setItemAsync('refreshToken', refreshToken);
-		SecureStore.setItemAsync('expiresIn', expiresIn.toString());
-		SecureStore.setItemAsync('clientId', this.state.client_id.toString());
-		// Non c'è bisogno di SecureStore.setItemAsync('clientSecret'); perchè i client in questo screen non hanno nessun secret
-
+			SecureStore.setItemAsync('accessToken', accessToken);
+			SecureStore.setItemAsync('refreshToken', refreshToken);
+			SecureStore.setItemAsync('expiresIn', expiresIn.toString());
+			SecureStore.setItemAsync('clientId', this.state.client_id.toString());
+			// Non c'è bisogno di SecureStore.setItemAsync('clientSecret'); perchè i client in questo screen non hanno nessun secret
+		}
 		return accessToken;
-	};
-
-	getHeaders = () => {
-		let headers = {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
-		};
-		return headers;
 	};
 
 	handlePress = () => this.setState({ expanded: !this.state.expanded });

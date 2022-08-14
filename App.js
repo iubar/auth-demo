@@ -14,9 +14,9 @@ import {
 	// DarkTheme as DarkThemeNav,
 	//DefaultTheme as DefaultThemeNav,
 } from '@react-navigation/native';
-import PasswordGrant from './src/screens/PasswordGrant';
+import PasswordGrantScreen from './src/screens/PasswordGrantScreen';
 import AuthorizationCodeGrant from './src/screens/AuthorizationCodeGrant';
-import HttpCall from './src/screens/HttpCall';
+import RestClientScreen from './src/screens/RestClientScreen';
 import Toolbar from './src/components/ToolbarComponent';
 
 const AppTheme = {
@@ -56,7 +56,7 @@ export default class App extends React.Component {
 									iconName = focused ? 'tag' : 'camera';
 								} else if (route.name === 'AuthorizationCodeGrant') {
 									iconName = focused ? 'tag' : 'camera';
-								} else if (route.name === 'HttpCall') {
+								} else if (route.name === 'RestClient') {
 									iconName = focused ? 'tag' : 'camera';
 								}
 								// You can return any component that you like here!
@@ -66,7 +66,7 @@ export default class App extends React.Component {
 						<Tab.Screen
 							options={{ tabBarLabel: 'Password Grant' }}
 							name="PasswordGrant"
-							component={PasswordGrant}
+							component={PasswordGrantScreen}
 						/>
 						<Tab.Screen
 							options={{ tabBarLabel: 'Auth Code Grant' }}
@@ -75,8 +75,8 @@ export default class App extends React.Component {
 						/>
 						<Tab.Screen
 							options={{ tabBarLabel: 'Api call' }}
-							name="HttpCall"
-							component={HttpCall}
+							name="RestClient"
+							component={RestClientScreen}
 						/>
 					</Tab.Navigator>
 				</NavigationContainer>

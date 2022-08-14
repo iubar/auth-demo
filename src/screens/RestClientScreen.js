@@ -5,8 +5,10 @@ import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
+import HttpCall from '../HttpCall';
+import { URL_OAUTH_LOGIN, URL_API_ROUTE1 } from '../Consts';
 
-export default class HttpCall extends React.Component {
+export default class RestClientScreen extends React.Component {
 	state = {
 		accessToken: '',
 		refreshToken: '',
@@ -16,6 +18,11 @@ export default class HttpCall extends React.Component {
 		data_to_send_printable: '',
 		response: '',
 	};
+
+	constructor(props) {
+		super(props);
+		this.api = new HttpCall();
+	}
 
 	readDataFromStore = async () => {
 		let accessToken = await SecureStore.getItemAsync('accessToken');
@@ -59,18 +66,7 @@ export default class HttpCall extends React.Component {
 		});
 	};
 
-	getHeaders = () => {
-		let headers = {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
-			'Authorization': 'Bearer ' + this.state.accessToken,
-		};
-
-		return headers;
-	};
-
 	refreshToken = async () => {
-		let url = 'https://hr.iubar.it/oauth/token';
 		let data_to_send = {
 			grant_type: 'refresh_token',
 			client_id: this.state.client_id,
@@ -81,134 +77,95 @@ export default class HttpCall extends React.Component {
 
 		console.log('data_to_send: ' + JSON.stringify(data_to_send));
 
-		this.setState({
-			data_to_send_printable: 'POST: ' + url + ' ' + JSON.stringify(data_to_send),
-		});
+		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
+		let result = await this.api.callApi3(
+			'POST',
+			URL_OAUTH_LOGIN,
+			this.state.accessToken,
+			data_to_send
+		);
+		if (result.status != 200) {
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
+			console.log(errorMsg);
+			Alert.alert(errorMsg);
 
-		let result = await fetch(url, {
-			method: 'POST',
-			headers: this.getHeaders(),
-			body: JSON.stringify(data_to_send),
-		});
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(result),
+			});
+		} else {
+			let data = result.data;
+			console.log('data: ' + JSON.stringify(data));
 
-		const statusCode = result.status;
-		console.log('status: ' + statusCode);
-		let json = await result.json();
-		console.log('json: ' + JSON.stringify(json));
+			let accessToken = data.access_token;
+			let refreshToken = data.refresh_token;
+			let expiresIn = data.expires_in;
 
-		this.setState({ response: JSON.stringify(json) });
+			console.log('accessToken: ' + JSON.stringify(accessToken));
+			console.log('refreshToken: ' + JSON.stringify(refreshToken));
+			console.log('expiresIn: ' + JSON.stringify(expiresIn));
 
-		let accessToken = json.access_token;
-		let refreshToken = json.refresh_token;
-		let expiresIn = json.expires_in;
+			let msg1 = 'The access token was not changed';
+			if (accessToken != this.state.accessToken) {
+				msg1 = 'The access was changed';
+			}
+			let msg2 = 'The refresh token was not changed';
+			if (refreshToken != this.state.refreshToken) {
+				msg2 = 'The refresh token was changed';
+			}
 
-		console.log('accessToken: ' + JSON.stringify(accessToken));
-		console.log('refreshToken: ' + JSON.stringify(refreshToken));
-		console.log('expiresIn: ' + JSON.stringify(expiresIn));
+			SecureStore.setItemAsync('accessToken', accessToken);
+			SecureStore.setItemAsync('refreshToken', refreshToken);
+			SecureStore.setItemAsync('expiresIn', expiresIn.toString());
+			SecureStore.setItemAsync('clientId', this.state.client_id.toString());
+			SecureStore.setItemAsync('clientSecret', this.state.client_secret);
 
-		let msg1 = 'The access token was not changed';
-		if (accessToken != this.state.accessToken) {
-			msg1 = 'The access was changed';
-		}
-		let msg2 = 'The refresh token was not changed';
-		if (refreshToken != this.state.refreshToken) {
-			msg2 = 'The refresh token was changed';
-		}
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(data),
+				accessToken: accessToken,
+				refreshToken: refreshToken,
+				expiresIn: expiresIn,
+				client_id: this.state.client_id,
+				client_secret: this.state.client_secret,
+			});
 
-		SecureStore.setItemAsync('accessToken', accessToken);
-		SecureStore.setItemAsync('refreshToken', refreshToken);
-		SecureStore.setItemAsync('expiresIn', expiresIn.toString());
-		SecureStore.setItemAsync('clientId', this.state.client_id.toString());
-		SecureStore.setItemAsync('clientSecret', this.state.client_secret);
-
-		this.setState({
-			accessToken: accessToken,
-			refreshToken: refreshToken,
-			expiresIn: expiresIn,
-			client_id: this.state.client_id,
-			client_secret: this.state.client_secret,
-		});
-
-		if (accessToken !== null) {
-			let msg3 = 'Done: tokens saved' + '\n' + msg1 + '\n' + msg2;
-			console.log(msg3);
-			Alert.alert('Done: tokens saved');
+			if (accessToken !== null) {
+				let msg3 = 'Done: tokens saved' + '\n' + msg1 + '\n' + msg2;
+				console.log(msg3);
+				Alert.alert('Done: tokens saved');
+			}
 		}
 	};
 
 	callApi = async () => {
-		let url = 'https://hr.iubar.it/api/v1/user';
-		let result = await fetch(url, {
-			method: 'GET',
-			headers: this.getHeaders(),
-		});
-
-		this.setState({ data_to_send_printable: 'GET: ' + url });
-
-		let json = await result.json();
-		console.log('json: ' + JSON.stringify(json));
-		const statusCode = result.status;
-		if (statusCode != 200) {
-			Alert.alert('Http error: ' + statusCode);
+		let arg1 = 'GET: ' + URL_API_ROUTE1;
+		let result = await this.api.callApi3('GET', URL_API_ROUTE1, this.state.accessToken);
+		let data = '';
+		if (result.status != 200) {
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
+			console.log(errorMsg);
+			Alert.alert(errorMsg);
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(result),
+			});
 		} else {
-			Alert.alert('Ok: ' + statusCode);
+			data = result.data;
+			console.log('data: ' + JSON.stringify(data));
+			this.setState({ data_to_send_printable: arg1, response: JSON.stringify(data) });
 		}
-
-		this.setState({ response: JSON.stringify(json) });
 	};
 
 	handlePress = () => this.setState({ expanded: !this.state.expanded });
-
-	formatTime(unix_timestamp_in_ms) {
-		var date = new Date(unix_timestamp_in_ms);
-
-		var day = date.getDate();
-		var month = date.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
-		var year = date.getFullYear();
-
-		// Hours part from the timestamp
-		var hours = date.getHours();
-		// Minutes part from the timestamp
-		var minutes = '0' + date.getMinutes();
-		// Seconds part from the timestamp
-		var seconds = '0' + date.getSeconds();
-
-		// Will display time in 10:30:23 format
-		var formattedTime =
-			day +
-			'/' +
-			month +
-			'/' +
-			year +
-			' ' +
-			hours +
-			':' +
-			minutes.substr(-2) +
-			':' +
-			seconds.substr(-2);
-
-		console.log(formattedTime);
-
-		return formattedTime;
-	}
-
-	isExpired(exp) {
-		if (Date.now() <= exp * 1000) {
-			console.log(true, 'token is not expired');
-			return false;
-		} else {
-			console.log(false, 'token is expired');
-			return true;
-		}
-	}
 
 	render() {
 		let expires = '';
 		if (this.state.expiresIn > 0) {
 			let expiresAtTime = new Date().getTime() + this.state.expiresIn * 1000;
-			let expiresAt = this.formatTime(expiresAtTime);
+			let expiresAt = this.api.formatTime(expiresAtTime);
 			let isExpired = "(it's not expired yet)";
-			if (this.isExpired(expiresAtTime)) {
+			if (this.api.isExpired(expiresAtTime)) {
 				isExpired = "(it's expired)";
 			}
 			expires = this.state.expiresIn + ' seconds, on ' + expiresAt + ' ' + isExpired;
