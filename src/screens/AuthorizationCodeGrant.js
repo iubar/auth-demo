@@ -5,13 +5,15 @@ import * as AuthSession from 'expo-auth-session';
 import { Text, Title, Subheading, Button, Paragraph, Divider, List } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import HttpCall from '../HttpCall';
-import { URL_OAUTH_LOGIN, URL_AUTH } from '../Consts';
+import { URL_OAUTH_LOGIN, URL_AUTH, OAUTH_CLIENT_SECRET, MY_IP } from '../Consts';
+import StoreUtil from '../StoreUtil';
+import { Context } from '../Context';
 
 export default class AuthorizationCodeGrant extends React.Component {
+	static contextType = Context;
+
 	state = {
-		clients: [],
-		client_id: 2,
-		client_desc: '',
+		redirects: [],
 		redirect_uri: '',
 		access_token: '',
 		expanded: false,
@@ -23,71 +25,68 @@ export default class AuthorizationCodeGrant extends React.Component {
 		super(props);
 		console.log('Theme: ' + JSON.stringify(this.props.theme));
 		this.api = new HttpCall();
-		this.initClients();
-	}
-
-	initClients() {
-		let myIp = '192.168.0.131';
-		let clients = [];
-		clients[2] = 'no proxy - exp://' + myIp + ':19000/--/expo-auth-session';
-		clients[3] = 'proxy - https://auth.expo.io/@borgo/auth-demo';
-		clients[4] = 'native - micoolredirect://';
-		clients[5] = 'no proxy - exp://' + myIp + ':19000';
-		clients[9] = 'native - exp://' + myIp + ':19000';
-		this.state.clients = clients;
 	}
 
 	async componentDidMount() {
-		await this.updateConfig(2);
+		this.store = new StoreUtil(this.context);
+		await this.initRedirects();
+		await this.updateConfig(0);
 	}
+
+	initRedirects = async () => {
+		let redirects = [];
+		let redirect_uri = null;
+
+		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
+		redirect_uri = await AuthSession.makeRedirectUri({});
+		redirects[0] = redirect_uri;
+
+		// expo client
+		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
+		redirect_uri = (await AuthSession.makeRedirectUri({})) + '/--/expo-auth-session';
+		redirects[1] = redirect_uri;
+
+		// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
+		// This proxy service is responsible for:
+		// - redirecting traffic from your application to the authentication service
+		// - redirecting response from the auth service to your application using a deep link
+		// The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
+		// The auth.expo.io proxy is only used when startAsync is called, or when useProxy: true is passed to the promptAsync() method of an AuthRequest.
+		// Should use the `auth.expo.io` proxy: this is useful for testing managed native apps that require a custom URI scheme.
+		redirect_uri = await AuthSession.makeRedirectUri({ useProxy: true });
+
+		redirects[2] = redirect_uri; // USE PROXY
+
+		// To make your native app handle "mycoolredirect://" scheme, simply run:
+		// npx uri-scheme add mycoolredirect
+		// npx uri-scheme list
+		// se also the app.json config file
+		redirect_uri = await AuthSession.makeRedirectUri({ native: 'mycoolredirect://' });
+		redirects[3] = redirect_uri; // NATIVE
+
+		this.state.redirects = redirects;
+	};
 
 	/**
 	 * see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
 	 */
-	updateConfig = async (itemValue) => {
-		if (!itemValue) {
-			itemValue = 1;
-		}
-		console.log('item selected: ' + JSON.stringify(itemValue));
-		let client_id = parseInt(itemValue);
-		let redirect_uri = null;
-
-		// This proxy service is responsible for:
-		// - redirecting traffic from your application to the authentication service
-		// - redirecting response from the auth service to your application using a deep link
-
-		let useProxy = false;
-		if (client_id == 2) {
-			// expo client
-			// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });
-			redirect_uri = redirect_uri + '/--/expo-auth-session';
-		} else if (client_id == 3) {
-			useProxy = true;
-			// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
-			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy }); // The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
-		} else if (client_id == 4) {
-			// redirect_uri = 'mycoolredirect://';
-			redirect_uri = AuthSession.makeRedirectUri({ native: 'mycoolredirect://' });
-		} else if (client_id == 5) {
-			// expo client
-			// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-			redirect_uri = await AuthSession.makeRedirectUri({ useProxy: useProxy });
-		} else if (client_id == 9) {
-			// redirect_uri = 'mycoolredirect://';
-			redirect_uri = AuthSession.makeRedirectUri({ native: '/' });
-		}
-
-		console.log('redirect_uri; ' + JSON.stringify(redirect_uri));
+	updateConfig = async (index) => {
+		console.log('*************** item selected: ' + JSON.stringify(index));
+		//let client_id = parseInt(itemValue);
+		let redirect_uri = this.state.redirects[index];
 		// The result is
 		// For a managed app: https://auth.expo.io/@your-username/your-app-slug/redirect
 		// For a web app: https://localhost:19006/redirect
-		let client_desc = client_id + ' ' + this.state.clients[client_id];
+
+		if (!redirect_uri) {
+			redirect_uri = 'Errore nella logica del metodo, index: ' + index;
+		}
+		this.state.useProxy = false;
+		if (index == 2) {
+			this.state.useProxy = true;
+		}
 		this.setState({
-			client_id: client_id,
-			client_desc: client_desc,
 			redirect_uri: redirect_uri,
-			useProxy: useProxy,
 			expanded: false,
 		});
 	};
@@ -208,8 +207,8 @@ export default class AuthorizationCodeGrant extends React.Component {
 	authCodeGrant1 = async () => {
 		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
 		let config = {
-			clientId: this.state.client_id,
-			// clientSecret: clientSecret,
+			clientId: this.context.client_id,
+			clientSecret: this.context.client_secret,
 			redirectUri: this.state.redirect_uri,
 			//responseType: 'code',			// It's the default value
 			scopes: ['*'],
@@ -225,21 +224,23 @@ export default class AuthorizationCodeGrant extends React.Component {
 			useProxy: this.state.useProxy,
 		}); // When invoked, a web browser will open up and prompt the user for authentication.
 
-		// const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
-		// console.log('urlAuth: ' + urlAuth);
-		// const requestConfig = await request.getAuthRequestConfigAsync();
-		// console.log('requestConfig: ' + JSON.stringify(requestConfig));
+		//////////////////////////////////////////////////
+		const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
+		console.log('urlAuth: ' + urlAuth);
+		const requestConfig = await request.getAuthRequestConfigAsync();
+		console.log('requestConfig: ' + JSON.stringify(requestConfig));
+		//////////////////////////////////////////////////
+
 		console.log('verifier : ' + JSON.stringify(verifier));
 		console.log('result : ' + JSON.stringify(result));
-		if (result.type == 'dismiss') {
-			console.log('login panel dismissed');
-		} else if (result.params !== undefined) {
+
+		if (result.params == 'opened') {
 			console.log('result.params !== undefined');
 			let code = result.params.code;
 			console.log('code : ' + JSON.stringify(code));
-			this.readToken(verifier, code, state);
+			await this.exchangeToken(verifier, code);
 		} else {
-			console.log('result.params == undefined');
+			console.log('WARNING: AuthSessionResult is ' + result.params);
 		}
 	};
 
@@ -258,7 +259,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 		console.log('state: ' + state);
 
 		let config = {
-			client_id: this.state.client_id,
+			client_id: this.context.client_id,
 			redirect_uri: this.state.redirect_uri,
 			response_type: 'code',
 			scope: '*',
@@ -281,34 +282,18 @@ export default class AuthorizationCodeGrant extends React.Component {
 
 		this.state.data_to_send_printable = 'AuthSession.startAsync({authUrl: ' + url + '})';
 
-		let discovery = await AuthSession.startAsync({ authUrl: url }); // The auth.expo.io proxy is ALWAYS used  (it calls openAuthSessionAsync)
+		let result = await AuthSession.startAsync({ authUrl: url }); // The auth.expo.io proxy is ALWAYS used  (it calls openAuthSessionAsync)
 		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
-		console.log('discovery: ' + JSON.stringify(discovery));
+		console.log('result: ' + JSON.stringify(result));
 
-		/*
-        
-		    Possibili risposte
-		
-            If the user cancelled the authentication session by closing the browser, the result is { type: 'cancel' }.
-            If the authentication is dismissed manually with AuthSession.dismiss(), the result is { type: 'dismiss' }.
-            If the authentication flow is successful, the result is {type: 'success', params: Object, event: Object }
-            If the authentication flow is returns an error, the result is {type: 'error', params: Object, errorCode: string, event: Object }
-            If you call AuthSession.startAsync more than once before the first call has returned, the result is {type: 'locked'}, because only one AuthSession can be in progress at any time.
-        */
-		if (discovery.params !== undefined) {
-			let code = discovery.params.code;
-			this.readToken(verifier, code, state);
+		/**
+		 * Possibili risposte: 'cancel' | 'dismiss' | 'opened' | 'locked'
+		 */
+		if (result.params == 'opened') {
+			let code = result.params.code;
+			await this.readToken(verifier, code);
 		} else {
-			console.log('panel dismissed or undefined value');
-		}
-	};
-
-	readToken = async (verifier, code) => {
-		console.log('code: ' + JSON.stringify(code));
-		if (code) {
-			let access_token = await this.exchangeToken(verifier, code);
-			this.setState({ access_token: access_token });
-			Alert.alert('Authentication done: token saved');
+			console.log('WARNING: AuthSessionResult is ' + result.params);
 		}
 	};
 
@@ -316,38 +301,37 @@ export default class AuthorizationCodeGrant extends React.Component {
 	 * exchange the authorization code for an access token.
 	 */
 	exchangeToken = async (verifier, code) => {
-		let data_to_send = {
-			client_id: this.state.client_id,
-			redirect_uri: this.state.redirect_uri,
-			grant_type: 'authorization_code',
-			code: code,
-			code_verifier: verifier,
-		};
-		console.log('data_to_send: ' + JSON.stringify(data_to_send));
-		this.setState({
-			data_to_send_printable: 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send),
-		});
-		let accessToken = null;
-		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
-		if (result.status != 200) {
-			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
-			console.log(errorMsg);
-			Alert.alert(errorMsg);
-		} else {
-			let data = result.data;
-			accessToken = data.access_token;
-			let refreshToken = data.refresh_token;
-			let expiresIn = data.expires_in;
+		console.log('code: ' + JSON.stringify(code));
+		if (code) {
+			let data_to_send = {
+				client_id: this.context.client_id,
+				redirect_uri: this.state.redirect_uri,
+				grant_type: 'authorization_code',
+				code: code,
+				code_verifier: verifier,
+			};
+			console.log('data_to_send: ' + JSON.stringify(data_to_send));
 
-			console.log('accessToken: ' + JSON.stringify(accessToken));
-
-			SecureStore.setItemAsync('accessToken', accessToken);
-			SecureStore.setItemAsync('refreshToken', refreshToken);
-			SecureStore.setItemAsync('expiresIn', expiresIn.toString());
-			SecureStore.setItemAsync('clientId', this.state.client_id.toString());
-			// Non c'è bisogno di SecureStore.setItemAsync('clientSecret'); perchè i client in questo screen non hanno nessun secret
+			let accessToken = '';
+			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+			if (result.status != 200) {
+				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
+				console.log(errorMsg);
+				Alert.alert(errorMsg);
+			} else {
+				let data = result.data;
+				accessToken = data.access_token;
+				let refreshToken = data.refresh_token;
+				let expiresIn = data.expires_in;
+				this.store.saveTokens(accessToken, refreshToken, expiresIn);
+				Alert.alert('Authentication done: token saved');
+			}
+			this.setState({
+				access_token: accessToken,
+				data_to_send_printable:
+					'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send),
+			});
 		}
-		return accessToken;
 	};
 
 	handlePress = () => this.setState({ expanded: !this.state.expanded });
@@ -357,13 +341,13 @@ export default class AuthorizationCodeGrant extends React.Component {
 		return (
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
-					<Subheading>Athorization Code Grant with PKCE</Subheading>
-					<List.Section title="Client type">
+					<Title>Auth Code Grant with PKCE</Title>
+					<List.Section title="Redirects">
 						<List.Accordion
-							title={this.state.client_desc}
+							title={this.state.redirect_uri}
 							expanded={this.state.expanded}
 							onPress={this.handlePress}>
-							{this.state.clients.map((desc, index) => {
+							{this.state.redirects.map((desc, index) => {
 								if (desc !== null) {
 									return (
 										<List.Item
@@ -378,7 +362,7 @@ export default class AuthorizationCodeGrant extends React.Component {
 					</List.Section>
 					<Divider style={{ marginVertical: 20 }} />
 					<Paragraph>Redirect uri: {this.state.redirect_uri}</Paragraph>
-					<Paragraph>Use proxy: {this.state.useProxy.toString()}</Paragraph>
+
 					<Divider style={{ marginVertical: 20 }} />
 					<View
 						style={{

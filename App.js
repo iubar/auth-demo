@@ -17,6 +17,8 @@ import {
 import PasswordGrantScreen from './src/screens/PasswordGrantScreen';
 import AuthorizationCodeGrant from './src/screens/AuthorizationCodeGrant';
 import RestClientScreen from './src/screens/RestClientScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import { Context } from './src/Context';
 import Toolbar from './src/components/ToolbarComponent';
 
 const AppTheme = {
@@ -44,42 +46,51 @@ export default class App extends React.Component {
 	render() {
 		return (
 			<PaperProvider theme={AppTheme}>
-				<NavigationContainer theme={AppTheme}>
-					<Toolbar />
-					<Tab.Navigator
-						initialRouteName="AuthorizationCodeGrant"
-						screenOptions={({ route }) => ({
-							tabBarIcon: ({ focused, color }) => {
-								// a Luglio 2020 c'è un bug nella documentazione ufficiale, qui corretto
-								let iconName;
-								if (route.name === 'PasswordGrant') {
-									iconName = focused ? 'tag' : 'camera';
-								} else if (route.name === 'AuthorizationCodeGrant') {
-									iconName = focused ? 'tag' : 'camera';
-								} else if (route.name === 'RestClient') {
-									iconName = focused ? 'tag' : 'camera';
-								}
-								// You can return any component that you like here!
-								return <FontAwesome name={iconName} size={21} color={color} />;
-							},
-						})}>
-						<Tab.Screen
-							options={{ tabBarLabel: 'Password Grant' }}
-							name="PasswordGrant"
-							component={PasswordGrantScreen}
-						/>
-						<Tab.Screen
-							options={{ tabBarLabel: 'Auth Code Grant' }}
-							name="AuthorizationCodeGrant"
-							children={() => <AuthorizationCodeGrant theme={AppTheme} />}
-						/>
-						<Tab.Screen
-							options={{ tabBarLabel: 'Api call' }}
-							name="RestClient"
-							component={RestClientScreen}
-						/>
-					</Tab.Navigator>
-				</NavigationContainer>
+				<Context.Provider value={{}}>
+					<NavigationContainer theme={AppTheme}>
+						<Toolbar />
+						<Tab.Navigator
+							initialRouteName="AuthorizationCodeGrant"
+							screenOptions={({ route }) => ({
+								tabBarIcon: ({ focused, color }) => {
+									// a Luglio 2020 c'è un bug nella documentazione ufficiale, qui corretto
+									let iconName;
+									if (route.name === 'PasswordGrant') {
+										iconName = focused ? 'tag' : 'camera';
+									} else if (route.name === 'AuthorizationCodeGrant') {
+										iconName = focused ? 'tag' : 'camera';
+									} else if (route.name === 'RestClient') {
+										iconName = focused ? 'tag' : 'camera';
+									} else if (route.name === 'Settings') {
+										iconName = focused ? 'tag' : 'camera';
+									}
+									// You can return any component that you like here!
+									return <FontAwesome name={iconName} size={21} color={color} />;
+								},
+							})}>
+							<Tab.Screen
+								options={{ tabBarLabel: 'Password Grant' }}
+								name="PasswordGrant"
+								component={PasswordGrantScreen}
+							/>
+							<Tab.Screen
+								options={{ tabBarLabel: 'Auth Code Grant' }}
+								name="AuthorizationCodeGrant"
+								children={() => <AuthorizationCodeGrant theme={AppTheme} />}
+							/>
+							<Tab.Screen
+								options={{ tabBarLabel: 'Api' }}
+								name="RestClient"
+								component={RestClientScreen}
+							/>
+							<Tab.Screen
+								options={{ tabBarLabel: 'Settings' }}
+								name="Settings"
+								component={SettingsScreen}
+							/>
+						</Tab.Navigator>
+					</NavigationContainer>
+				</Context.Provider>
 			</PaperProvider>
 		);
 	}

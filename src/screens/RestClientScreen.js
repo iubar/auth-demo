@@ -1,22 +1,22 @@
 import React from 'react';
 import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
-import * as Crypto from 'expo-crypto';
-import * as Random from 'expo-random';
-import * as AuthSession from 'expo-auth-session';
 import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import HttpCall from '../HttpCall';
-import { URL_OAUTH_LOGIN, URL_API_ROUTE1 } from '../Consts';
+import StoreUtil from '../StoreUtil';
+import { URL_OAUTH_LOGIN, URL_API_ROUTE1, OAUTH_CLIENT_SECRET } from '../Consts';
+import { Context } from '../Context';
 
 export default class RestClientScreen extends React.Component {
+	static contextType = Context;
+
 	state = {
 		accessToken: '',
 		refreshToken: '',
 		expiresIn: 0,
-		client_id: 0,
-		client_secret: '',
 		data_to_send_printable: '',
 		response: '',
+		disabled: true,
 	};
 
 	constructor(props) {
@@ -24,71 +24,49 @@ export default class RestClientScreen extends React.Component {
 		this.api = new HttpCall();
 	}
 
-	readDataFromStore = async () => {
-		let accessToken = await SecureStore.getItemAsync('accessToken');
-		let refreshToken = await SecureStore.getItemAsync('refreshToken');
-		let expiresInString = await SecureStore.getItemAsync('expiresIn');
-		let expiresIn = 0;
-		if (expiresInString) {
-			expiresIn = parseInt(expiresInString);
-		}
-		let client_id_as_string = await SecureStore.getItemAsync('clientId');
-		let client_id = 0;
-		if (client_id_as_string) {
-			client_id = parseInt(client_id_as_string);
-		}
-		let client_secret = await SecureStore.getItemAsync('clientSecret');
-
-		this.setState({
-			accessToken: accessToken,
-			refreshToken: refreshToken,
-			expiresIn: expiresIn,
-			client_id: client_id,
-			client_secret: client_secret,
+	async componentDidMount() {
+		this.store = new StoreUtil(this.context);
+		this._unsubscribe = this.props.navigation.addListener('focus', () => {
+			console.log('RestApi ha focus ****************** ');
+			let disabled = true;
+			if (this.context.access_token) {
+				disabled = false;
+			}
+			this.setState({
+				accessToken: this.context.access_token,
+				refreshToken: this.context.refresh_token,
+				expiresIn: this.context.expires_in,
+				disabled: disabled,
+			});
 		});
-	};
+	}
 
-	clearDataFromStore = async () => {
-		await SecureStore.deleteItemAsync('accessToken');
-		await SecureStore.deleteItemAsync('refreshToken');
-		await SecureStore.deleteItemAsync('expiresIn');
-		await SecureStore.deleteItemAsync('clientId');
-		await SecureStore.deleteItemAsync('clientSecret');
-
-		this.setState({
-			accessToken: null,
-			refreshToken: null,
-			expiresIn: null,
-			client_id: null,
-			client_secret: null,
-			response: null,
-			data_to_send_printable: null,
-		});
-	};
+	/**
+	 * https://reactnavigation.org/docs/navigation-events/
+	 */
+	componentWillUnmount() {
+		if (this._unsubscribe) {
+			this._unsubscribe();
+		}
+	}
 
 	refreshToken = async () => {
 		let data_to_send = {
 			grant_type: 'refresh_token',
-			client_id: this.state.client_id,
+			client_id: this.context.client_id,
 			scope: '',
 			refresh_token: this.state.refreshToken,
-			client_secret: this.state.client_secret,
+			client_secret: this.context.client_secret,
 		};
 
 		console.log('data_to_send: ' + JSON.stringify(data_to_send));
 
 		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
-		let result = await this.api.callApi3(
-			'POST',
-			URL_OAUTH_LOGIN,
-			this.state.accessToken,
-			data_to_send
-		);
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 		if (result.status != 200) {
 			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 			console.log(errorMsg);
 			Alert.alert(errorMsg);
-
 			this.setState({
 				data_to_send_printable: arg1,
 				response: JSON.stringify(result),
@@ -101,9 +79,13 @@ export default class RestClientScreen extends React.Component {
 			let refreshToken = data.refresh_token;
 			let expiresIn = data.expires_in;
 
-			console.log('accessToken: ' + JSON.stringify(accessToken));
-			console.log('refreshToken: ' + JSON.stringify(refreshToken));
-			console.log('expiresIn: ' + JSON.stringify(expiresIn));
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(data),
+				accessToken: accessToken,
+				refreshToken: refreshToken,
+				expiresIn: expiresIn,
+			});
 
 			let msg1 = 'The access token was not changed';
 			if (accessToken != this.state.accessToken) {
@@ -114,27 +96,10 @@ export default class RestClientScreen extends React.Component {
 				msg2 = 'The refresh token was changed';
 			}
 
-			SecureStore.setItemAsync('accessToken', accessToken);
-			SecureStore.setItemAsync('refreshToken', refreshToken);
-			SecureStore.setItemAsync('expiresIn', expiresIn.toString());
-			SecureStore.setItemAsync('clientId', this.state.client_id.toString());
-			SecureStore.setItemAsync('clientSecret', this.state.client_secret);
-
-			this.setState({
-				data_to_send_printable: arg1,
-				response: JSON.stringify(data),
-				accessToken: accessToken,
-				refreshToken: refreshToken,
-				expiresIn: expiresIn,
-				client_id: this.state.client_id,
-				client_secret: this.state.client_secret,
-			});
-
-			if (accessToken !== null) {
-				let msg3 = 'Done: tokens saved' + '\n' + msg1 + '\n' + msg2;
-				console.log(msg3);
-				Alert.alert('Done: tokens saved');
-			}
+			await this.store.saveTokens(accessToken, refreshToken, expiresIn);
+			let msg3 = 'Done: tokens saved' + '\n' + msg1 + '\n' + msg2;
+			console.log(msg3);
+			Alert.alert('Done: tokens saved');
 		}
 	};
 
@@ -160,6 +125,7 @@ export default class RestClientScreen extends React.Component {
 	handlePress = () => this.setState({ expanded: !this.state.expanded });
 
 	render() {
+		console.log('RestApi.render() ******************');
 		let expires = '';
 		if (this.state.expiresIn > 0) {
 			let expiresAtTime = new Date().getTime() + this.state.expiresIn * 1000;
@@ -174,20 +140,7 @@ export default class RestClientScreen extends React.Component {
 		return (
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
-					<Subheading>Secure store</Subheading>
-					<Button
-						style={{ marginHorizontal: 20, marginVertical: 20 }}
-						mode="contained"
-						onPress={this.readDataFromStore}>
-						Read data from store
-					</Button>
-					<Button
-						style={{ marginHorizontal: 20, marginVertical: 20 }}
-						mode="contained"
-						onPress={this.clearDataFromStore}>
-						Clear data in store
-					</Button>
-					<Divider style={{ marginVertical: 20 }} />
+					<Title>Rest Api</Title>
 					<Subheading>Token</Subheading>
 					<Paragraph>Access token: {this.state.accessToken}</Paragraph>
 					<Paragraph>Refresh token: {this.state.refreshToken}</Paragraph>
@@ -197,7 +150,7 @@ export default class RestClientScreen extends React.Component {
 						style={{ marginHorizontal: 20, marginVertical: 20 }}
 						mode="contained"
 						onPress={this.refreshToken}
-						disabled={this.state.accessToken === '' || this.state.accessToken === null}>
+						disabled={this.state.disabled}>
 						Refresh token
 					</Button>
 					<Divider style={{ marginVertical: 20 }} />
@@ -206,7 +159,7 @@ export default class RestClientScreen extends React.Component {
 						style={{ marginHorizontal: 20, marginVertical: 20 }}
 						mode="contained"
 						onPress={this.callApi}
-						disabled={this.state.accessToken === '' || this.state.accessToken === null}>
+						disabled={this.state.disabled}>
 						Call route
 					</Button>
 					<Divider style={{ marginVertical: 20 }} />

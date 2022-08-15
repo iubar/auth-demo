@@ -10,3 +10,10 @@ export const URL_API_ROUTE1 = URL_API + '/user';
 // OAuth
 export const OAUTH_CLIENT_ID = 0;
 export const OAUTH_CLIENT_SECRET = 'Qw5lBfbgufHf8SBbRKSErqZO3uOCtgphuXHZqaPb';
+
+// Others
+export const MY_IP = '192.168.0.131';
+
+export const CLIENTS = [];
+CLIENTS[1] = 'with client secret';
+CLIENTS[6] = 'without client secret';
