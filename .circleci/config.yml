@@ -28,9 +28,9 @@ jobs:
       - run:
           name: Run linter
           command: npm run lint
-#      - run:
-#          name: Testing
-#          command: npm run test-ci
+      - run:
+          name: Testing
+          command: npm run test-ci
       - run:
           name: Publish
           command: |
