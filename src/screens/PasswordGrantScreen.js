@@ -18,8 +18,6 @@ import {
 } from 'react-native-paper';
 import StoreUtil from '../StoreUtil';
 
-import * as SecureStore from 'expo-secure-store';
-
 export default class PasswordGrantScreen extends React.Component {
 	static contextType = Context;
 

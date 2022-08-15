@@ -12,7 +12,6 @@ export const OAUTH_CLIENT_ID = 0;
 export const OAUTH_CLIENT_SECRET = 'Qw5lBfbgufHf8SBbRKSErqZO3uOCtgphuXHZqaPb';
 
 // Others
-export const MY_IP = '192.168.0.131';
 
 export const CLIENTS = [];
 CLIENTS[1] = 'with client secret';

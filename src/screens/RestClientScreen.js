@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
 import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-native-paper';
-import * as SecureStore from 'expo-secure-store';
+
 import HttpCall from '../HttpCall';
 import StoreUtil from '../StoreUtil';
 import { URL_OAUTH_LOGIN, URL_API_ROUTE1, OAUTH_CLIENT_SECRET } from '../Consts';
@@ -26,8 +26,9 @@ export default class RestClientScreen extends React.Component {
 
 	async componentDidMount() {
 		this.store = new StoreUtil(this.context);
+
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
-			console.log('RestApi ha focus ****************** ');
+			console.log('RestApi has focus ****************** ');
 			let disabled = true;
 			if (this.context.access_token) {
 				disabled = false;

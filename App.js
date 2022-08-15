@@ -15,11 +15,12 @@ import {
 	//DefaultTheme as DefaultThemeNav,
 } from '@react-navigation/native';
 import PasswordGrantScreen from './src/screens/PasswordGrantScreen';
-import AuthorizationCodeGrant from './src/screens/AuthorizationCodeGrant';
+import AuthorizationCodeGrantScreen from './src/screens/AuthorizationCodeGrantScreen';
 import RestClientScreen from './src/screens/RestClientScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import { Context } from './src/Context';
 import Toolbar from './src/components/ToolbarComponent';
+import * as SecureStore from 'expo-secure-store';
 
 const AppTheme = {
 	...DefaultTheme,
@@ -53,7 +54,6 @@ export default class App extends React.Component {
 							initialRouteName="AuthorizationCodeGrant"
 							screenOptions={({ route }) => ({
 								tabBarIcon: ({ focused, color }) => {
-									// a Luglio 2020 c'è un bug nella documentazione ufficiale, qui corretto
 									let iconName;
 									if (route.name === 'PasswordGrant') {
 										iconName = focused ? 'tag' : 'camera';
@@ -76,8 +76,9 @@ export default class App extends React.Component {
 							<Tab.Screen
 								options={{ tabBarLabel: 'Auth Code Grant' }}
 								name="AuthorizationCodeGrant"
-								children={() => <AuthorizationCodeGrant theme={AppTheme} />}
+								component={AuthorizationCodeGrantScreen}
 							/>
+
 							<Tab.Screen
 								options={{ tabBarLabel: 'Api' }}
 								name="RestClient"
