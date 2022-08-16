@@ -56,13 +56,13 @@ export default class App extends React.Component {
 								tabBarIcon: ({ focused, color }) => {
 									let iconName;
 									if (route.name === 'PasswordGrant') {
-										iconName = focused ? 'tag' : 'camera';
+										iconName = focused ? 'key' : 'key';
 									} else if (route.name === 'AuthorizationCodeGrant') {
-										iconName = focused ? 'tag' : 'camera';
+										iconName = focused ? 'unlock-alt' : 'unlock-alt';
 									} else if (route.name === 'RestClient') {
-										iconName = focused ? 'tag' : 'camera';
+										iconName = focused ? 'code' : 'code';
 									} else if (route.name === 'Settings') {
-										iconName = focused ? 'tag' : 'camera';
+										iconName = focused ? 'cogs' : 'cogs';
 									}
 									// You can return any component that you like here!
 									return <FontAwesome name={iconName} size={21} color={color} />;
