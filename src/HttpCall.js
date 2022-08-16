@@ -1,5 +1,5 @@
 import React from 'react';
-import { URL_OAUTH_LOGIN, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, DEBUG } from './Consts.js';
+import { URL_OAUTH_LOGIN, OAUTH_CLIENT_SECRET, DEBUG } from './Consts.js';
 
 import * as SecureStore from 'expo-secure-store';
 
@@ -36,15 +36,17 @@ export default class HttpCall extends React.Component {
 		return headers;
 	};
 
-	refreshToken = async (refreshToken) => {
+	/**
+	 * https://laravel.com/docs/9.x/passport#refreshing-tokens
+	 */
+	refreshToken = async (clientId, refreshToken) => {
 		let data_to_send = {
 			grant_type: 'refresh_token',
-			client_id: OAUTH_CLIENT_ID,
+			client_id: clientId,
 			scope: '',
 			refresh_token: refreshToken,
 			client_secret: OAUTH_CLIENT_SECRET,
 		};
-
 		return this.callApi('POST', URL_OAUTH_LOGIN, data_to_send);
 	};
 
@@ -92,37 +94,38 @@ export default class HttpCall extends React.Component {
 			if (DEBUG) {
 				console.log('RESPONSE: ' + JSON.stringify(json));
 			}
-
-			// API DI IUBAR
-			if (json.hasOwnProperty('data')) {
-				_data = json.data;
-			}
-			if (json.hasOwnProperty('response')) {
-				// Attenzione nell'API IUBAR, json.response contiene il testo di un erorre quanto status != 200
-				if (status !== 200) {
-					_error = json.response;
-				} else {
-					responseMsg = json.response;
+			if (json) {
+				// API DI IUBAR
+				if (json.hasOwnProperty('data')) {
+					_data = json.data;
 				}
-			}
-			// FINE API DI IUBAR
-
-			// API DI PASSPORT (ricordati che è un middleware per Laravel)
-			if (json.hasOwnProperty('error')) {
-				_error = json.error;
-			}
-			if (json && json.hasOwnProperty('error_description')) {
-				_error = _error + ' | ' + json.error_description;
-			}
-			if (json.hasOwnProperty('message')) {
-				if (status === 200) {
-					responseMsg = json.message;
-				} else {
-					_error = json.message; // Ha un contenuto informativo superoriore rispetto al valore di json.error
+				if (json.hasOwnProperty('response')) {
+					// Attenzione nell'API IUBAR, json.response contiene il testo di un erorre quanto status != 200
+					if (status !== 200) {
+						_error = json.response;
+					} else {
+						responseMsg = json.response;
+					}
 				}
-			}
-			if (json.hasOwnProperty('token_type')) {
-				_data = json;
+				// FINE API DI IUBAR
+
+				// API DI PASSPORT (ricordati che è un middleware per Laravel)
+				if (json.hasOwnProperty('error')) {
+					_error = json.error;
+				}
+				if (json.hasOwnProperty('error_description')) {
+					_error = _error + ' | ' + json.error_description;
+				}
+				if (json.hasOwnProperty('message')) {
+					if (status === 200) {
+						responseMsg = json.message;
+					} else {
+						_error = json.message; // Ha un contenuto informativo superoriore rispetto al valore di json.error
+					}
+				}
+				if (json.hasOwnProperty('token_type')) {
+					_data = json;
+				}
 			}
 			// FINE API DI PASSPORT
 		} catch (error) {

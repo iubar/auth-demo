@@ -48,10 +48,8 @@ export default class SettingsScreen extends React.Component {
 		let client_secret = '';
 		if (client_id == 1) {
 			client_secret = OAUTH_CLIENT_SECRET;
-		} else if (client_id == 6) {
-			// without client_secret
 		} else {
-			console.log('ERRORE: MAI QUI');
+			// without client_secret
 		}
 		console.log('clientSecret: ' + client_secret);
 		let client_desc = client_id + ' ' + this.state.clients[client_id];

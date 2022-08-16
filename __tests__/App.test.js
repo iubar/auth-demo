@@ -10,6 +10,8 @@ describe('<App />', () => {
 	//});
 	it('renders correctly', async () => {
 		const tree = renderer.create(<App />).toJSON();
+
+		// see https://github.com/callstack/react-native-testing-library/issues/398
 		 await act(async () => {
 			expect(tree).toMatchSnapshot();
 		   })		

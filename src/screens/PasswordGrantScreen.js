@@ -27,6 +27,7 @@ export default class PasswordGrantScreen extends React.Component {
 		username: '',
 		password: '',
 		expanded: false,
+		client_id: 0,
 	};
 
 	constructor(props) {
@@ -36,6 +37,24 @@ export default class PasswordGrantScreen extends React.Component {
 
 	async componentDidMount() {
 		this.store = new StoreUtil(this.context);
+		this._unsubscribe = this.props.navigation.addListener('focus', () => {
+			console.log('AuthorizationCodeGrant has focus ****************** ');
+			this.setState({
+				access_token: this.context.accessToken,
+				client_id: this.context.clientId,
+			});
+		});
+
+		// NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
+	}
+
+	/**
+	 * https://reactnavigation.org/docs/navigation-events/
+	 */
+	componentWillUnmount() {
+		if (this._unsubscribe) {
+			this._unsubscribe();
+		}
 	}
 
 	setUsername(username) {
@@ -46,14 +65,19 @@ export default class PasswordGrantScreen extends React.Component {
 		this.setState({ password: password });
 	}
 
+	/**
+	 * https://laravel.com/docs/9.x/passport#requesting-password-grant-tokens
+	 */
 	authPasswordGrant = async () => {
 		let data_to_send = {
 			grant_type: 'password',
 			scope: '',
+			clientId: this.context.client_id,
+			clientSecret: this.context.client_secret,
 			username: this.state.username,
 			password: this.state.password,
 		};
-
+		console.log('data_to_send: ' + JSON.stringify(data_to_send));
 		let accessToken = '';
 		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 		if (result.status != 200) {
@@ -81,7 +105,7 @@ export default class PasswordGrantScreen extends React.Component {
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Password Grant</Title>
-
+					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
 					<TextInput
 						label="Username"
 						value={this.state.username}

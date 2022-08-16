@@ -4,7 +4,7 @@ import * as Crypto from 'expo-crypto';
 import * as AuthSession from 'expo-auth-session';
 import { Text, Title, Subheading, Button, Paragraph, Divider, List } from 'react-native-paper';
 import HttpCall from '../HttpCall';
-import { URL_OAUTH_LOGIN, URL_AUTH, OAUTH_CLIENT_SECRET } from '../Consts';
+import { URL_OAUTH_LOGIN, URL_AUTH } from '../Consts';
 import StoreUtil from '../StoreUtil';
 import { Context } from '../Context';
 import { withTheme } from 'react-native-paper';
@@ -20,6 +20,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		expanded: false,
 		useProxy: false,
 		data_to_send_printable: '',
+		client_id: 0,
 	};
 
 	constructor(props) {
@@ -35,7 +36,10 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
 			console.log('AuthorizationCodeGrant has focus ****************** ');
-			this.setState({ access_token: this.context.accessToken });
+			this.setState({
+				access_token: this.context.accessToken,
+				client_id: this.context.clientId,
+			});
 		});
 
 		// NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
@@ -111,6 +115,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		this.setState({
 			redirect_uri: redirect_uri,
 			expanded: false,
+			client_id: this.context.clientId,
 		});
 	};
 
@@ -325,7 +330,49 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	};
 
 	/**
+	 * TODO: metodo da provare alternativo a exchangeToken()
 	 * exchange the authorization code for an access token.
+	 * https://laravel.com/docs/9.x/passport#requesting-tokens-converting-authorization-codes-to-access-tokens
+	 */
+	exchangeToken2 = async (verifier, code) => {
+		console.log('code: ' + JSON.stringify(code));
+		if (code) {
+			let data_to_send = {
+				client_id: this.context.client_id,
+				client_secret: this.context.client_secret,
+				redirect_uri: this.state.redirect_uri,
+				grant_type: 'authorization_code',
+				code: code,
+			};
+			console.log('data_to_send: ' + JSON.stringify(data_to_send));
+
+			let accessToken = '';
+			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+			if (result.status != 200) {
+				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
+				console.log(errorMsg);
+				Alert.alert(errorMsg);
+			} else {
+				let data = result.data;
+				accessToken = data.access_token;
+				let refreshToken = data.refresh_token;
+				let expiresIn = data.expires_in;
+				this.store.saveTokens(accessToken, refreshToken, expiresIn);
+				Alert.alert('Authentication done: token saved');
+			}
+			this.setState({
+				access_token: accessToken,
+				data_to_send_printable:
+					'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send),
+			});
+		}
+	};
+
+	/**
+	 * exchange the authorization code for an access token.
+	 * Code Verifier & Code Challenge
+	 * As this authorization grant does not provide a client secret, developers will need to generate a combination of a code verifier and a code challenge in order to request a token.
+	 * https://laravel.com/docs/9.x/passport#code-grant-pkce-converting-authorization-codes-to-access-tokens
 	 */
 	exchangeToken = async (verifier, code) => {
 		console.log('code: ' + JSON.stringify(code));
@@ -369,6 +416,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Auth Code Grant with PKCE</Title>
+					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
 					<List.Section title="Redirects uri">
 						<List.Accordion
 							title={this.state.redirect_uri}
@@ -388,7 +436,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 						</List.Accordion>
 					</List.Section>
 					<Divider style={{ marginVertical: 20 }} />
-					<Paragraph>Client Id: {this.context.client_id}</Paragraph>
 
 					<Divider style={{ marginVertical: 20 }} />
 					<View

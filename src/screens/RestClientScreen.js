@@ -4,19 +4,20 @@ import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-na
 
 import HttpCall from '../HttpCall';
 import StoreUtil from '../StoreUtil';
-import { URL_OAUTH_LOGIN, URL_API_ROUTE1, OAUTH_CLIENT_SECRET } from '../Consts';
+import { URL_OAUTH_LOGIN, URL_API_ROUTE1 } from '../Consts';
 import { Context } from '../Context';
 
 export default class RestClientScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
-		accessToken: '',
-		refreshToken: '',
+		access_token: '',
+		refresh_token: '',
 		expiresIn: 0,
 		data_to_send_printable: '',
 		response: '',
 		disabled: true,
+		client_id: 0,
 	};
 
 	constructor(props) {
@@ -34,8 +35,9 @@ export default class RestClientScreen extends React.Component {
 				disabled = false;
 			}
 			this.setState({
-				accessToken: this.context.access_token,
-				refreshToken: this.context.refresh_token,
+				client_id: this.context.clientId,
+				access_token: this.context.access_token,
+				refresh_token: this.context.refresh_token,
 				expiresIn: this.context.expires_in,
 				disabled: disabled,
 			});
@@ -51,13 +53,16 @@ export default class RestClientScreen extends React.Component {
 		}
 	}
 
+	/**
+	 * https://laravel.com/docs/9.x/passport#refreshing-tokens
+	 */
 	refreshToken = async () => {
 		let data_to_send = {
 			grant_type: 'refresh_token',
 			client_id: this.context.client_id,
-			scope: '',
-			refresh_token: this.state.refreshToken,
 			client_secret: this.context.client_secret,
+			scope: '',
+			refresh_token: this.state.refresh_token,
 		};
 
 		console.log('data_to_send: ' + JSON.stringify(data_to_send));
@@ -83,17 +88,17 @@ export default class RestClientScreen extends React.Component {
 			this.setState({
 				data_to_send_printable: arg1,
 				response: JSON.stringify(data),
-				accessToken: accessToken,
-				refreshToken: refreshToken,
+				access_token: accessToken,
+				refresh_token: refreshToken,
 				expiresIn: expiresIn,
 			});
 
 			let msg1 = 'The access token was not changed';
-			if (accessToken != this.state.accessToken) {
+			if (accessToken != this.state.access_token) {
 				msg1 = 'The access was changed';
 			}
 			let msg2 = 'The refresh token was not changed';
-			if (refreshToken != this.state.refreshToken) {
+			if (refreshToken != this.state.refresh_token) {
 				msg2 = 'The refresh token was changed';
 			}
 
@@ -106,7 +111,7 @@ export default class RestClientScreen extends React.Component {
 
 	callApi = async () => {
 		let arg1 = 'GET: ' + URL_API_ROUTE1;
-		let result = await this.api.callApi3('GET', URL_API_ROUTE1, this.state.accessToken);
+		let result = await this.api.callApi3('GET', URL_API_ROUTE1, this.state.access_token, null);
 		let data = '';
 		if (result.status != 200) {
 			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
@@ -142,9 +147,9 @@ export default class RestClientScreen extends React.Component {
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Rest Api</Title>
-					<Subheading>Token</Subheading>
-					<Paragraph>Access token: {this.state.accessToken}</Paragraph>
-					<Paragraph>Refresh token: {this.state.refreshToken}</Paragraph>
+					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
+					<Paragraph>Access token: {this.state.access_token}</Paragraph>
+					<Paragraph>Refresh token: {this.state.refresh_token}</Paragraph>
 					<Paragraph>Expires in: {expires}</Paragraph>
 					{/* <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Info</Button> */}
 					<Button

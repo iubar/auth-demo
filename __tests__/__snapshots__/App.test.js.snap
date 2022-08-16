@@ -263,6 +263,43 @@ exports[`<App /> renders correctly 1`] = `
                   >
                     Auth Code Grant with PKCE
                   </Text>
+                  <Text
+                    style={
+                      Array [
+                        Object {
+                          "color": "rgb(28, 28, 30)",
+                          "fontFamily": "System",
+                          "fontWeight": "400",
+                        },
+                        Object {
+                          "textAlign": "left",
+                        },
+                        Array [
+                          Object {
+                            "textAlign": "left",
+                          },
+                          Object {
+                            "color": "rgba(28, 28, 30, 0.87)",
+                            "fontFamily": "System",
+                            "fontWeight": "400",
+                            "writingDirection": "ltr",
+                          },
+                          Array [
+                            Object {
+                              "fontSize": 14,
+                              "letterSpacing": 0.25,
+                              "lineHeight": 20,
+                              "marginVertical": 2,
+                            },
+                            undefined,
+                          ],
+                        ],
+                      ]
+                    }
+                  >
+                    Client Id: 
+                    0
+                  </Text>
                   <View
                     style={
                       Array [
@@ -463,42 +500,6 @@ exports[`<App /> renders correctly 1`] = `
                       ]
                     }
                   />
-                  <Text
-                    style={
-                      Array [
-                        Object {
-                          "color": "rgb(28, 28, 30)",
-                          "fontFamily": "System",
-                          "fontWeight": "400",
-                        },
-                        Object {
-                          "textAlign": "left",
-                        },
-                        Array [
-                          Object {
-                            "textAlign": "left",
-                          },
-                          Object {
-                            "color": "rgba(28, 28, 30, 0.87)",
-                            "fontFamily": "System",
-                            "fontWeight": "400",
-                            "writingDirection": "ltr",
-                          },
-                          Array [
-                            Object {
-                              "fontSize": 14,
-                              "letterSpacing": 0.25,
-                              "lineHeight": 20,
-                              "marginVertical": 2,
-                            },
-                            undefined,
-                          ],
-                        ],
-                      ]
-                    }
-                  >
-                    Client Id: 
-                  </Text>
                   <View
                     style={
                       Array [

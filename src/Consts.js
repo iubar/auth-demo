@@ -8,11 +8,14 @@ export const URL_API = URL_BASE + '/api/v1';
 export const URL_API_ROUTE1 = URL_API + '/user';
 
 // OAuth
-export const OAUTH_CLIENT_ID = 0;
 export const OAUTH_CLIENT_SECRET = 'Qw5lBfbgufHf8SBbRKSErqZO3uOCtgphuXHZqaPb';
 
 // Others
 
 export const CLIENTS = [];
-CLIENTS[1] = 'with client secret';
-CLIENTS[6] = 'without client secret';
+CLIENTS[1] = 'Password grant with client secret';
+CLIENTS[2] = 'Auth grant without client secret';
+CLIENTS[3] = 'Auth grant without client secret';
+CLIENTS[4] = 'Auth grant without client secret';
+CLIENTS[5] = 'Auth grant without client secret';
+CLIENTS[6] = 'Password grant without client secret';
