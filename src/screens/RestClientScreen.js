@@ -59,16 +59,16 @@ export default class RestClientScreen extends React.Component {
 	refreshToken = async () => {
 		let data_to_send = {
 			grant_type: 'refresh_token',
+			refresh_token: this.state.refresh_token,
 			client_id: this.context.client_id,
 			client_secret: this.context.client_secret,
 			scope: '',
-			refresh_token: this.state.refresh_token,
 		};
 
 		console.log('data_to_send: ' + JSON.stringify(data_to_send));
 
 		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
-		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send); // TODO: forse è callApi3() ?
 		if (result.status != 200) {
 			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 			console.log(errorMsg);

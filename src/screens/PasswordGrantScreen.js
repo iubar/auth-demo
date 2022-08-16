@@ -71,7 +71,7 @@ export default class PasswordGrantScreen extends React.Component {
 	authPasswordGrant = async () => {
 		let data_to_send = {
 			grant_type: 'password',
-			scope: '',
+			scope: '', // vedi anche https://laravel.com/docs/9.x/passport#requesting-all-scopes
 			clientId: this.context.client_id,
 			clientSecret: this.context.client_secret,
 			username: this.state.username,

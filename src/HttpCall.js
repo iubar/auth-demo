@@ -42,9 +42,9 @@ export default class HttpCall extends React.Component {
 	refreshToken = async (clientId, refreshToken) => {
 		let data_to_send = {
 			grant_type: 'refresh_token',
+			refresh_token: refreshToken,
 			client_id: clientId,
 			scope: '',
-			refresh_token: refreshToken,
 			client_secret: OAUTH_CLIENT_SECRET,
 		};
 		return this.callApi('POST', URL_OAUTH_LOGIN, data_to_send);

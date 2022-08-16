@@ -34,11 +34,8 @@ jobs:
       - run:
           name: Publish
           command: |
-            # sudo npm install --global expo-cli
             npx expo-cli login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
             npx expo-cli publish --non-interactive --quiet --release-channel default
-
-# 
 # 
 # 
 # Visual Editor: https://circleci-public.github.io/visual-config-editor/
@@ -49,10 +46,10 @@ jobs:
 #   https://circleci.com/docs/variables
 # Immagini:
 #   https://circleci.com/docs/circleci-images
-#   https://circleci.com/blog/announcing-our-next-generation-convenience-images-smaller-faster-more-deterministic/
-#   https://hub.docker.com/u/cimg
 #   https://github.com/circleci/circleci-images
-#   https://circleci.com/developer/images 
+#   https://circleci.com/developer/images
+#   https://hub.docker.com/u/cimg
+#   https://circleci.com/blog/announcing-our-next-generation-convenience-images-smaller-faster-more-deterministic/
 # Integrazioni:
 #   https://circleci.com/docs/webhooks
 #   https://circleci.com/blog/circleci-slack-integration/
@@ -66,6 +63,7 @@ jobs:
 # Examples
 #   https://github.com/CircleCI-Public/circleci-demo-react-native/blob/master/.circleci/config.yml
 #   https://github.com/orgs/CircleCI-Public/repositories?type=all
+#
 # Languages
 #   Java
 #     https://circleci.com/docs/language-java-maven

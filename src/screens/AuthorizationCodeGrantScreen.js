@@ -269,7 +269,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			console.log('result.params !== undefined');
 			let code = result.params.code;
 			console.log('code : ' + JSON.stringify(code));
-			await this.exchangeToken(verifier, code);
+			await this.exchangeToken(verifier, code); // TODO: provare ad usare qui anche exchangeToken2()
 		} else {
 			console.log('WARNING: AuthSessionResult is ' + result.params);
 		}
@@ -279,6 +279,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * When requesting an access token using the authorization code grant,
 	 * consumers should specify their desired scopes as the scope query string parameter.
 	 * The scope parameter should be a space-delimited list of scopes (!)
+	 *
+	 * https://laravel.com/docs/9.x/passport#requesting-tokens
 	 *
 	 */
 	authCodeGrant2 = async () => {
@@ -293,7 +295,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			client_id: this.context.client_id,
 			redirect_uri: this.state.redirect_uri,
 			response_type: 'code',
-			scope: '*',
+			scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
 			state: state,
 			code_challenge_method: 'S256',
 			code_challenge: codeChallenge,
@@ -334,7 +336,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * exchange the authorization code for an access token.
 	 * https://laravel.com/docs/9.x/passport#requesting-tokens-converting-authorization-codes-to-access-tokens
 	 */
-	exchangeToken2 = async (verifier, code) => {
+	exchangeToken2 = async (code) => {
 		console.log('code: ' + JSON.stringify(code));
 		if (code) {
 			let data_to_send = {
@@ -347,7 +349,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			console.log('data_to_send: ' + JSON.stringify(data_to_send));
 
 			let accessToken = '';
-			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send); // TODO: forse è callApi3() ?
 			if (result.status != 200) {
 				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 				console.log(errorMsg);
@@ -387,7 +389,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			console.log('data_to_send: ' + JSON.stringify(data_to_send));
 
 			let accessToken = '';
-			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send); // TODO: forse è callApi3() ?
 			if (result.status != 200) {
 				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 				console.log(errorMsg);
