@@ -7,6 +7,11 @@ export default class StoreUtil {
 		this.context = context;
 	}
 
+	clear = async () => {
+		await this.clearClient();
+		await this.clearTokens();
+	};
+
 	clearClient = async () => {
 		await SecureStore.deleteItemAsync('clientId');
 		await SecureStore.deleteItemAsync('clientSecret');
@@ -23,6 +28,11 @@ export default class StoreUtil {
 		this.context.expires_in = 0;
 	};
 
+	save = async (clientId, accessToken, refreshToken, expiresIn) => {
+		await this.saveClient(clientId, ''); // il valore client_secret è prelevato a run-time dal file Consts.js
+		await this.saveTokens(accessToken, refreshToken, expiresIn);
+	};
+
 	saveTokens = async (accessToken, refreshToken, expiresIn) => {
 		console.log('accessToken : ' + accessToken);
 		console.log('refreshToken : ' + refreshToken);
@@ -35,6 +45,11 @@ export default class StoreUtil {
 		this.context.expires_in = expiresIn;
 	};
 
+	load = async () => {
+		await this.loadClient();
+		await this.loadTokens();
+	};
+
 	loadTokens = async () => {
 		let accessToken = await SecureStore.getItemAsync('accessToken');
 		let refreshToken = await SecureStore.getItemAsync('refreshToken');
@@ -43,6 +58,7 @@ export default class StoreUtil {
 		if (expiresInString) {
 			expiresIn = parseInt(expiresInString);
 		}
+
 		this.context.access_token = accessToken;
 		this.context.refresh_token = refreshToken;
 		this.context.expires_in = expiresIn;

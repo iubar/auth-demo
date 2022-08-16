@@ -13,14 +13,15 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
+		response: '',
 		redirects_descs: [],
 		redirects: [],
 		redirect_uri: '',
-		access_token: '',
 		expanded: false,
 		useProxy: false,
 		data_to_send_printable: '',
 		client_id: 0,
+		screen_disabled: true,
 	};
 
 	constructor(props) {
@@ -32,18 +33,19 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	async componentDidMount() {
 		this.store = new StoreUtil(this.context);
 		await this.initRedirects();
-		await this.updateConfig(1);
 
-		this._unsubscribe = this.props.navigation.addListener('focus', () => {
+		this._unsubscribe = this.props.navigation.addListener('focus', async () => {
 			console.log('AuthorizationCodeGrant has focus ****************** ');
-			this.setState({
-				access_token: this.context.accessToken,
-				client_id: this.context.clientId,
-			});
+			this.updateGui();
 		});
 
-		// NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
+		this.updateGui(); // NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
 	}
+
+	updateGui = () => {
+		//TODO: se client != 2,3,4,5 allora disabilitare pulsante LOGIN e visualizzare istruzioni "Selezionare client id 1 o 6"
+		this.updateConfig(this.context.client_id);
+	};
 
 	/**
 	 * https://reactnavigation.org/docs/navigation-events/
@@ -61,8 +63,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
 		redirect_uri = await AuthSession.makeRedirectUri({});
-		redirects[1] = redirect_uri;
-		redirects_descs[1] = '{}';
+		redirects[5] = redirect_uri;
+		redirects_descs[5] = '{}';
 
 		// expo client
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
@@ -97,8 +99,11 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	/**
 	 * see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
 	 */
-	updateConfig = async (index) => {
-		console.log('*************** item selected: ' + JSON.stringify(index));
+	updateConfig = (index) => {
+		console.log('*************** client id selected: ' + JSON.stringify(index));
+		if (index == undefined) {
+			index = 1;
+		}
 		//let client_id = parseInt(itemValue);
 		let redirect_uri = this.state.redirects[index];
 		// The result is
@@ -106,16 +111,28 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// For a web app: https://localhost:19006/redirect
 
 		if (!redirect_uri) {
-			Alert.alert('Errore nella logica del metodo, index: ' + index);
+			console.log('Errore nella logica del metodo, index: ' + index);
 		}
 		this.state.useProxy = false;
 		if (index == 3) {
 			this.state.useProxy = true;
 		}
+
+		let b = true;
+		if (
+			this.context.client_id == 2 ||
+			this.context.client_id == 3 ||
+			this.context.client_id == 4 ||
+			this.context.client_id == 5
+		) {
+			b = false;
+		}
+
 		this.setState({
 			redirect_uri: redirect_uri,
 			expanded: false,
-			client_id: this.context.clientId,
+			client_id: this.context.client_id,
+			screen_disabled: b,
 		});
 	};
 
@@ -265,13 +282,12 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		console.log('verifier : ' + JSON.stringify(verifier));
 		console.log('result : ' + JSON.stringify(result));
 
-		if (result.params == 'opened') {
-			console.log('result.params !== undefined');
+		if (result.type == 'success') {
 			let code = result.params.code;
 			console.log('code : ' + JSON.stringify(code));
 			await this.exchangeToken(verifier, code); // TODO: provare ad usare qui anche exchangeToken2()
 		} else {
-			console.log('WARNING: AuthSessionResult is ' + result.params);
+			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
 		}
 	};
 
@@ -323,16 +339,16 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		/**
 		 * Possibili risposte: 'cancel' | 'dismiss' | 'opened' | 'locked'
 		 */
-		if (result.params == 'opened') {
+		if (result.type == 'success') {
 			let code = result.params.code;
-			await this.readToken(verifier, code);
+			await this.exchangeToken(verifier, code); // TODO: provare ad usare qui anche exchangeToken2()
 		} else {
-			console.log('WARNING: AuthSessionResult is ' + result.params);
+			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
 		}
 	};
 
 	/**
-	 * TODO: metodo da provare alternativo a exchangeToken()
+	 * Metodo alternativo a exchangeToken()
 	 * exchange the authorization code for an access token.
 	 * https://laravel.com/docs/9.x/passport#requesting-tokens-converting-authorization-codes-to-access-tokens
 	 */
@@ -346,27 +362,35 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				grant_type: 'authorization_code',
 				code: code,
 			};
-			console.log('data_to_send: ' + JSON.stringify(data_to_send));
+			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
+			console.log(arg1);
 
-			let accessToken = '';
 			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send); // TODO: forse è callApi3() ?
 			if (result.status != 200) {
 				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 				console.log(errorMsg);
-				Alert.alert(errorMsg);
+
+				this.setState({
+					data_to_send_printable: arg1,
+					response: JSON.stringify(result),
+				});
+
+				let errorMsg2 = 'HTTP ERROR: ' + result.status;
+				Alert.alert(errorMsg2);
 			} else {
 				let data = result.data;
-				accessToken = data.access_token;
+
+				this.setState({
+					data_to_send_printable: arg1,
+					response: JSON.stringify(data),
+				});
+
+				let accessToken = data.access_token;
 				let refreshToken = data.refresh_token;
 				let expiresIn = data.expires_in;
-				this.store.saveTokens(accessToken, refreshToken, expiresIn);
-				Alert.alert('Authentication done: token saved');
+				this.store.save(this.context.client_id, accessToken, refreshToken, expiresIn);
+				Alert.alert('Authorized: token saved');
 			}
-			this.setState({
-				access_token: accessToken,
-				data_to_send_printable:
-					'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send),
-			});
 		}
 	};
 
@@ -386,27 +410,34 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				code: code,
 				code_verifier: verifier,
 			};
-			console.log('data_to_send: ' + JSON.stringify(data_to_send));
+			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
+			console.log(arg1);
 
-			let accessToken = '';
 			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send); // TODO: forse è callApi3() ?
 			if (result.status != 200) {
 				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 				console.log(errorMsg);
-				Alert.alert(errorMsg);
+
+				this.setState({
+					data_to_send_printable: arg1,
+					response: JSON.stringify(result),
+				});
+				let errorMsg2 = 'HTTP ERROR: ' + result.status;
+				Alert.alert(errorMsg2);
 			} else {
 				let data = result.data;
-				accessToken = data.access_token;
+
+				this.setState({
+					data_to_send_printable: arg1,
+					response: JSON.stringify(data),
+				});
+
+				let accessToken = data.access_token;
 				let refreshToken = data.refresh_token;
 				let expiresIn = data.expires_in;
-				this.store.saveTokens(accessToken, refreshToken, expiresIn);
-				Alert.alert('Authentication done: token saved');
+				this.store.save(this.context.client_id, accessToken, refreshToken, expiresIn);
+				Alert.alert('Authorized: token saved');
 			}
-			this.setState({
-				access_token: accessToken,
-				data_to_send_printable:
-					'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send),
-			});
 		}
 	};
 
@@ -419,55 +450,70 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Auth Code Grant with PKCE</Title>
 					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
-					<List.Section title="Redirects uri">
-						<List.Accordion
-							title={this.state.redirect_uri}
-							expanded={this.state.expanded}
-							onPress={this.handlePress}>
-							{this.state.redirects.map((elem, index) => {
-								if (elem) {
-									return (
-										<List.Item
-											key={index}
-											title={this.state.redirects_descs[index] + ' - ' + elem}
-											onPress={() => this.updateConfig(index)}
-										/>
-									);
-								}
-							})}
-						</List.Accordion>
-					</List.Section>
-					<Divider style={{ marginVertical: 20 }} />
 
-					<Divider style={{ marginVertical: 20 }} />
-					<View
-						style={{
-							flexDirection: 'column',
-							alignItems: 'center',
-							justifyContent: 'center',
-						}}>
-						<Button
-							style={{ marginHorizontal: 20, marginVertical: 20 }}
-							mode="contained"
-							onPress={this.authCodeGrant1}>
-							Authorize 1
-						</Button>
-						<Text>[loadAsync() + promptAsync()]</Text>
-						<Button
-							color={this.props.theme.colors.accent}
-							style={{ marginHorizontal: 20, marginVertical: 20 }}
-							mode="contained"
-							onPress={this.authCodeGrant2}>
-							Authorize 2
-						</Button>
-						<Text>[startAsync(), it always uses proxy]</Text>
-					</View>
-					<Divider style={{ marginVertical: 20 }} />
-					<Subheading>Request</Subheading>
-					<Paragraph>{this.state.data_to_send_printable}</Paragraph>
-					<Divider style={{ marginVertical: 20 }} />
-					<Subheading>Access token</Subheading>
-					<Paragraph>{this.state.access_token}</Paragraph>
+					{this.state.screen_disabled && (
+						<View>
+							<Text>That client doesn't support the Auth Code Grant flow</Text>
+						</View>
+					)}
+
+					{!this.state.screen_disabled && (
+						<View>
+							<List.Section title="Redirects uri">
+								<List.Accordion
+									title={this.state.redirect_uri}
+									expanded={this.state.expanded}
+									onPress={this.handlePress}>
+									{this.state.redirects.map((elem, index) => {
+										if (elem) {
+											return (
+												<List.Item
+													key={index}
+													title={
+														this.state.redirects_descs[index] +
+														' - ' +
+														elem
+													}
+													onPress={() => this.updateConfig(index)}
+												/>
+											);
+										}
+									})}
+								</List.Accordion>
+							</List.Section>
+							<Divider style={{ marginVertical: 20 }} />
+
+							<Divider style={{ marginVertical: 20 }} />
+							<View
+								style={{
+									flexDirection: 'column',
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}>
+								<Button
+									style={{ marginHorizontal: 20, marginVertical: 20 }}
+									mode="contained"
+									onPress={this.authCodeGrant1}>
+									Authorize 1
+								</Button>
+								<Text>[loadAsync() + promptAsync()]</Text>
+								<Button
+									color={this.props.theme.colors.accent}
+									style={{ marginHorizontal: 20, marginVertical: 20 }}
+									mode="contained"
+									onPress={this.authCodeGrant2}>
+									Authorize 2
+								</Button>
+								<Text>[startAsync(), it always uses proxy]</Text>
+							</View>
+							<Divider style={{ marginVertical: 20 }} />
+							<Subheading>Request</Subheading>
+							<Paragraph>{this.state.data_to_send_printable}</Paragraph>
+							<Divider style={{ marginVertical: 20 }} />
+							<Subheading>Response</Subheading>
+							<Paragraph>{this.state.response}</Paragraph>
+						</View>
+					)}
 				</ScrollView>
 			</SafeAreaView>
 		);

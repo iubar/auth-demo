@@ -27,7 +27,7 @@ export default class HttpCall extends React.Component {
 		return headers;
 	};
 
-	getAuthHeaders2 = async (access_token) => {
+	getAuthHeaders2 = (access_token) => {
 		const headers = {
 			'Content-Type': 'application/json',
 			'Accept': 'application/json',
@@ -62,12 +62,7 @@ export default class HttpCall extends React.Component {
 	};
 
 	callApi3 = async (method, url, access_token, data_to_send) => {
-		return this.callApiGeneric(
-			method,
-			url,
-			await this.getAuthHeaders2(access_token),
-			data_to_send
-		);
+		return this.callApiGeneric(method, url, this.getAuthHeaders2(access_token), data_to_send);
 	};
 
 	callApiGeneric = async (method, url, headers, data_to_send) => {

@@ -13,9 +13,17 @@ export const OAUTH_CLIENT_SECRET = 'Qw5lBfbgufHf8SBbRKSErqZO3uOCtgphuXHZqaPb';
 // Others
 
 export const CLIENTS = [];
-CLIENTS[1] = 'Password grant with client secret';
-CLIENTS[2] = 'Auth grant without client secret';
-CLIENTS[3] = 'Auth grant without client secret';
-CLIENTS[4] = 'Auth grant without client secret';
-CLIENTS[5] = 'Auth grant without client secret';
-CLIENTS[6] = 'Password grant without client secret';
+CLIENTS[1] = 'Password Grant Client with secret';
+CLIENTS[2] = 'Auth grant without client secret'; // Code Grant for Expo (dev app)
+CLIENTS[3] = 'Auth grant without client secret'; // Code Grant for Expo (dev app)
+CLIENTS[4] = 'Auth grant without client secret'; // Code Grant for Expo (dev app)
+CLIENTS[5] = 'Auth grant without client secret'; // Code Grant for Expo (dev app)
+CLIENTS[6] = 'Password Grant Client without secret';
+
+export const REDIRECTS = [];
+REDIRECTS[1] = 'http://localhost';
+REDIRECTS[2] = 'exp://192.168.0.131:19000/--/expo-auth-session';
+REDIRECTS[3] = 'https://auth.expo.io/@borgo/auth-demo';
+REDIRECTS[4] = 'micoolredirect://';
+REDIRECTS[5] = 'exp://192.168.0.131:19000';
+REDIRECTS[6] = 'http://localhost';
