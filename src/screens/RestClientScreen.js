@@ -3,11 +3,12 @@ import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native'
 import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-native-paper';
 
 import HttpCall from '../HttpCall';
-import StoreUtil from '../StoreUtil';
+
 import { URL_OAUTH_LOGIN, URL_API_ROUTE1 } from '../Consts';
 import { Context } from '../Context';
+import { withTheme } from 'react-native-paper';
 
-export default class RestClientScreen extends React.Component {
+class RestClientScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
@@ -23,8 +24,6 @@ export default class RestClientScreen extends React.Component {
 	}
 
 	async componentDidMount() {
-		this.store = new StoreUtil(this.context);
-
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
 			console.log('RestApi has focus ****************** ');
 			this.updateGui();
@@ -98,10 +97,15 @@ export default class RestClientScreen extends React.Component {
 				msg2 = 'The refresh token was changed';
 			}
 
-			await this.store.save(this.context.client_id, accessToken, refreshToken, expiresIn);
-			let msg3 = 'Done: tokens saved' + '\n' + msg1 + '\n' + msg2;
+			await this.store.updateContext(
+				this.context.client_id,
+				accessToken,
+				refreshToken,
+				expiresIn
+			);
+			let msg3 = 'Done: ' + '\n' + msg1 + '\n' + msg2;
 			console.log(msg3);
-			Alert.alert('Refreshed: token saved');
+			Alert.alert('OK: tokens refreshed');
 		}
 	};
 
@@ -149,6 +153,7 @@ export default class RestClientScreen extends React.Component {
 					</Button>
 					<Divider style={{ marginVertical: 20 }} />
 					<Button
+						color={this.props.theme.colors.accent}
 						style={{ marginHorizontal: 20, marginVertical: 20 }}
 						mode="contained"
 						onPress={this.callApi}
@@ -166,3 +171,5 @@ export default class RestClientScreen extends React.Component {
 		);
 	}
 }
+
+export default withTheme(RestClientScreen);

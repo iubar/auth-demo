@@ -28,6 +28,23 @@ export default class StoreUtil {
 		this.context.expires_in = 0;
 	};
 
+	updateContext = (clientId, accessToken, refreshToken, expiresIn) => {
+		this.updateContextClient(clientId, ''); // il valore client_secret è prelevato a run-time dal file Consts.js
+		this.updateContextTokens(accessToken, refreshToken, expiresIn);
+	};
+
+	updateContextTokens = (accessToken, refreshToken, expiresIn) => {
+		console.log('**** updateContextTokens');
+		this.context.access_token = accessToken;
+		this.context.refresh_token = refreshToken;
+		this.context.expires_in = expiresIn;
+	};
+
+	updateContextClient = (client_id, client_secret) => {
+		this.context.client_id = client_id;
+		this.context.client_secret = client_secret;
+	};
+
 	save = async (clientId, accessToken, refreshToken, expiresIn) => {
 		await this.saveClient(clientId, ''); // il valore client_secret è prelevato a run-time dal file Consts.js
 		await this.saveTokens(accessToken, refreshToken, expiresIn);
@@ -36,13 +53,15 @@ export default class StoreUtil {
 	saveTokens = async (accessToken, refreshToken, expiresIn) => {
 		console.log('accessToken : ' + accessToken);
 		console.log('refreshToken : ' + refreshToken);
-		console.log('expiresIn : ' + expiresIn.toString());
+		console.log('expiresIn : ' + expiresIn);
+		let expiresInAsString = '';
+		if (expiresIn) {
+			expiresInAsString = expiresIn.toString();
+		}
 		await SecureStore.setItemAsync('accessToken', accessToken);
 		await SecureStore.setItemAsync('refreshToken', refreshToken);
-		await SecureStore.setItemAsync('expiresIn', expiresIn.toString());
-		this.context.access_token = accessToken;
-		this.context.refresh_token = refreshToken;
-		this.context.expires_in = expiresIn;
+		await SecureStore.setItemAsync('expiresIn', expiresInAsString);
+		this.updateContextTokens(accessToken, refreshToken, expiresIn);
 	};
 
 	load = async () => {
@@ -75,10 +94,15 @@ export default class StoreUtil {
 		this.context.client_secret = client_secret;
 	};
 
-	saveClient = async (client_id, client_secret) => {
-		await SecureStore.setItemAsync('clientId', client_id.toString());
-		await SecureStore.setItemAsync('clientSecret', client_secret);
-		this.context.client_id = client_id;
-		this.context.client_secret = client_secret;
+	saveClient = async (clientId, clientSecret) => {
+		console.log('clientId : ' + clientId);
+		console.log('clientSecret : ' + clientSecret);
+		let clientIdAsString = '';
+		if (clientId) {
+			clientIdAsString = clientId.toString();
+		}
+		await SecureStore.setItemAsync('clientId', clientIdAsString);
+		await SecureStore.setItemAsync('clientSecret', clientSecret);
+		this.updateContextClient(clientId, clientSecret);
 	};
 }

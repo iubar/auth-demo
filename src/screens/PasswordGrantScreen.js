@@ -16,7 +16,6 @@ import {
 	List,
 	TextInput,
 } from 'react-native-paper';
-import StoreUtil from '../StoreUtil';
 
 export default class PasswordGrantScreen extends React.Component {
 	static contextType = Context;
@@ -37,7 +36,6 @@ export default class PasswordGrantScreen extends React.Component {
 	}
 
 	async componentDidMount() {
-		this.store = new StoreUtil(this.context);
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
 			console.log('PasswordGrantScreen has focus ****************** ');
 			this.updateGui();
@@ -113,8 +111,8 @@ export default class PasswordGrantScreen extends React.Component {
 			let expiresIn = data.expires_in;
 			let accessToken = data.access_token;
 			let refreshToken = data.refresh_token;
-			this.store.save(this.context.client_id, accessToken, refreshToken, expiresIn);
-			Alert.alert('Authorized: token saved');
+			this.store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
+			Alert.alert('OK: authorized');
 		}
 	};
 
@@ -127,7 +125,10 @@ export default class PasswordGrantScreen extends React.Component {
 
 					{this.state.screen_disabled && (
 						<View>
-							<Text>That client doesn't support the Password Grant flow</Text>
+							<Divider style={{ marginVertical: 20 }} />
+							<Paragraph>
+								That client doesn't support the Password Grant flow
+							</Paragraph>
 						</View>
 					)}
 

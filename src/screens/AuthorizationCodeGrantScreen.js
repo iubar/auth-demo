@@ -2,26 +2,38 @@ import React from 'react';
 import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as AuthSession from 'expo-auth-session';
-import { Text, Title, Subheading, Button, Paragraph, Divider, List } from 'react-native-paper';
+import {
+	Text,
+	Title,
+	Subheading,
+	Headline,
+	Caption,
+	Button,
+	Paragraph,
+	Divider,
+} from 'react-native-paper';
 import HttpCall from '../HttpCall';
-import { URL_OAUTH_LOGIN, URL_AUTH } from '../Consts';
-import StoreUtil from '../StoreUtil';
+import { URL_OAUTH_LOGIN, URL_AUTH, LARAVEL_REDIRECTS } from '../Consts';
+
 import { Context } from '../Context';
 import { withTheme } from 'react-native-paper';
+import { Switch } from 'react-native-paper';
 
 class AuthorizationCodeGrantScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
 		response: '',
-		redirects_descs: [],
+		redirects_info: [],
 		redirects: [],
 		redirect_uri: '',
-		expanded: false,
+		redirect_uri_desc: '',
+		laravel_redirect_uri: '',
 		useProxy: false,
 		data_to_send_printable: '',
 		client_id: 0,
 		screen_disabled: true,
+		usePkce: true,
 	};
 
 	constructor(props) {
@@ -31,7 +43,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	}
 
 	async componentDidMount() {
-		this.store = new StoreUtil(this.context);
 		await this.initRedirects();
 
 		this._unsubscribe = this.props.navigation.addListener('focus', async () => {
@@ -43,7 +54,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	}
 
 	updateGui = () => {
-		//TODO: se client != 2,3,4,5 allora disabilitare pulsante LOGIN e visualizzare istruzioni "Selezionare client id 1 o 6"
 		this.updateConfig(this.context.client_id);
 	};
 
@@ -58,19 +68,16 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 	initRedirects = async () => {
 		let redirects = [];
-		let redirects_descs = [];
-		let redirect_uri = null;
+		let redirects_info = [];
 
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirect_uri = await AuthSession.makeRedirectUri({});
-		redirects[5] = redirect_uri;
-		redirects_descs[5] = '{}';
+		redirects[5] = await AuthSession.makeRedirectUri({});
+		redirects_info[5] = '{}';
 
 		// expo client
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirect_uri = (await AuthSession.makeRedirectUri({})) + '/--/expo-auth-session';
-		redirects[2] = redirect_uri;
-		redirects_descs[2] = '/--/expo-auth-session';
+		redirects[2] = (await AuthSession.makeRedirectUri({})) + '/--/expo-auth-session';
+		redirects_info[2] = '/--/expo-auth-session';
 
 		// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
 		// This proxy service is responsible for:
@@ -79,21 +86,18 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
 		// The auth.expo.io proxy is only used when startAsync is called, or when useProxy: true is passed to the promptAsync() method of an AuthRequest.
 		// Should use the `auth.expo.io` proxy: this is useful for testing managed native apps that require a custom URI scheme.
-		redirect_uri = await AuthSession.makeRedirectUri({ useProxy: true });
-
-		redirects[3] = redirect_uri; // USE PROXY
-		redirects_descs[3] = '{useProxy: true}';
+		redirects[3] = await AuthSession.makeRedirectUri({ useProxy: true });
+		redirects_info[3] = '{useProxy: true}';
 
 		// To make your native app handle "mycoolredirect://" scheme, simply run:
 		// npx uri-scheme add mycoolredirect
 		// npx uri-scheme list
 		// se also the app.json config file
-		redirect_uri = await AuthSession.makeRedirectUri({ native: 'mycoolredirect://' });
-		redirects[4] = redirect_uri; // NATIVE
-		redirects_descs[4] = "{native: 'mycoolredirect://'}";
+		redirects[4] = await AuthSession.makeRedirectUri({ native: 'mycoolredirect://' });
+		redirects_info[4] = "{native: 'mycoolredirect://'}";
 
 		this.state.redirects = redirects;
-		this.state.redirects_descs = redirects_descs;
+		this.state.redirects_info = redirects_info;
 	};
 
 	/**
@@ -102,10 +106,28 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	updateConfig = (index) => {
 		console.log('*************** client id selected: ' + JSON.stringify(index));
 		if (index == undefined) {
-			index = 1;
+			this.setState({ screen_disabled: true });
+			return;
+		}
+
+		let b1 = true;
+		if (
+			this.context.client_id &&
+			(this.context.client_id == 2 ||
+				this.context.client_id == 3 ||
+				this.context.client_id == 4 ||
+				this.context.client_id == 5)
+		) {
+			b1 = false;
+		}
+		if (b1) {
+			this.setState({ screen_disabled: true });
+			return;
 		}
 		//let client_id = parseInt(itemValue);
 		let redirect_uri = this.state.redirects[index];
+		let laravel_redirect_uri = LARAVEL_REDIRECTS[index];
+		let redirect_uri_desc = this.state.redirects_info[index];
 		// The result is
 		// For a managed app: https://auth.expo.io/@your-username/your-app-slug/redirect
 		// For a web app: https://localhost:19006/redirect
@@ -113,26 +135,18 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		if (!redirect_uri) {
 			console.log('Errore nella logica del metodo, index: ' + index);
 		}
-		this.state.useProxy = false;
+		let b2 = false;
 		if (index == 3) {
-			this.state.useProxy = true;
-		}
-
-		let b = true;
-		if (
-			this.context.client_id == 2 ||
-			this.context.client_id == 3 ||
-			this.context.client_id == 4 ||
-			this.context.client_id == 5
-		) {
-			b = false;
+			b2 = true;
 		}
 
 		this.setState({
 			redirect_uri: redirect_uri,
-			expanded: false,
+			redirect_uri_desc: redirect_uri_desc,
 			client_id: this.context.client_id,
-			screen_disabled: b,
+			screen_disabled: b1,
+			useProxy: b2,
+			laravel_redirect_uri: laravel_redirect_uri,
 		});
 	};
 
@@ -273,6 +287,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		}); // When invoked, a web browser will open up and prompt the user for authentication.
 
 		//////////////////////////////////////////////////
+		// TODO: capire l'utilità dei metodi seguenti
 		const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
 		console.log('urlAuth: ' + urlAuth);
 		const requestConfig = await request.getAuthRequestConfigAsync();
@@ -283,9 +298,13 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		console.log('result : ' + JSON.stringify(result));
 
 		if (result.type == 'success') {
-			let code = result.params.code;
-			console.log('code : ' + JSON.stringify(code));
-			await this.exchangeToken(verifier, code); // TODO: provare ad usare qui anche exchangeToken2()
+			if (this.state.usePkce) {
+				console.log('use pkce...');
+				let code = result.params.code;
+				await this.exchangeToken(verifier, code);
+			} else {
+				await this.exchangeToken2(verifier);
+			}
 		} else {
 			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
 		}
@@ -332,16 +351,24 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 		this.state.data_to_send_printable = 'AuthSession.startAsync({authUrl: ' + url + '})';
 
-		let result = await AuthSession.startAsync({ authUrl: url }); // The auth.expo.io proxy is ALWAYS used  (it calls openAuthSessionAsync)
+		let result = await AuthSession.startAsync({ authUrl: url }); // NOTICE: The auth.expo.io proxy is ALWAYS used (it calls openAuthSessionAsync)
 		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
 		console.log('result: ' + JSON.stringify(result));
 
 		/**
 		 * Possibili risposte: 'cancel' | 'dismiss' | 'opened' | 'locked'
+		 * C'è un errore nella documentazione di Expo, perchè 'success' non è indicato
+		 * probabilemnte 'opened' non esiste
+		 * https://docs.expo.dev/versions/latest/sdk/auth-session/#authsessionresult
 		 */
 		if (result.type == 'success') {
-			let code = result.params.code;
-			await this.exchangeToken(verifier, code); // TODO: provare ad usare qui anche exchangeToken2()
+			if (this.state.usePkce) {
+				console.log('use pkce...');
+				let code = result.params.code;
+				await this.exchangeToken(verifier, code);
+			} else {
+				await this.exchangeToken2(verifier);
+			}
 		} else {
 			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
 		}
@@ -365,7 +392,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
 			console.log(arg1);
 
-			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send); // TODO: forse è callApi3() ?
+			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 			if (result.status != 200) {
 				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 				console.log(errorMsg);
@@ -388,8 +415,13 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				let accessToken = data.access_token;
 				let refreshToken = data.refresh_token;
 				let expiresIn = data.expires_in;
-				this.store.save(this.context.client_id, accessToken, refreshToken, expiresIn);
-				Alert.alert('Authorized: token saved');
+				this.store.updateContext(
+					this.context.client_id,
+					accessToken,
+					refreshToken,
+					expiresIn
+				);
+				Alert.alert('OK: authorized');
 			}
 		}
 	};
@@ -413,7 +445,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
 			console.log(arg1);
 
-			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send); // TODO: forse è callApi3() ?
+			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 			if (result.status != 200) {
 				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 				console.log(errorMsg);
@@ -435,55 +467,48 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				let accessToken = data.access_token;
 				let refreshToken = data.refresh_token;
 				let expiresIn = data.expires_in;
-				this.store.save(this.context.client_id, accessToken, refreshToken, expiresIn);
-				Alert.alert('Authorized: token saved');
+				this.store.updateContext(
+					this.context.client_id,
+					accessToken,
+					refreshToken,
+					expiresIn
+				);
+				Alert.alert('OK: authorized');
 			}
 		}
 	};
 
-	handlePress = () => this.setState({ expanded: !this.state.expanded });
+	onToggleSwitch = () => this.setState({ usePkce: !this.state.usePkce });
+
+	onToggleSwitch2 = () => console.log('nothing to do');
 
 	render() {
 		console.log('rendering....');
+
+		let warning = '';
+		if (this.state.redirect_uri != this.state.laravel_redirect_uri) {
+			warning =
+				"Attenzione, il redirect calcolato è diverso da quello configurato sul server. Se stai utilizzando ExpoGo potrebbe essere corretto se l'argomento d";
+		}
 		return (
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
-					<Title>Auth Code Grant with PKCE</Title>
+					<Title>Auth Code Grant</Title>
 					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
 
 					{this.state.screen_disabled && (
 						<View>
-							<Text>That client doesn't support the Auth Code Grant flow</Text>
+							<Divider style={{ marginVertical: 20 }} />
+							<Paragraph>
+								That client doesn't support the Auth Code Grant flow
+							</Paragraph>
 						</View>
 					)}
 
 					{!this.state.screen_disabled && (
 						<View>
-							<List.Section title="Redirects uri">
-								<List.Accordion
-									title={this.state.redirect_uri}
-									expanded={this.state.expanded}
-									onPress={this.handlePress}>
-									{this.state.redirects.map((elem, index) => {
-										if (elem) {
-											return (
-												<List.Item
-													key={index}
-													title={
-														this.state.redirects_descs[index] +
-														' - ' +
-														elem
-													}
-													onPress={() => this.updateConfig(index)}
-												/>
-											);
-										}
-									})}
-								</List.Accordion>
-							</List.Section>
 							<Divider style={{ marginVertical: 20 }} />
 
-							<Divider style={{ marginVertical: 20 }} />
 							<View
 								style={{
 									flexDirection: 'column',
@@ -496,7 +521,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 									onPress={this.authCodeGrant1}>
 									Authorize 1
 								</Button>
-								<Text>[loadAsync() + promptAsync()]</Text>
+								<Caption>loadAsync() + promptAsync()</Caption>
 								<Button
 									color={this.props.theme.colors.accent}
 									style={{ marginHorizontal: 20, marginVertical: 20 }}
@@ -504,8 +529,47 @@ class AuthorizationCodeGrantScreen extends React.Component {
 									onPress={this.authCodeGrant2}>
 									Authorize 2
 								</Button>
-								<Text>[startAsync(), it always uses proxy]</Text>
+								<Caption>startAsync()</Caption>
+								<Caption>(usa sempre e comunque il proxy)</Caption>
 							</View>
+							<Divider style={{ marginVertical: 20 }} />
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}>
+								<Caption>use Proxy </Caption>
+								<Switch
+									color={this.props.theme.colors.primary}
+									disabled="true"
+									value={this.state.useProxy}
+									onValueChange={this.onToggleSwitch2}
+								/>
+							</View>
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}>
+								<Caption>use Pkce </Caption>
+								<Switch
+									color={this.props.theme.colors.primary}
+									value={this.state.usePkce}
+									onValueChange={this.onToggleSwitch}
+								/>
+							</View>
+							<Divider style={{ marginVertical: 20 }} />
+							<Subheading>Redirect uri</Subheading>
+							<Caption>Argument</Caption>
+							<Paragraph>{this.state.redirect_uri_desc}</Paragraph>
+							<Caption>Result</Caption>
+							<Paragraph>{this.state.redirect_uri}</Paragraph>
+							{warning && (
+								<Paragraph theme={{ colors: { text: 'red' } }}>{warning}</Paragraph>
+							)}
+
 							<Divider style={{ marginVertical: 20 }} />
 							<Subheading>Request</Subheading>
 							<Paragraph>{this.state.data_to_send_printable}</Paragraph>

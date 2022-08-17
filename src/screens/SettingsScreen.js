@@ -4,12 +4,13 @@ import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
 import HttpCall from '../HttpCall';
-import { CLIENTS, OAUTH_CLIENT_SECRET } from '../Consts';
+import { CLIENTS, LARAVEL_REDIRECTS, OAUTH_CLIENT_SECRET } from '../Consts';
 import {
 	Text,
 	Title,
 	Subheading,
 	Button,
+	Caption,
 	Paragraph,
 	Divider,
 	List,
@@ -17,8 +18,9 @@ import {
 } from 'react-native-paper';
 import StoreUtil from '../StoreUtil';
 import { Context } from '../Context';
+import { withTheme } from 'react-native-paper';
 
-export default class SettingsScreen extends React.Component {
+class SettingsScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
@@ -29,6 +31,7 @@ export default class SettingsScreen extends React.Component {
 		access_token: '',
 		refresh_token: '',
 		expires_in: 0,
+		laravel_redirect_uri: '',
 	};
 
 	constructor(props) {
@@ -38,6 +41,8 @@ export default class SettingsScreen extends React.Component {
 
 	async componentDidMount() {
 		this.store = new StoreUtil(this.context);
+		await this.store.load();
+
 		this.initClients();
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
 			console.log('SettingsScreen has focus ****************** ');
@@ -81,6 +86,8 @@ export default class SettingsScreen extends React.Component {
 		this.context.client_id = client_id;
 		this.context.client_secret = client_secret;
 
+		let laravel_redirect_uri = LARAVEL_REDIRECTS[index];
+
 		this.setState({
 			client_id: this.context.client_id,
 			access_token: this.context.access_token,
@@ -88,11 +95,17 @@ export default class SettingsScreen extends React.Component {
 			expires_in: this.context.expires_in,
 			client_desc: client_desc,
 			expanded: false,
+			laravel_redirect_uri: laravel_redirect_uri,
 		});
 	};
 
-	saveDataInStore = () => {
-		this.store.saveClient(this.context.client_id, this.context.client_secret);
+	saveDataInStore = async () => {
+		await this.store.saveClient(this.context.client_id, this.context.client_secret);
+		await this.store.saveTokens(
+			this.context.access_token,
+			this.context.refresh_token,
+			this.context.expires_in
+		);
 	};
 
 	clearDataFromStore = async () => {
@@ -129,7 +142,7 @@ export default class SettingsScreen extends React.Component {
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Settings</Title>
-					<List.Section title="IubarHR client id">
+					<List.Section title="IubarHR selected client">
 						<List.Accordion
 							title={this.state.client_desc}
 							expanded={this.state.expanded}
@@ -147,30 +160,40 @@ export default class SettingsScreen extends React.Component {
 							})}
 						</List.Accordion>
 					</List.Section>
+					<Caption>Redirect configured on the server</Caption>
+					<Paragraph>{this.state.laravel_redirect_uri}</Paragraph>
 					<Divider style={{ marginVertical: 20 }} />
-					<Subheading>Secure store</Subheading>
 					<Button
 						style={{ marginHorizontal: 20, marginVertical: 20 }}
 						mode="contained"
 						onPress={this.readDataFromStore}>
-						Read data from store
+						Load data
+					</Button>
+					<Button
+						color={this.props.theme.colors.accent}
+						style={{ marginHorizontal: 20, marginVertical: 20 }}
+						mode="contained"
+						onPress={this.saveDataInStore}>
+						Save data
 					</Button>
 					<Button
 						style={{ marginHorizontal: 20, marginVertical: 20 }}
 						mode="contained"
 						onPress={this.clearDataFromStore}>
-						Clear data in store
+						Clear data
 					</Button>
 					<Divider style={{ marginVertical: 20 }} />
 					<Title>Tokens</Title>
-					<Subheading>Access token</Subheading>
+					<Caption>Access token</Caption>
 					<Paragraph>{this.state.access_token}</Paragraph>
-					<Subheading>Refresh token</Subheading>
+					<Caption>Refresh token</Caption>
 					<Paragraph>{this.state.refresh_token}</Paragraph>
-					<Subheading>Expires in</Subheading>
+					<Caption>Expires in</Caption>
 					<Paragraph>{this.getExpiredDesc()}</Paragraph>
 				</ScrollView>
 			</SafeAreaView>
 		);
 	}
 }
+
+export default withTheme(SettingsScreen);

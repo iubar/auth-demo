@@ -20,7 +20,6 @@ import RestClientScreen from './src/screens/RestClientScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import { Context } from './src/Context';
 import Toolbar from './src/components/ToolbarComponent';
-import * as SecureStore from 'expo-secure-store';
 
 const AppTheme = {
 	...DefaultTheme,
@@ -44,14 +43,22 @@ const AppTheme = {
 const Tab = createMaterialBottomTabNavigator();
 
 export default class App extends React.Component {
+	defaultValue = {
+		client_id: 1,
+		client_secret: '',
+		access_token: '',
+		refresh_token: '',
+		expires_in: 0,
+	};
+
 	render() {
 		return (
 			<PaperProvider theme={AppTheme}>
-				<Context.Provider value={{}}>
+				<Context.Provider value={this.defaultValue}>
 					<NavigationContainer theme={AppTheme}>
 						<Toolbar />
 						<Tab.Navigator
-							initialRouteName="AuthorizationCodeGrant"
+							initialRouteName="Settings"
 							screenOptions={({ route }) => ({
 								tabBarIcon: ({ focused, color }) => {
 									let iconName;
