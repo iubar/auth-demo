@@ -281,10 +281,12 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let issuerOrDiscovery = { authorizationEndpoint: URL_AUTH }; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)
 		let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 		let state = request.state;
-		let verifier = request.codeVerifier;
+
 		const result = await request.promptAsync(issuerOrDiscovery, {
 			useProxy: this.state.useProxy,
 		}); // When invoked, a web browser will open up and prompt the user for authentication.
+		console.log('result: ' + JSON.stringify(result));
+		let code = result.params.code;
 
 		//////////////////////////////////////////////////
 		// TODO: capire l'utilità dei metodi seguenti
@@ -293,17 +295,16 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		const requestConfig = await request.getAuthRequestConfigAsync();
 		console.log('requestConfig: ' + JSON.stringify(requestConfig));
 		//////////////////////////////////////////////////
-
-		console.log('verifier : ' + JSON.stringify(verifier));
 		console.log('result : ' + JSON.stringify(result));
 
 		if (result.type == 'success') {
 			if (this.state.usePkce) {
 				console.log('use pkce...');
-				let code = result.params.code;
-				await this.exchangeToken(verifier, code);
+				let verifier = request.codeVerifier;
+				console.log('verifier : ' + JSON.stringify(verifier));
+				await this.exchangeToken(code, verifier);
 			} else {
-				await this.exchangeToken2(verifier);
+				await this.exchangeToken2(code);
 			}
 		} else {
 			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
@@ -354,6 +355,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let result = await AuthSession.startAsync({ authUrl: url }); // NOTICE: The auth.expo.io proxy is ALWAYS used (it calls openAuthSessionAsync)
 		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
 		console.log('result: ' + JSON.stringify(result));
+		let code = result.params.code;
 
 		/**
 		 * Possibili risposte: 'cancel' | 'dismiss' | 'opened' | 'locked'
@@ -364,10 +366,9 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		if (result.type == 'success') {
 			if (this.state.usePkce) {
 				console.log('use pkce...');
-				let code = result.params.code;
-				await this.exchangeToken(verifier, code);
+				await this.exchangeToken(code, verifier);
 			} else {
-				await this.exchangeToken2(verifier);
+				await this.exchangeToken2(code);
 			}
 		} else {
 			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
@@ -432,7 +433,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * As this authorization grant does not provide a client secret, developers will need to generate a combination of a code verifier and a code challenge in order to request a token.
 	 * https://laravel.com/docs/9.x/passport#code-grant-pkce-converting-authorization-codes-to-access-tokens
 	 */
-	exchangeToken = async (verifier, code) => {
+	exchangeToken = async (code, verifier) => {
 		console.log('code: ' + JSON.stringify(code));
 		if (code) {
 			let data_to_send = {
@@ -488,7 +489,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let warning = '';
 		if (this.state.redirect_uri != this.state.laravel_redirect_uri) {
 			warning =
-				"Attenzione, il redirect calcolato è diverso da quello configurato sul server. Se stai utilizzando ExpoGo potrebbe essere corretto se l'argomento d";
+				'Attenzione, il redirect calcolato è diverso da quello configurato sul server. Se stai utilizzando ExpoGo potrebbe essere corretto.';
 		}
 		return (
 			<SafeAreaView>
