@@ -523,8 +523,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 					{!this.state.screen_disabled && (
 						<View>
-							<Divider style={{ marginVertical: 20 }} />
-
 							<View
 								style={{
 									flexDirection: 'column',
@@ -583,7 +581,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 							<Caption>
 								TODO: verificare l'afermazione seguente. Quando non utilizzo PKCE
 								devo specificare un valore per il parametro client_secret. Pertanto
-								nessuno deli client configurati ora sul server è compatibile.
+								nessuno de client configurati ora sul server è compatibile.
 							</Caption>
 							<Divider style={{ marginVertical: 20 }} />
 							<Subheading>Redirect uri</Subheading>
