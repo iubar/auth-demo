@@ -3,7 +3,7 @@ import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native'
 import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-native-paper';
 
 import HttpCall from '../HttpCall';
-
+import StoreUtil from '../StoreUtil';
 import { URL_OAUTH_LOGIN, URL_API_ROUTE1 } from '../Consts';
 import { Context } from '../Context';
 import { withTheme } from 'react-native-paper';
@@ -64,7 +64,7 @@ class RestClientScreen extends React.Component {
 		};
 
 		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
-		console.log(arg1);
+
 		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 		if (result.status != 200) {
 			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
@@ -96,13 +96,8 @@ class RestClientScreen extends React.Component {
 			if (refreshToken != this.context.refresh_token) {
 				msg2 = 'The refresh token was changed';
 			}
-
-			await this.store.updateContext(
-				this.context.client_id,
-				accessToken,
-				refreshToken,
-				expiresIn
-			);
+			let store = new StoreUtil(this.context);
+			store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
 			let msg3 = 'Done: ' + '\n' + msg1 + '\n' + msg2;
 			console.log(msg3);
 			Alert.alert('OK: tokens refreshed');

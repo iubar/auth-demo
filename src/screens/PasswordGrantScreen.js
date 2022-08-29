@@ -16,6 +16,7 @@ import {
 	List,
 	TextInput,
 } from 'react-native-paper';
+import StoreUtil from '../StoreUtil';
 
 export default class PasswordGrantScreen extends React.Component {
 	static contextType = Context;
@@ -85,7 +86,6 @@ export default class PasswordGrantScreen extends React.Component {
 		};
 
 		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
-		console.log(arg1);
 
 		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 		if (result.status != 200) {
@@ -111,7 +111,8 @@ export default class PasswordGrantScreen extends React.Component {
 			let expiresIn = data.expires_in;
 			let accessToken = data.access_token;
 			let refreshToken = data.refresh_token;
-			this.store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
+			let store = new StoreUtil(this.context);
+			store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
 			Alert.alert('OK: authorized');
 		}
 	};

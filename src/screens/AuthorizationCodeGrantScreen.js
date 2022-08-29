@@ -14,7 +14,7 @@ import {
 } from 'react-native-paper';
 import HttpCall from '../HttpCall';
 import { URL_OAUTH_LOGIN, URL_AUTH, LARAVEL_REDIRECTS } from '../Consts';
-
+import StoreUtil from '../StoreUtil';
 import { Context } from '../Context';
 import { withTheme } from 'react-native-paper';
 import { Switch } from 'react-native-paper';
@@ -200,6 +200,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	/**
 	 * RFC 4648 (see https://tools.ietf.org/html/rfc4648)
 	 *
+	 * see also https://laravel.com/docs/9.x/passport#code-grant-pkce-redirecting-for-authorization
+	 *
 	 * Using standard Base64 in URL requires encoding of '+', '/' and '=' characters
 	 * vedi commento del metodo calcCodeChallenge()
 	 *
@@ -265,16 +267,28 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 	authCodeGrant1 = async () => {
 		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
-		let config = {
-			clientId: this.context.client_id,
-			clientSecret: this.context.client_secret,
-			redirectUri: this.state.redirect_uri,
-			responseType: 'code', // It's the default value
-			scopes: ['*'],
-			codeChallengeMethod: 'S256', // It's the default value
-			usePKCE: true,
-			//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
-		};
+		let config = null;
+		if (this.state.usePkce) {
+			config = {
+				clientId: this.context.client_id,
+				clientSecret: this.context.client_secret,
+				redirectUri: this.state.redirect_uri,
+				responseType: 'code', // It's the default value
+				scopes: ['*'],
+				codeChallengeMethod: 'S256', // It's the default value
+				usePKCE: true,
+				//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
+			};
+		} else {
+			config = {
+				clientId: this.context.client_id,
+				clientSecret: this.context.client_secret,
+				redirectUri: this.state.redirect_uri,
+				responseType: 'code', // It's the default value
+				scopes: ['*'],
+				//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
+			};
+		}
 
 		console.log('config : ' + JSON.stringify(config));
 		console.log('URL_AUTH : ' + JSON.stringify(URL_AUTH));
@@ -326,16 +340,27 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		console.log('codeChallenge: ' + codeChallenge);
 		let state = this.calcState();
 		console.log('state: ' + state);
+		let config = null;
+		if (this.state.usePkce) {
+			config = {
+				client_id: this.context.client_id,
+				redirect_uri: this.state.redirect_uri,
+				response_type: 'code',
+				scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
+				state: state,
+				code_challenge_method: 'S256',
+				code_challenge: codeChallenge,
+			};
+		} else {
+			config = {
+				client_id: this.context.client_id,
+				redirect_uri: this.state.redirect_uri,
+				response_type: 'code',
+				scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
+				state: state,
+			};
+		}
 
-		let config = {
-			client_id: this.context.client_id,
-			redirect_uri: this.state.redirect_uri,
-			response_type: 'code',
-			scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
-			state: state,
-			code_challenge_method: 'S256',
-			code_challenge: codeChallenge,
-		};
 		console.log('config : ' + JSON.stringify(config));
 
 		let url = this.buildUrl(URL_AUTH, config);
@@ -381,7 +406,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * https://laravel.com/docs/9.x/passport#requesting-tokens-converting-authorization-codes-to-access-tokens
 	 */
 	exchangeToken2 = async (code) => {
-		console.log('code: ' + JSON.stringify(code));
+		console.log('exchangeToken2()');
 		if (code) {
 			let data_to_send = {
 				client_id: this.context.client_id,
@@ -391,7 +416,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				code: code,
 			};
 			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
-			console.log(arg1);
 
 			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 			if (result.status != 200) {
@@ -416,12 +440,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				let accessToken = data.access_token;
 				let refreshToken = data.refresh_token;
 				let expiresIn = data.expires_in;
-				this.store.updateContext(
-					this.context.client_id,
-					accessToken,
-					refreshToken,
-					expiresIn
-				);
+				let store = new StoreUtil(this.context);
+				store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
 				Alert.alert('OK: authorized');
 			}
 		}
@@ -444,7 +464,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				code_verifier: verifier,
 			};
 			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
-			console.log(arg1);
 
 			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 			if (result.status != 200) {
@@ -468,12 +487,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				let accessToken = data.access_token;
 				let refreshToken = data.refresh_token;
 				let expiresIn = data.expires_in;
-				this.store.updateContext(
-					this.context.client_id,
-					accessToken,
-					refreshToken,
-					expiresIn
-				);
+				let store = new StoreUtil(this.context);
+				store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
 				Alert.alert('OK: authorized');
 			}
 		}
@@ -530,8 +545,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 									onPress={this.authCodeGrant2}>
 									Authorize 2
 								</Button>
-								<Caption>startAsync()</Caption>
-								<Caption>(usa sempre e comunque il proxy)</Caption>
+								<Caption>startAsync(), usa sempre il proxy</Caption>
 							</View>
 							<Divider style={{ marginVertical: 20 }} />
 							<View
@@ -548,6 +562,11 @@ class AuthorizationCodeGrantScreen extends React.Component {
 									onValueChange={this.onToggleSwitch2}
 								/>
 							</View>
+							<Caption>
+								The auth.expo.io proxy is only used alwayswhen startAsync is called,
+								or when useProxy: true is passed to the promptAsync() method of an
+								AuthRequest.
+							</Caption>
 							<View
 								style={{
 									flexDirection: 'row',
@@ -561,6 +580,11 @@ class AuthorizationCodeGrantScreen extends React.Component {
 									onValueChange={this.onToggleSwitch}
 								/>
 							</View>
+							<Caption>
+								TODO: verificare l'afermazione seguente. Quando non utilizzo PKCE
+								devo specificare un valore per il parametro client_secret. Pertanto
+								nessuno deli client configurati ora sul server è compatibile.
+							</Caption>
 							<Divider style={{ marginVertical: 20 }} />
 							<Subheading>Redirect uri</Subheading>
 							<Caption>Argument</Caption>

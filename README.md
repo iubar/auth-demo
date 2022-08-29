@@ -63,3 +63,6 @@ Navigation
 (Client)
  * https://github.com/facebook/react-native/issues/28844
  * https://github.com/react-navigation/react-navigation/issues?q=is%3Aissue+You+are+trying+to+%60import%60+a+file+after+the+Jest+environment+has+been+torn+down.
+
+
+![Filesystem](https://docs.expo.dev/static/images/sdk/file-system/file-system-diagram.png)
