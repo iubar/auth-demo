@@ -79,6 +79,9 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		redirects[2] = (await AuthSession.makeRedirectUri({})) + '/--/expo-auth-session';
 		redirects_info[2] = '/--/expo-auth-session';
 
+		redirects[7] = (await AuthSession.makeRedirectUri({})) + '/--/expo-auth-session';
+		redirects_info[7] = '/--/expo-auth-session';
+
 		// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
 		// This proxy service is responsible for:
 		// - redirecting traffic from your application to the authentication service
@@ -116,7 +119,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			(this.context.client_id == 2 ||
 				this.context.client_id == 3 ||
 				this.context.client_id == 4 ||
-				this.context.client_id == 5)
+				this.context.client_id == 5 ||
+				this.context.client_id == 7)
 		) {
 			b1 = false;
 		}
@@ -266,26 +270,31 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	};
 
 	authCodeGrant1 = async () => {
-		// AuthRequestConfig (see https://github.com/expo/expo/blob/abfa127e40706ce5b234e219ecc27ed8e7531f23/packages/expo-auth-session/src/AuthRequest.ts#L49)
+		/**
+		 * AuthRequestConfig (see https://docs.expo.dev/versions/latest/sdk/auth-session/#authrequestconfig)
+		 */
 		let config = null;
 		if (this.state.usePkce) {
 			config = {
 				clientId: this.context.client_id,
-				clientSecret: this.context.client_secret,
+				// clientSecret: this.context.client_secret,
+				// codeChallenge: ....
 				redirectUri: this.state.redirect_uri,
-				responseType: 'code', // It's the default value
+				responseType: 'code',
 				scopes: ['*'],
-				codeChallengeMethod: 'S256', // It's the default value
+				codeChallengeMethod: 'S256',
 				usePKCE: true,
 				//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
 			};
 		} else {
 			config = {
 				clientId: this.context.client_id,
-				clientSecret: this.context.client_secret,
+				// clientSecret: this.context.client_secret,
+				// codeChallenge: ....
 				redirectUri: this.state.redirect_uri,
 				responseType: 'code', // It's the default value
 				scopes: ['*'],
+				usePKCE: false,
 				//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
 			};
 		}
@@ -294,34 +303,25 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		console.log('URL_AUTH : ' + JSON.stringify(URL_AUTH));
 		let issuerOrDiscovery = { authorizationEndpoint: URL_AUTH }; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)
 		let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
-		let state = request.state;
 
-		const result = await request.promptAsync(issuerOrDiscovery, {
+		console.log('request.state : ' + JSON.stringify(request.state));
+
+		const result = await request.promptAsync({
 			useProxy: this.state.useProxy,
 		}); // When invoked, a web browser will open up and prompt the user for authentication.
-		console.log('result: ' + JSON.stringify(result));
-		let code = result.params.code;
-
-		//////////////////////////////////////////////////
-		// TODO: capire l'utilità dei metodi seguenti
-		const urlAuth = await request.makeAuthUrlAsync(issuerOrDiscovery);
-		console.log('urlAuth: ' + urlAuth);
-		const requestConfig = await request.getAuthRequestConfigAsync();
-		console.log('requestConfig: ' + JSON.stringify(requestConfig));
-		//////////////////////////////////////////////////
-		console.log('result : ' + JSON.stringify(result));
-
-		if (result.type == 'success') {
-			if (this.state.usePkce) {
-				console.log('use pkce...');
-				let verifier = request.codeVerifier;
-				console.log('verifier : ' + JSON.stringify(verifier));
-				await this.exchangeToken(code, verifier);
-			} else {
-				await this.exchangeToken2(code);
-			}
+		if (result.type != 'success') {
+			// es: "error"  or "dismiss"
+			console.log('WARNING: result.type is ' + JSON.stringify(result.type));
+			return null;
 		} else {
-			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
+			console.log('result: ' + JSON.stringify(result));
+		}
+		let code = result.params.code;
+		if (this.state.usePkce) {
+			let verifier = request.codeVerifier;
+			await this.exchangeToken(code, verifier);
+		} else {
+			await this.exchangeToken2(code);
 		}
 	};
 
@@ -379,24 +379,22 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 		let result = await AuthSession.startAsync({ authUrl: url }); // NOTICE: The auth.expo.io proxy is ALWAYS used (it calls openAuthSessionAsync)
 		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
-		console.log('result: ' + JSON.stringify(result));
+
+		if (result.type != 'success') {
+			// es: "error"  or "dismiss"
+			console.log('WARNING: result.type is ' + JSON.stringify(result.type));
+			return null;
+		} else {
+			console.log('result: ' + JSON.stringify(result));
+		}
+
 		let code = result.params.code;
 
-		/**
-		 * Possibili risposte: 'cancel' | 'dismiss' | 'opened' | 'locked'
-		 * C'è un errore nella documentazione di Expo, perchè 'success' non è indicato
-		 * probabilemnte 'opened' non esiste
-		 * https://docs.expo.dev/versions/latest/sdk/auth-session/#authsessionresult
-		 */
-		if (result.type == 'success') {
-			if (this.state.usePkce) {
-				console.log('use pkce...');
-				await this.exchangeToken(code, verifier);
-			} else {
-				await this.exchangeToken2(code);
-			}
+		if (this.state.usePkce) {
+			console.log('use pkce...');
+			await this.exchangeToken(code, verifier);
 		} else {
-			console.log('WARNING: AuthSessionResult is ' + JSON.stringify(result));
+			await this.exchangeToken2(code);
 		}
 	};
 
@@ -407,43 +405,44 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 */
 	exchangeToken2 = async (code) => {
 		console.log('exchangeToken2()');
-		if (code) {
-			let data_to_send = {
-				client_id: this.context.client_id,
-				client_secret: this.context.client_secret,
-				redirect_uri: this.state.redirect_uri,
-				grant_type: 'authorization_code',
-				code: code,
-			};
-			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
+		if (!code) {
+			return null;
+		}
+		let data_to_send = {
+			client_id: this.context.client_id,
+			client_secret: this.context.client_secret,
+			redirect_uri: this.state.redirect_uri,
+			grant_type: 'authorization_code',
+			code: code,
+		};
+		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
 
-			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
-			if (result.status != 200) {
-				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
-				console.log(errorMsg);
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+		if (result.status != 200) {
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
+			console.log(errorMsg);
 
-				this.setState({
-					data_to_send_printable: arg1,
-					response: JSON.stringify(result),
-				});
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(result),
+			});
 
-				let errorMsg2 = 'HTTP ERROR: ' + result.status;
-				Alert.alert(errorMsg2);
-			} else {
-				let data = result.data;
+			let errorMsg2 = 'HTTP ERROR: ' + result.status;
+			Alert.alert(errorMsg2);
+		} else {
+			let data = result.data;
 
-				this.setState({
-					data_to_send_printable: arg1,
-					response: JSON.stringify(data),
-				});
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(data),
+			});
 
-				let accessToken = data.access_token;
-				let refreshToken = data.refresh_token;
-				let expiresIn = data.expires_in;
-				let store = new StoreUtil(this.context);
-				store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
-				Alert.alert('OK: authorized');
-			}
+			let accessToken = data.access_token;
+			let refreshToken = data.refresh_token;
+			let expiresIn = data.expires_in;
+			let store = new StoreUtil(this.context);
+			store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
+			Alert.alert('OK: authorized');
 		}
 	};
 
@@ -454,43 +453,45 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * https://laravel.com/docs/9.x/passport#code-grant-pkce-converting-authorization-codes-to-access-tokens
 	 */
 	exchangeToken = async (code, verifier) => {
-		console.log('code: ' + JSON.stringify(code));
-		if (code) {
-			let data_to_send = {
-				client_id: this.context.client_id,
-				redirect_uri: this.state.redirect_uri,
-				grant_type: 'authorization_code',
-				code: code,
-				code_verifier: verifier,
-			};
-			let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
+		console.log('exchangeToken()');
+		if (!code) {
+			return null;
+		}
+		let data_to_send = {
+			client_id: this.context.client_id,
+			client_secret: this.context.client_secret,
+			redirect_uri: this.state.redirect_uri,
+			grant_type: 'authorization_code',
+			code: code,
+			code_verifier: verifier,
+		};
+		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
 
-			let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
-			if (result.status != 200) {
-				let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
-				console.log(errorMsg);
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
+		if (result.status != 200) {
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
+			console.log(errorMsg);
 
-				this.setState({
-					data_to_send_printable: arg1,
-					response: JSON.stringify(result),
-				});
-				let errorMsg2 = 'HTTP ERROR: ' + result.status;
-				Alert.alert(errorMsg2);
-			} else {
-				let data = result.data;
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(result),
+			});
+			let errorMsg2 = 'HTTP ERROR: ' + result.status;
+			Alert.alert(errorMsg2);
+		} else {
+			let data = result.data;
 
-				this.setState({
-					data_to_send_printable: arg1,
-					response: JSON.stringify(data),
-				});
+			this.setState({
+				data_to_send_printable: arg1,
+				response: JSON.stringify(data),
+			});
 
-				let accessToken = data.access_token;
-				let refreshToken = data.refresh_token;
-				let expiresIn = data.expires_in;
-				let store = new StoreUtil(this.context);
-				store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
-				Alert.alert('OK: authorized');
-			}
+			let accessToken = data.access_token;
+			let refreshToken = data.refresh_token;
+			let expiresIn = data.expires_in;
+			let store = new StoreUtil(this.context);
+			store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
+			Alert.alert('OK: authorized');
 		}
 	};
 
@@ -561,7 +562,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 								/>
 							</View>
 							<Caption>
-								The auth.expo.io proxy is only used alwayswhen startAsync is called,
+								The auth.expo.io proxy is used when startAsync is called (always),
 								or when useProxy: true is passed to the promptAsync() method of an
 								AuthRequest.
 							</Caption>
@@ -579,15 +580,16 @@ class AuthorizationCodeGrantScreen extends React.Component {
 								/>
 							</View>
 							<Caption>
-								TODO: verificare l'afermazione seguente. Quando non utilizzo PKCE
-								devo specificare un valore per il parametro client_secret. Pertanto
-								nessuno de client configurati ora sul server è compatibile.
+								Quando non utilizzo PKCE devo impostare obbligoriamete un valore per
+								il parametro client_secret. Pertanto solo il client 7 è compatibile
+								con la modalità PKCE = false.
 							</Caption>
+
 							<Divider style={{ marginVertical: 20 }} />
-							<Subheading>Redirect uri</Subheading>
+							<Subheading>Redirect</Subheading>
 							<Caption>Argument</Caption>
 							<Paragraph>{this.state.redirect_uri_desc}</Paragraph>
-							<Caption>Result</Caption>
+							<Caption>Uri at runtime</Caption>
 							<Paragraph>{this.state.redirect_uri}</Paragraph>
 							{warning && (
 								<Paragraph theme={{ colors: { text: 'red' } }}>{warning}</Paragraph>

@@ -3,8 +3,9 @@ import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native'
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
+import * as Application from 'expo-application';
 import HttpCall from '../HttpCall';
-import { CLIENTS, LARAVEL_REDIRECTS, OAUTH_CLIENT_SECRET } from '../Consts';
+import { CLIENTS, LARAVEL_REDIRECTS, LARAVEL_SECRETS } from '../Consts';
 import {
 	Text,
 	Title,
@@ -75,12 +76,8 @@ class SettingsScreen extends React.Component {
 		}
 		let client_id = parseInt(index);
 
-		let client_secret = '';
-		if (client_id == 1) {
-			client_secret = OAUTH_CLIENT_SECRET;
-		} else {
-			// without client_secret
-		}
+		let client_secret = LARAVEL_SECRETS[client_id];
+
 		console.log('clientSecret: ' + client_secret);
 		let client_desc = client_id + ' ' + this.state.clients[client_id];
 		this.context.client_id = client_id;
@@ -188,8 +185,16 @@ class SettingsScreen extends React.Component {
 					<Paragraph>{this.state.access_token}</Paragraph>
 					<Caption>Refresh token</Caption>
 					<Paragraph>{this.state.refresh_token}</Paragraph>
-					<Caption>Expires in</Caption>
+					<Caption>Expires</Caption>
 					<Paragraph>{this.getExpiredDesc()}</Paragraph>
+					<Divider style={{ marginVertical: 20 }} />
+					{/*
+					<Title>About</Title>
+					<Paragraph>Name {Application.applicationName}</Paragraph>				
+					<Paragraph>Id {Application.applicationId}</Paragraph>
+					<Paragraph>Version {Application.nativeApplicationVersion}</Paragraph>				
+					<Paragraph>Build {Application.nativeBuildVersion}</Paragraph>				
+					*/}
 				</ScrollView>
 			</SafeAreaView>
 		);

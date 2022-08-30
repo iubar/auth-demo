@@ -1072,7 +1072,7 @@ exports[`<App /> renders correctly 1`] = `
                       ]
                     }
                   >
-                    Expires in
+                    Expires
                   </Text>
                   <Text
                     style={
@@ -1105,6 +1105,20 @@ exports[`<App /> renders correctly 1`] = `
                             undefined,
                           ],
                         ],
+                      ]
+                    }
+                  />
+                  <View
+                    style={
+                      [
+                        {
+                          "backgroundColor": "rgba(0, 0, 0, 0.12)",
+                          "height": 0.5,
+                        },
+                        undefined,
+                        {
+                          "marginVertical": 20,
+                        },
                       ]
                     }
                   />

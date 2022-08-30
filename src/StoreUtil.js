@@ -42,11 +42,11 @@ export default class StoreUtil {
 
 	updateContextClient = (client_id, client_secret) => {
 		this.context.client_id = client_id;
-		this.context.client_secret = client_secret;
+		// this.context.client_secret = client_secret; // il valore client_secret è prelevato a run-time dal file Consts.js
 	};
 
-	save = async (clientId, accessToken, refreshToken, expiresIn) => {
-		await this.saveClient(clientId, ''); // il valore client_secret è prelevato a run-time dal file Consts.js
+	save = async (clientId, accessToken, refreshToken, expiresIn, client_secret) => {
+		await this.saveClient(clientId, client_secret); // il valore client_secret è prelevato a run-time dal file Consts.js
 		await this.saveTokens(accessToken, refreshToken, expiresIn);
 	};
 

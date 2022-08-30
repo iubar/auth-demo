@@ -138,7 +138,6 @@ class RestClientScreen extends React.Component {
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Rest Api</Title>
 					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
-					{/* <Button style={{marginHorizontal: 20, marginVertical: 20}} mode="contained" onPress={this.refreshToken} disabled={this.state.accessToken === '' || this.state.accessToken === null}>Info</Button> */}
 					<Button
 						style={{ marginHorizontal: 20, marginVertical: 20 }}
 						mode="contained"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { URL_OAUTH_LOGIN, OAUTH_CLIENT_SECRET, DEBUG } from './Consts.js';
+import { URL_OAUTH_LOGIN, DEBUG } from './Consts.js';
 
 import * as SecureStore from 'expo-secure-store';
 
@@ -39,13 +39,13 @@ export default class HttpCall extends React.Component {
 	/**
 	 * https://laravel.com/docs/9.x/passport#refreshing-tokens
 	 */
-	refreshToken = async (clientId, refreshToken) => {
+	refreshToken = async (clientId, refreshToken, clientSecret) => {
 		let data_to_send = {
 			grant_type: 'refresh_token',
 			refresh_token: refreshToken,
 			client_id: clientId,
 			scope: '',
-			client_secret: OAUTH_CLIENT_SECRET,
+			client_secret: clientSecret,
 		};
 		return this.callApi('POST', URL_OAUTH_LOGIN, data_to_send);
 	};
@@ -74,7 +74,7 @@ export default class HttpCall extends React.Component {
 		if (data_to_send) {
 			_body = JSON.stringify(data_to_send);
 			if (DEBUG) {
-				console.log('ROUTE: ' + url);
+				console.log(method + ': ' + url);
 				console.log('DATA TO SEND: ' + JSON.stringify(data_to_send));
 			}
 		}
