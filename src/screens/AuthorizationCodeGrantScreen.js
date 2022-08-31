@@ -43,18 +43,16 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	}
 
 	async componentDidMount() {
-		await this.initRedirects();
-
 		this._unsubscribe = this.props.navigation.addListener('focus', async () => {
 			console.log('AuthorizationCodeGrant has focus ****************** ');
-			this.updateGui();
+			await this.updateGui();
 		});
 
-		this.updateGui(); // NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
+		await this.updateGui(); // NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
 	}
 
-	updateGui = () => {
-		this.updateConfig(this.context.client_id);
+	updateGui = async () => {
+		await this.updateConfig(this.context.client_id);
 	};
 
 	/**
@@ -70,17 +68,25 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let redirects = [];
 		let redirects_info = [];
 
+		let more = '';
+		if (this.state.useProxy) {
+			more = ' {useProxy: true}';
+		}
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirects[5] = await AuthSession.makeRedirectUri({});
-		redirects_info[5] = '{}';
+		redirects[5] = await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy });
+		redirects_info[5] = '{}' + more;
 
 		// expo client
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirects[2] = (await AuthSession.makeRedirectUri({})) + '/--/expo-auth-session';
-		redirects_info[2] = '/--/expo-auth-session';
+		redirects[2] =
+			(await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy })) +
+			'/--/expo-auth-session';
+		redirects_info[2] = '/--/expo-auth-session' + more;
 
-		redirects[7] = (await AuthSession.makeRedirectUri({})) + '/--/expo-auth-session';
-		redirects_info[7] = '/--/expo-auth-session';
+		redirects[7] =
+			(await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy })) +
+			'/--/expo-auth-session';
+		redirects_info[7] = '/--/expo-auth-session' + more;
 
 		// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
 		// This proxy service is responsible for:
@@ -89,15 +95,18 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
 		// The auth.expo.io proxy is only used when startAsync is called, or when useProxy: true is passed to the promptAsync() method of an AuthRequest.
 		// Should use the `auth.expo.io` proxy: this is useful for testing managed native apps that require a custom URI scheme.
-		redirects[3] = await AuthSession.makeRedirectUri({ useProxy: true });
-		redirects_info[3] = '{useProxy: true}';
+		redirects[3] = await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy });
+		redirects_info[3] = '{}' + more;
 
 		// To make your native app handle "mycoolredirect://" scheme, simply run:
 		// npx uri-scheme add mycoolredirect
 		// npx uri-scheme list
 		// se also the app.json config file
-		redirects[4] = await AuthSession.makeRedirectUri({ native: 'mycoolredirect://' });
-		redirects_info[4] = "{native: 'mycoolredirect://'}";
+		redirects[4] = await AuthSession.makeRedirectUri({
+			useProxy: this.state.useProxy,
+			native: 'mycoolredirect://',
+		});
+		redirects_info[4] = "{native: 'mycoolredirect://'}" + more;
 
 		this.state.redirects = redirects;
 		this.state.redirects_info = redirects_info;
@@ -106,12 +115,14 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	/**
 	 * see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
 	 */
-	updateConfig = (index) => {
+	updateConfig = async (index) => {
 		console.log('*************** client id selected: ' + JSON.stringify(index));
 		if (index == undefined) {
 			this.setState({ screen_disabled: true });
 			return;
 		}
+
+		await this.initRedirects();
 
 		let b1 = true;
 		if (
@@ -139,17 +150,12 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		if (!redirect_uri) {
 			console.log('Errore nella logica del metodo, index: ' + index);
 		}
-		let b2 = false;
-		if (index == 3) {
-			b2 = true;
-		}
 
 		this.setState({
 			redirect_uri: redirect_uri,
 			redirect_uri_desc: redirect_uri_desc,
 			client_id: this.context.client_id,
 			screen_disabled: b1,
-			useProxy: b2,
 			laravel_redirect_uri: laravel_redirect_uri,
 		});
 	};
@@ -169,6 +175,18 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// let randomBytes = await Random.getRandomBytesAsync(128);
 		let randomString = this.randomString(
 			43,
+			'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+		);
+		return randomString;
+	};
+
+	/**
+	 * The state parameter is used to provide protection against Cross-Site Request Forgery (CSRF) attacks on OAuth
+	 */
+	calcState = () => {
+		// let randomBytes = await Random.getRandomBytesAsync(10);
+		let randomString = this.randomString(
+			10,
 			'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 		);
 		return randomString;
@@ -235,15 +253,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			cryptoDigestOptions
 		);
 		return digest;
-	};
-
-	calcState = () => {
-		// let randomBytes = await Random.getRandomBytesAsync(10);
-		let randomString = this.randomString(
-			10,
-			'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-		);
-		return randomString;
 	};
 
 	/**
@@ -497,7 +506,10 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 	onToggleSwitch = () => this.setState({ usePkce: !this.state.usePkce });
 
-	onToggleSwitch2 = () => console.log('nothing to do');
+	onToggleSwitch2 = async () => {
+		await this.setState({ useProxy: !this.state.useProxy });
+		await this.updateGui();
+	};
 
 	render() {
 		console.log('rendering....');
@@ -524,70 +536,64 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 					{!this.state.screen_disabled && (
 						<View>
-							<View
-								style={{
-									flexDirection: 'column',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}>
-								<Button
-									style={{ marginHorizontal: 20, marginVertical: 20 }}
-									mode="contained"
-									onPress={this.authCodeGrant1}>
-									Authorize 1
-								</Button>
-								<Caption>loadAsync() + promptAsync()</Caption>
-								<Button
-									color={this.props.theme.colors.accent}
-									style={{ marginHorizontal: 20, marginVertical: 20 }}
-									mode="contained"
-									onPress={this.authCodeGrant2}>
-									Authorize 2
-								</Button>
-								<Caption>startAsync(), usa sempre il proxy</Caption>
+							<View style={styles.box}>
+								<View style={styles.centered}>
+									<Button
+										style={{ marginHorizontal: 20, marginVertical: 20 }}
+										mode="contained"
+										onPress={this.authCodeGrant1}>
+										Authorize 1
+									</Button>
+									<Caption>loadAsync() + promptAsync()</Caption>
+
+									<View style={styles.inline}>
+										<Caption>use Proxy </Caption>
+										<Switch
+											color={this.props.theme.colors.primary}
+											value={this.state.useProxy}
+											onValueChange={this.onToggleSwitch2}
+										/>
+									</View>
+									<Caption>
+										The auth.expo.io proxy is used when startAsync is called
+										(always), or when useProxy: true is passed to the
+										promptAsync() method of an AuthRequest.
+									</Caption>
+								</View>
 							</View>
 							<Divider style={{ marginVertical: 20 }} />
-							<View
-								style={{
-									flexDirection: 'row',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}>
-								<Caption>use Proxy </Caption>
-								<Switch
-									color={this.props.theme.colors.primary}
-									disabled="true"
-									value={this.state.useProxy}
-									onValueChange={this.onToggleSwitch2}
-								/>
+							<View style={styles.box}>
+								<View style={styles.centered}>
+									<Button
+										color={this.props.theme.colors.accent}
+										style={{ marginHorizontal: 20, marginVertical: 20 }}
+										mode="contained"
+										onPress={this.authCodeGrant2}>
+										Authorize 2
+									</Button>
+									<Caption>startAsync(), usa sempre il proxy</Caption>
+								</View>
 							</View>
-							<Caption>
-								The auth.expo.io proxy is used when startAsync is called (always),
-								or when useProxy: true is passed to the promptAsync() method of an
-								AuthRequest.
-							</Caption>
-							<View
-								style={{
-									flexDirection: 'row',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}>
-								<Caption>use Pkce </Caption>
-								<Switch
-									color={this.props.theme.colors.primary}
-									value={this.state.usePkce}
-									onValueChange={this.onToggleSwitch}
-								/>
-							</View>
-							<Caption>
-								Quando non utilizzo PKCE devo impostare obbligoriamete un valore per
-								il parametro client_secret. Pertanto solo il client 7 è compatibile
-								con la modalità PKCE = false.
-							</Caption>
+							<Divider style={{ marginVertical: 20 }} />
 
+							<View style={styles.centered}>
+								<View style={styles.inline}>
+									<Caption>use Pkce </Caption>
+									<Switch
+										color={this.props.theme.colors.primary}
+										value={this.state.usePkce}
+										onValueChange={this.onToggleSwitch}
+									/>
+								</View>
+								<Caption>
+									Quando non utilizzo PKCE devo impostare obbligoriamete un valore
+									per il parametro client_secret. Pertanto solo il client 7 è
+									compatibile con la modalità PKCE = false.
+								</Caption>
+							</View>
 							<Divider style={{ marginVertical: 20 }} />
 							<Subheading>Redirect</Subheading>
-							<Caption>Argument</Caption>
+							<Caption>Description</Caption>
 							<Paragraph>{this.state.redirect_uri_desc}</Paragraph>
 							<Caption>Uri at runtime</Caption>
 							<Paragraph>{this.state.redirect_uri}</Paragraph>
@@ -608,5 +614,29 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		padding: 20,
+		margin: 10,
+	},
+	box: {
+		//height: 40,
+		borderWidth: 0.5,
+		padding: 20,
+		borderColor: 'gray',
+	},
+	centered: {
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	inline: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+});
 
 export default withTheme(AuthorizationCodeGrantScreen);
