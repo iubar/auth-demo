@@ -25,7 +25,6 @@ class RestClientScreen extends React.Component {
 
 	async componentDidMount() {
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
-			console.log('RestApi has focus ****************** ');
 			this.updateGui();
 		});
 		this.updateGui(); // NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
@@ -132,11 +131,11 @@ class RestClientScreen extends React.Component {
 	handlePress = () => this.setState({ expanded: !this.state.expanded });
 
 	render() {
-		console.log('RestApi.render() ******************');
 		return (
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Rest Api</Title>
+					<Divider style={{ marginVertical: 5 }} />
 					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
 					<Button
 						style={{ marginHorizontal: 20, marginVertical: 20 }}

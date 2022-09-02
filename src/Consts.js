@@ -14,16 +14,17 @@ export const OAUTH_CLIENT_SECRET_CLIENT_7 = 'q5MGqBrcerFM11fBlFD6XFi5eWygC3VKHfJ
 // Others
 
 export const CLIENTS = [];
-CLIENTS[1] = 'Password Grant with secret';
-CLIENTS[2] = 'Auth Grant w/o secret';
-CLIENTS[3] = 'Auth Grant w/o secret (proxy required)';
-CLIENTS[4] = 'Auth Grant w/o secret (custom scheme)';
-CLIENTS[5] = 'Auth Grant w/o secret';
-CLIENTS[6] = 'Password Grant w/o secret';
-CLIENTS[7] = 'Auth Grant with secret';
-CLIENTS[8] = 'Auth Grant w/o secret';
-CLIENTS[9] = 'Auth Grant w/o secret';
-CLIENTS[10] = 'Auth Grant with secret';
+CLIENTS[0] = 'Change me';
+CLIENTS[1] = 'Password with secret';
+CLIENTS[2] = 'Auth w/o secret';
+CLIENTS[3] = 'Auth w/o secret (proxy required)';
+CLIENTS[4] = 'Auth w/o secret (custom scheme)';
+CLIENTS[5] = 'Auth w/o secret';
+CLIENTS[6] = 'Password w/o secret';
+CLIENTS[7] = 'Auth with secret';
+CLIENTS[8] = 'Auth w/o secret';
+CLIENTS[9] = 'Auth w/o secret';
+CLIENTS[10] = 'Auth with secret';
 
 export const LARAVEL_REDIRECTS = [];
 LARAVEL_REDIRECTS[1] = 'http://localhost';

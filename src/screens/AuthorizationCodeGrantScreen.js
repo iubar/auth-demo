@@ -44,7 +44,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 	async componentDidMount() {
 		this._unsubscribe = this.props.navigation.addListener('focus', async () => {
-			console.log('AuthorizationCodeGrant has focus ****************** ');
 			await this.updateGui();
 		});
 
@@ -121,7 +120,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * see https://docs.expo.io/guides/authentication/#redirect-uri-patterns
 	 */
 	updateConfig = async (index) => {
-		console.log('*************** client id selected: ' + JSON.stringify(index));
 		if (index == undefined) {
 			this.setState({ screen_disabled: true });
 			return;
@@ -526,6 +524,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Auth Code Grant</Title>
+					<Divider style={{ marginVertical: 5 }} />
 					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
 
 					{this.state.screen_disabled && (

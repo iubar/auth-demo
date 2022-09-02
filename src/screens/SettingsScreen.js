@@ -46,7 +46,6 @@ class SettingsScreen extends React.Component {
 
 		this.initClients();
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
-			console.log('SettingsScreen has focus ****************** ');
 			this.updateGui();
 		});
 
@@ -139,7 +138,9 @@ class SettingsScreen extends React.Component {
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Settings</Title>
-					<List.Section title="IubarHR selected client">
+					<Divider style={{ marginVertical: 5 }} />
+					<Caption>Iubar HR client and relative OAuth2 grant type</Caption>
+					<List.Section title="">
 						<List.Accordion
 							title={this.state.client_desc}
 							expanded={this.state.expanded}
@@ -157,9 +158,15 @@ class SettingsScreen extends React.Component {
 							})}
 						</List.Accordion>
 					</List.Section>
-					<Caption>Redirect configured on the server</Caption>
-					<Paragraph>{this.state.laravel_redirect_uri}</Paragraph>
-					<Divider style={{ marginVertical: 20 }} />
+
+					{this.state.laravel_redirect_uri && (
+						<View>
+							<Caption>Redirect configured on the server</Caption>
+							<Paragraph>{this.state.laravel_redirect_uri}</Paragraph>
+						</View>
+					)}
+
+					<Divider style={{ marginVertical: 5 }} />
 					<Button
 						style={{ marginHorizontal: 20, marginVertical: 20 }}
 						mode="contained"

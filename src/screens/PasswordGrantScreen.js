@@ -38,7 +38,6 @@ export default class PasswordGrantScreen extends React.Component {
 
 	async componentDidMount() {
 		this._unsubscribe = this.props.navigation.addListener('focus', () => {
-			console.log('PasswordGrantScreen has focus ****************** ');
 			this.updateGui();
 		});
 		this.updateGui(); // NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
@@ -122,6 +121,7 @@ export default class PasswordGrantScreen extends React.Component {
 			<SafeAreaView>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Password Grant</Title>
+					<Divider style={{ marginVertical: 5 }} />
 					<Paragraph>Client Id: {this.state.client_id}</Paragraph>
 
 					{this.state.screen_disabled && (
