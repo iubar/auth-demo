@@ -72,21 +72,26 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		if (this.state.useProxy) {
 			more = ' {useProxy: true}';
 		}
-		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirects[5] = await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy });
-		redirects_info[5] = '{}' + more;
 
-		// expo client
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
 		redirects[2] =
 			(await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy })) +
 			'/--/expo-auth-session';
 		redirects_info[2] = '/--/expo-auth-session' + more;
 
-		redirects[7] =
-			(await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy })) +
-			'/--/expo-auth-session';
-		redirects_info[7] = '/--/expo-auth-session' + more;
+		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
+		redirects[5] = await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy });
+		redirects_info[5] = '{}' + more;
+
+		redirects[7] = redirects[2];
+		redirects_info[7] = redirects_info[2];
+
+		redirects[8] = redirects[2];
+		redirects_info[8] = redirects_info[2];
+		redirects[9] = redirects[5];
+		redirects_info[9] = redirects_info[5];
+		redirects[10] = redirects[2];
+		redirects_info[10] = redirects_info[2];
 
 		// Expo Proxy (Environment: Development or production projects in the Expo client, or in a standalone build.)
 		// This proxy service is responsible for:
@@ -95,8 +100,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
 		// The auth.expo.io proxy is only used when startAsync is called, or when useProxy: true is passed to the promptAsync() method of an AuthRequest.
 		// Should use the `auth.expo.io` proxy: this is useful for testing managed native apps that require a custom URI scheme.
-		redirects[3] = await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy });
-		redirects_info[3] = '{}' + more;
+		redirects[3] = redirects[2];
+		redirects_info[3] = redirects_info[5];
 
 		// To make your native app handle "mycoolredirect://" scheme, simply run:
 		// npx uri-scheme add mycoolredirect
@@ -127,11 +132,9 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let b1 = true;
 		if (
 			this.context.client_id &&
-			(this.context.client_id == 2 ||
-				this.context.client_id == 3 ||
-				this.context.client_id == 4 ||
-				this.context.client_id == 5 ||
-				this.context.client_id == 7)
+			this.context.client_id > 0 &&
+			this.context.client_id != 1 &&
+			this.context.client_id != 6
 		) {
 			b1 = false;
 		}
@@ -587,8 +590,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 								</View>
 								<Caption>
 									Quando non utilizzo PKCE devo impostare obbligoriamete un valore
-									per il parametro client_secret. Pertanto solo il client 7 è
-									compatibile con la modalità PKCE = false.
+									per il parametro client_secret. Pertanto solo i client 7 e 10
+									sono compatibili con la modalità PKCE = false.
 								</Caption>
 							</View>
 							<Divider style={{ marginVertical: 20 }} />

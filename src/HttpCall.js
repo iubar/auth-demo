@@ -91,10 +91,10 @@ export default class HttpCall extends React.Component {
 			}
 			if (json) {
 				// API DI IUBAR
-				if (json.hasOwnProperty('data')) {
+				if (Object.prototype.hasOwnProperty.call(json, 'data')) {
 					_data = json.data;
 				}
-				if (json.hasOwnProperty('response')) {
+				if (Object.prototype.hasOwnProperty.call(json, 'response')) {
 					// Attenzione nell'API IUBAR, json.response contiene il testo di un erorre quanto status != 200
 					if (status !== 200) {
 						_error = json.response;
@@ -105,20 +105,20 @@ export default class HttpCall extends React.Component {
 				// FINE API DI IUBAR
 
 				// API DI PASSPORT (ricordati che è un middleware per Laravel)
-				if (json.hasOwnProperty('error')) {
+				if (Object.prototype.hasOwnProperty.call(json, 'error')) {
 					_error = json.error;
 				}
-				if (json.hasOwnProperty('error_description')) {
+				if (Object.prototype.hasOwnProperty.call(json, 'error_description')) {
 					_error = _error + ' | ' + json.error_description;
 				}
-				if (json.hasOwnProperty('message')) {
+				if (Object.prototype.hasOwnProperty.call(json, 'message')) {
 					if (status === 200) {
 						responseMsg = json.message;
 					} else {
 						_error = json.message; // Ha un contenuto informativo superoriore rispetto al valore di json.error
 					}
 				}
-				if (json.hasOwnProperty('token_type')) {
+				if (Object.prototype.hasOwnProperty.call(json, 'token_type')) {
 					_data = json;
 				}
 			}
