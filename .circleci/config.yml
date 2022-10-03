@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: cimg/node:18.7.0 
+      - image: cimg/node:18.7.0
       # https://github.com/CircleCI-Public/cimg-node
       # https://hub.docker.com/r/cimg/node
       # https://circleci.com/developer/images/image/cimg/node
@@ -36,12 +36,13 @@ jobs:
           command: |
             npx expo-cli login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
             npx expo-cli publish --non-interactive --quiet --release-channel default
-# 
-# 
+
+#
+#
 # Visual Editor: https://circleci-public.github.io/visual-config-editor/
-# References: 
+# References:
 #   https://circleci.com/continuous-integration/
-#   https://circleci.com/docs/configuration-reference 
+#   https://circleci.com/docs/configuration-reference
 #   https://app.circleci.com/settings/user/notifications
 #   https://circleci.com/docs/variables
 # Immagini:
@@ -70,8 +71,6 @@ jobs:
 #     https://circleci.com/docs/language-java
 #   Android
 #     https://circleci.com/docs/language-android
-#   Php
-#     https://circleci.com/docs/language-php
 #   JS
 #     https://circleci.com/docs/language-javascript
 # DB

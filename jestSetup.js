@@ -1,14 +1,11 @@
 /**
-* @see https://react-native-community.github.io/async-storage/docs/advanced/jest
-*/
+ * @see https://react-native-community.github.io/async-storage/docs/advanced/jest
+ */
 
 //import { enableFetchMocks } from 'jest-fetch-mock'
 //enableFetchMocks()
 
 //import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
-
-
- 
 
 // jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
@@ -18,7 +15,6 @@ jest.mock('@react-navigation/native/lib/commonjs/useLinking.native', () => ({
   __esModule: true,
 }));
 */
-
 
 /*
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
