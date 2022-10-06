@@ -8,10 +8,8 @@ export const URL_API = URL_BASE + "/api/v1";
 export const URL_API_ROUTE1 = URL_API + "/user";
 
 // OAuth
-export const OAUTH_CLIENT_SECRET_CLIENT_1 =
-  "Qw5lBfbgufHf8SBbRKSErqZO3uOCtgphuXHZqaPb";
-export const OAUTH_CLIENT_SECRET_CLIENT_7 =
-  "q5MGqBrcerFM11fBlFD6XFi5eWygC3VKHfJMFuLp";
+export const OAUTH_CLIENT_SECRET_CLIENT_1 = "Qw5lBfbgufHf8SBbRKSErqZO3uOCtgphuXHZqaPb";
+export const OAUTH_CLIENT_SECRET_CLIENT_7 = "q5MGqBrcerFM11fBlFD6XFi5eWygC3VKHfJMFuLp";
 
 // Others
 
