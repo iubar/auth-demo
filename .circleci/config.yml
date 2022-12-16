@@ -67,8 +67,6 @@ jobs:
 #
 # Languages
 #   Java
-#     https://circleci.com/docs/language-java-maven
-#     https://circleci.com/docs/language-java
 #   Android
 #     https://circleci.com/docs/language-android
 #   JS
