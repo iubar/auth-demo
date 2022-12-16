@@ -2,7 +2,7 @@ const config = {
 	preset: "jest-expo",
 	//testTimeout: 20000,
 	setupFiles: ["./jestSetup.js"],
-
+	timers: "fake",
 	transformIgnorePatterns: [
 		"node_modules/(?!(" +
 			"(jest-)?react-native" +

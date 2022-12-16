@@ -1,28 +1,28 @@
-import React from "react";
-import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from "react-native";
-import * as Crypto from "expo-crypto";
-import * as Random from "expo-random";
-import * as AuthSession from "expo-auth-session";
-import * as Application from "expo-application";
-import HttpCall from "../HttpCall";
-import { CLIENTS, LARAVEL_REDIRECTS, LARAVEL_SECRETS } from "../Consts";
-import { Text, Title, Subheading, Button, Caption, Paragraph, Divider, List, TextInput } from "react-native-paper";
-import StoreUtil from "../StoreUtil";
-import { Context } from "../Context";
-import { withTheme } from "react-native-paper";
+import React from 'react';
+import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
+import * as Crypto from 'expo-crypto';
+import * as Random from 'expo-random';
+import * as AuthSession from 'expo-auth-session';
+import * as Application from 'expo-application';
+import HttpCall from '../HttpCall';
+import { CLIENTS, LARAVEL_REDIRECTS, LARAVEL_SECRETS } from '../Consts';
+import { Text, Title, Subheading, Button, Caption, Paragraph, Divider, List, TextInput } from 'react-native-paper';
+import StoreUtil from '../StoreUtil';
+import { Context } from '../Context';
+import { withTheme } from 'react-native-paper';
 
 class SettingsScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
 		clients: [],
-		client_desc: "",
+		client_desc: '',
 		expanded: false,
 		client_id: 0,
-		access_token: "",
-		refresh_token: "",
+		access_token: '',
+		refresh_token: '',
 		expires_in: 0,
-		laravel_redirect_uri: "",
+		laravel_redirect_uri: '',
 	};
 
 	constructor(props) {
@@ -35,7 +35,7 @@ class SettingsScreen extends React.Component {
 		await this.store.load();
 
 		this.initClients();
-		this._unsubscribe = this.props.navigation.addListener("focus", () => {
+		this._unsubscribe = this.props.navigation.addListener('focus', () => {
 			this.updateGui();
 		});
 
@@ -67,8 +67,8 @@ class SettingsScreen extends React.Component {
 
 		let client_secret = LARAVEL_SECRETS[client_id];
 
-		console.log("clientSecret: " + client_secret);
-		let client_desc = client_id + " " + this.state.clients[client_id];
+		console.log('clientSecret: ' + client_secret);
+		let client_desc = client_id + ' ' + this.state.clients[client_id];
 		this.context.client_id = client_id;
 		this.context.client_secret = client_secret;
 
@@ -93,7 +93,7 @@ class SettingsScreen extends React.Component {
 	clearDataFromStore = async () => {
 		await this.store.clear();
 		this.setState({
-			client_desc: "",
+			client_desc: '',
 		});
 	};
 
@@ -102,11 +102,11 @@ class SettingsScreen extends React.Component {
 	readDataFromStore = async () => {
 		await this.store.load();
 		this.updateConfig(this.context.client_id);
-		console.log("data loaded successfully");
+		console.log('data loaded successfully');
 	};
 
 	getExpiredDesc = () => {
-		let expires = "";
+		let expires = '';
 		if (this.state.expires_in > 0) {
 			let expiresAtTime = new Date().getTime() + this.state.expires_in * 1000;
 			let expiresAt = this.api.formatTime(expiresAtTime);
@@ -114,7 +114,7 @@ class SettingsScreen extends React.Component {
 			if (this.api.isExpired(expiresAtTime)) {
 				isExpired = "(it's expired)";
 			}
-			expires = this.state.expires_in + " seconds, on " + expiresAt + " " + isExpired;
+			expires = this.state.expires_in + ' seconds, on ' + expiresAt + ' ' + isExpired;
 		}
 		return expires;
 	};
@@ -130,7 +130,7 @@ class SettingsScreen extends React.Component {
 						<List.Accordion title={this.state.client_desc} expanded={this.state.expanded} onPress={this.handlePress}>
 							{this.state.clients.map((desc, index) => {
 								if (desc !== null) {
-									return <List.Item key={index} title={index + " - " + desc} onPress={() => this.updateConfig(index)} />;
+									return <List.Item key={index} title={index + ' - ' + desc} onPress={() => this.updateConfig(index)} />;
 								}
 							})}
 						</List.Accordion>

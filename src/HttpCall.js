@@ -1,37 +1,37 @@
-import React from "react";
-import { URL_OAUTH_LOGIN, DEBUG } from "./Consts.js";
+import React from 'react';
+import { URL_OAUTH_LOGIN, DEBUG } from './Consts.js';
 
-import * as SecureStore from "expo-secure-store";
+import * as SecureStore from 'expo-secure-store';
 
 export default class HttpCall extends React.Component {
 	getHeaders = (accessToken) => {
 		let headers = {
-			"Content-Type": "application/json",
-			"Accept": "application/json",
+			'Content-Type': 'application/json',
+			'Accept': 'application/json',
 		};
 
 		if (accessToken) {
-			headers.Authorization = "Bearer " + accessToken;
+			headers.Authorization = 'Bearer ' + accessToken;
 		}
 
 		return headers;
 	};
 
 	getAuthHeaders = async () => {
-		const access_token = await SecureStore.getItemAsync("accessToken");
+		const access_token = await SecureStore.getItemAsync('accessToken');
 		const headers = {
-			"Content-Type": "application/json",
-			"Accept": "application/json",
-			"Authorization": "Bearer " + access_token,
+			'Content-Type': 'application/json',
+			'Accept': 'application/json',
+			'Authorization': 'Bearer ' + access_token,
 		};
 		return headers;
 	};
 
 	getAuthHeaders2 = (access_token) => {
 		const headers = {
-			"Content-Type": "application/json",
-			"Accept": "application/json",
-			"Authorization": "Bearer " + access_token,
+			'Content-Type': 'application/json',
+			'Accept': 'application/json',
+			'Authorization': 'Bearer ' + access_token,
 		};
 		return headers;
 	};
@@ -41,13 +41,13 @@ export default class HttpCall extends React.Component {
 	 */
 	refreshToken = async (clientId, refreshToken, clientSecret) => {
 		let data_to_send = {
-			grant_type: "refresh_token",
+			grant_type: 'refresh_token',
 			refresh_token: refreshToken,
 			client_id: clientId,
-			scope: "",
+			scope: '',
 			client_secret: clientSecret,
 		};
-		return this.callApi("POST", URL_OAUTH_LOGIN, data_to_send);
+		return this.callApi('POST', URL_OAUTH_LOGIN, data_to_send);
 	};
 
 	/**
@@ -74,8 +74,8 @@ export default class HttpCall extends React.Component {
 		if (data_to_send) {
 			_body = JSON.stringify(data_to_send);
 			if (DEBUG) {
-				console.log(method + ": " + url);
-				console.log("DATA TO SEND: " + JSON.stringify(data_to_send));
+				console.log(method + ': ' + url);
+				console.log('DATA TO SEND: ' + JSON.stringify(data_to_send));
 			}
 		}
 		try {
@@ -87,14 +87,14 @@ export default class HttpCall extends React.Component {
 			status = response.status;
 			let json = await response.json();
 			if (DEBUG) {
-				console.log("RESPONSE: " + JSON.stringify(json));
+				console.log('RESPONSE: ' + JSON.stringify(json));
 			}
 			if (json) {
 				// API DI IUBAR
-				if (Object.prototype.hasOwnProperty.call(json, "data")) {
+				if (Object.prototype.hasOwnProperty.call(json, 'data')) {
 					_data = json.data;
 				}
-				if (Object.prototype.hasOwnProperty.call(json, "response")) {
+				if (Object.prototype.hasOwnProperty.call(json, 'response')) {
 					// Attenzione nell'API IUBAR, json.response contiene il testo di un erorre quanto status != 200
 					if (status !== 200) {
 						_error = json.response;
@@ -105,26 +105,26 @@ export default class HttpCall extends React.Component {
 				// FINE API DI IUBAR
 
 				// API DI PASSPORT (ricordati che è un middleware per Laravel)
-				if (Object.prototype.hasOwnProperty.call(json, "error")) {
+				if (Object.prototype.hasOwnProperty.call(json, 'error')) {
 					_error = json.error;
 				}
-				if (Object.prototype.hasOwnProperty.call(json, "error_description")) {
-					_error = _error + " | " + json.error_description;
+				if (Object.prototype.hasOwnProperty.call(json, 'error_description')) {
+					_error = _error + ' | ' + json.error_description;
 				}
-				if (Object.prototype.hasOwnProperty.call(json, "message")) {
+				if (Object.prototype.hasOwnProperty.call(json, 'message')) {
 					if (status === 200) {
 						responseMsg = json.message;
 					} else {
 						_error = json.message; // Ha un contenuto informativo superoriore rispetto al valore di json.error
 					}
 				}
-				if (Object.prototype.hasOwnProperty.call(json, "token_type")) {
+				if (Object.prototype.hasOwnProperty.call(json, 'token_type')) {
 					_data = json;
 				}
 			}
 			// FINE API DI PASSPORT
 		} catch (error) {
-			console.log("ERROR: " + error.message);
+			console.log('ERROR: ' + error.message);
 			_error = error.message;
 		}
 		return {
@@ -137,10 +137,10 @@ export default class HttpCall extends React.Component {
 
 	isExpired(exp) {
 		if (Date.now() <= exp * 1000) {
-			console.log(true, "token is not expired");
+			console.log(true, 'token is not expired');
 			return false;
 		} else {
-			console.log(false, "token is expired");
+			console.log(false, 'token is expired');
 			return true;
 		}
 	}
@@ -155,12 +155,12 @@ export default class HttpCall extends React.Component {
 		// Hours part from the timestamp
 		let hours = date.getHours();
 		// Minutes part from the timestamp
-		let minutes = "0" + date.getMinutes();
+		let minutes = '0' + date.getMinutes();
 		// Seconds part from the timestamp
-		let seconds = "0" + date.getSeconds();
+		let seconds = '0' + date.getSeconds();
 
 		// Will display time in 10:30:23 format
-		let formattedTime = day + "/" + month + "/" + year + " " + hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+		let formattedTime = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
 		// console.log(formattedTime);
 
@@ -173,15 +173,15 @@ export default class HttpCall extends React.Component {
 		}
 		let statusCode = result.status;
 		let _error = result.error;
-		console.log("URL: " + url);
+		console.log('URL: ' + url);
 		if (statusCode !== 200) {
-			console.log("HTTP ERROR: " + statusCode);
-			console.log("RESPONSE (riformattata): " + JSON.stringify(result));
+			console.log('HTTP ERROR: ' + statusCode);
+			console.log('RESPONSE (riformattata): ' + JSON.stringify(result));
 		} else {
-			console.log("HTTP OK: " + statusCode);
-			console.log("RESPONSE (riformattata): " + JSON.stringify(result));
+			console.log('HTTP OK: ' + statusCode);
+			console.log('RESPONSE (riformattata): ' + JSON.stringify(result));
 			if (_error) {
-				console.log("ATTENZIONE: errore in presenza di codice http 200");
+				console.log('ATTENZIONE: errore in presenza di codice http 200');
 			}
 		}
 	};

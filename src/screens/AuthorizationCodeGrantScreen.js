@@ -1,27 +1,27 @@
-import React from "react";
-import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from "react-native";
-import * as Crypto from "expo-crypto";
-import * as AuthSession from "expo-auth-session";
-import { Text, Title, Subheading, Headline, Caption, Button, Paragraph, Divider } from "react-native-paper";
-import HttpCall from "../HttpCall";
-import { URL_OAUTH_LOGIN, URL_AUTH, LARAVEL_REDIRECTS } from "../Consts";
-import StoreUtil from "../StoreUtil";
-import { Context } from "../Context";
-import { withTheme } from "react-native-paper";
-import { Switch } from "react-native-paper";
+import React from 'react';
+import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
+import * as Crypto from 'expo-crypto';
+import * as AuthSession from 'expo-auth-session';
+import { Text, Title, Subheading, Headline, Caption, Button, Paragraph, Divider } from 'react-native-paper';
+import HttpCall from '../HttpCall';
+import { URL_OAUTH_LOGIN, URL_AUTH, LARAVEL_REDIRECTS } from '../Consts';
+import StoreUtil from '../StoreUtil';
+import { Context } from '../Context';
+import { withTheme } from 'react-native-paper';
+import { Switch } from 'react-native-paper';
 
 class AuthorizationCodeGrantScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
-		response: "",
+		response: '',
 		redirects_info: [],
 		redirects: [],
-		redirect_uri: "",
-		redirect_uri_desc: "",
-		laravel_redirect_uri: "",
+		redirect_uri: '',
+		redirect_uri_desc: '',
+		laravel_redirect_uri: '',
 		useProxy: false,
-		data_to_send_printable: "",
+		data_to_send_printable: '',
 		client_id: 0,
 		screen_disabled: true,
 		usePkce: true,
@@ -29,12 +29,12 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 	constructor(props) {
 		super(props);
-		console.log("Theme: " + JSON.stringify(this.props.theme));
+		console.log('Theme: ' + JSON.stringify(this.props.theme));
 		this.api = new HttpCall();
 	}
 
 	async componentDidMount() {
-		this._unsubscribe = this.props.navigation.addListener("focus", async () => {
+		this._unsubscribe = this.props.navigation.addListener('focus', async () => {
 			await this.updateGui();
 		});
 
@@ -58,20 +58,20 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let redirects = [];
 		let redirects_info = [];
 
-		let more = "";
+		let more = '';
 		if (this.state.useProxy) {
-			more = " {useProxy: true}";
+			more = ' {useProxy: true}';
 		}
 
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirects[2] = (await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy })) + "/--/expo-auth-session";
-		redirects_info[2] = "/--/expo-auth-session" + more;
+		redirects[2] = (await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy })) + '/--/expo-auth-session';
+		redirects_info[2] = '/--/expo-auth-session' + more;
 
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
 		redirects[5] = await AuthSession.makeRedirectUri({
 			useProxy: this.state.useProxy,
 		});
-		redirects_info[5] = "{}" + more;
+		redirects_info[5] = '{}' + more;
 
 		redirects[7] = redirects[2];
 		redirects_info[7] = redirects_info[2];
@@ -99,7 +99,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// se also the app.json config file
 		redirects[4] = await AuthSession.makeRedirectUri({
 			useProxy: this.state.useProxy,
-			native: "mycoolredirect://",
+			native: 'mycoolredirect://',
 		});
 		redirects_info[4] = "{native: 'mycoolredirect://'}" + more;
 
@@ -135,7 +135,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// For a web app: https://localhost:19006/redirect
 
 		if (!redirect_uri) {
-			console.log("Errore nella logica del metodo, index: " + index);
+			console.log('Errore nella logica del metodo, index: ' + index);
 		}
 
 		this.setState({
@@ -148,7 +148,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	};
 
 	randomString = (length, chars) => {
-		let result = "";
+		let result = '';
 		for (let i = length; i > 0; --i) {
 			result += chars[Math.floor(Math.random() * chars.length)];
 		}
@@ -160,7 +160,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 */
 	calcVerifier = () => {
 		// let randomBytes = await Random.getRandomBytesAsync(128);
-		let randomString = this.randomString(43, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		let randomString = this.randomString(43, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 		return randomString;
 	};
 
@@ -169,12 +169,12 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 */
 	calcState = () => {
 		// let randomBytes = await Random.getRandomBytesAsync(10);
-		let randomString = this.randomString(10, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		let randomString = this.randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 		return randomString;
 	};
 
 	calcVerifierMock = () => {
-		return "OENZUUJGNXJDOUIzVGJITkJ6Q3A3V2kycG1jbDFJYnRFcExnblFLQ0ZOZQ";
+		return 'OENZUUJGNXJDOUIzVGJITkJ6Q3A3V2kycG1jbDFJYnRFcExnblFLQ0ZOZQ';
 	};
 
 	/**
@@ -197,7 +197,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	};
 
 	calcCodeChallengeMock = () => {
-		return "CUsFvFDG_Q8AtartzgKEEX3vjHuan-a-4iBmvqSJ72E";
+		return 'CUsFvFDG_Q8AtartzgKEEX3vjHuan-a-4iBmvqSJ72E';
 	};
 
 	/**
@@ -210,8 +210,8 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 *
 	 */
 	toURLEncode = (str) => {
-		let encoded = str.replace(/\+/g, "-").replace(/\//g, "_");
-		encoded = encoded.replace(/=/g, ""); // questo statement dovrebbe sostituire solo l'ultimo carattere '=', ma in realtà essendocene uno solo è corretto
+		let encoded = str.replace(/\+/g, '-').replace(/\//g, '_');
+		encoded = encoded.replace(/=/g, ''); // questo statement dovrebbe sostituire solo l'ultimo carattere '=', ma in realtà essendocene uno solo è corretto
 		return encoded;
 	};
 
@@ -237,15 +237,15 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	//}
 
 	buildUrl = (url, parameters) => {
-		var qs = "";
+		var qs = '';
 		for (var key in parameters) {
 			var value = parameters[key];
-			qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+			qs += encodeURIComponent(key) + '=' + encodeURIComponent(value) + '&';
 		}
 
 		if (qs.length > 0) {
 			qs = qs.substring(0, qs.length - 1); // chop off last "&"
-			url = url + "?" + qs;
+			url = url + '?' + qs;
 		}
 
 		return url;
@@ -262,9 +262,9 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				// clientSecret: this.context.client_secret,
 				// codeChallenge: ....
 				redirectUri: this.state.redirect_uri,
-				responseType: "code",
-				scopes: ["*"],
-				codeChallengeMethod: "S256",
+				responseType: 'code',
+				scopes: ['*'],
+				codeChallengeMethod: 'S256',
 				usePKCE: true,
 				//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
 			};
@@ -274,29 +274,29 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				// clientSecret: this.context.client_secret,
 				// codeChallenge: ....
 				redirectUri: this.state.redirect_uri,
-				responseType: "code", // It's the default value
-				scopes: ["*"],
+				responseType: 'code', // It's the default value
+				scopes: ['*'],
 				usePKCE: false,
 				//	prompt: 'SelectAccount' // None Login Consent SelectAccount (see https://docs.expo.io/versions/latest/sdk/auth-session/#prompt)
 			};
 		}
 
-		console.log("config : " + JSON.stringify(config));
-		console.log("URL_AUTH : " + JSON.stringify(URL_AUTH));
+		console.log('config : ' + JSON.stringify(config));
+		console.log('URL_AUTH : ' + JSON.stringify(URL_AUTH));
 		let issuerOrDiscovery = { authorizationEndpoint: URL_AUTH }; // Should use auth.expo.io proxy for redirecting requests. Only works in managed native apps. (https://docs.expo.io/versions/latest/sdk/auth-session/#discoverydocument)
 		let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 
-		console.log("request.state : " + JSON.stringify(request.state));
+		console.log('request.state : ' + JSON.stringify(request.state));
 
 		const result = await request.promptAsync({
 			useProxy: this.state.useProxy,
 		}); // When invoked, a web browser will open up and prompt the user for authentication.
-		if (result.type != "success") {
+		if (result.type != 'success') {
 			// es: "error"  or "dismiss"
-			console.log("WARNING: result.type is " + JSON.stringify(result.type));
+			console.log('WARNING: result.type is ' + JSON.stringify(result.type));
 			return null;
 		} else {
-			console.log("result: " + JSON.stringify(result));
+			console.log('result: ' + JSON.stringify(result));
 		}
 		let code = result.params.code;
 		if (this.state.usePkce) {
@@ -317,37 +317,37 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 */
 	authCodeGrant2 = async () => {
 		let verifier = this.calcVerifier();
-		console.log("verifier: " + verifier);
+		console.log('verifier: ' + verifier);
 		let codeChallenge = await this.calcCodeChallenge(verifier);
-		console.log("codeChallenge: " + codeChallenge);
+		console.log('codeChallenge: ' + codeChallenge);
 		let state = this.calcState();
-		console.log("state: " + state);
+		console.log('state: ' + state);
 		let config = null;
 		if (this.state.usePkce) {
 			config = {
 				client_id: this.context.client_id,
 				redirect_uri: this.state.redirect_uri,
-				response_type: "code",
-				scope: "*", // TODO: la documentazione dice di usare: 'scope' => '',
+				response_type: 'code',
+				scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
 				state: state,
-				code_challenge_method: "S256",
+				code_challenge_method: 'S256',
 				code_challenge: codeChallenge,
 			};
 		} else {
 			config = {
 				client_id: this.context.client_id,
 				redirect_uri: this.state.redirect_uri,
-				response_type: "code",
-				scope: "*", // TODO: la documentazione dice di usare: 'scope' => '',
+				response_type: 'code',
+				scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
 				state: state,
 			};
 		}
 
-		console.log("config : " + JSON.stringify(config));
+		console.log('config : ' + JSON.stringify(config));
 
 		let url = this.buildUrl(URL_AUTH, config);
 
-		console.log("authUrl: " + url);
+		console.log('authUrl: ' + url);
 
 		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
 		// console.log('discovery2; ' + JSON.stringify(discovery2))  // let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
@@ -355,25 +355,25 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// se returnUrl non è specificato, startAsync() calcolerà il valore di dafault con sessionUrlProvider.getDefaultReturnUrl();
 
 		let returnUrl = AuthSession.getDefaultReturnUrl();
-		console.log("returnUrl (default): " + JSON.stringify(returnUrl));
+		console.log('returnUrl (default): ' + JSON.stringify(returnUrl));
 
-		this.state.data_to_send_printable = "AuthSession.startAsync({authUrl: " + url + "})";
+		this.state.data_to_send_printable = 'AuthSession.startAsync({authUrl: ' + url + '})';
 
 		let result = await AuthSession.startAsync({ authUrl: url }); // NOTICE: The auth.expo.io proxy is ALWAYS used (it calls openAuthSessionAsync)
 		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
 
-		if (result.type != "success") {
+		if (result.type != 'success') {
 			// es: "error"  or "dismiss"
-			console.log("WARNING: result.type is " + JSON.stringify(result.type));
+			console.log('WARNING: result.type is ' + JSON.stringify(result.type));
 			return null;
 		} else {
-			console.log("result: " + JSON.stringify(result));
+			console.log('result: ' + JSON.stringify(result));
 		}
 
 		let code = result.params.code;
 
 		if (this.state.usePkce) {
-			console.log("use pkce...");
+			console.log('use pkce...');
 			await this.exchangeToken(code, verifier);
 		} else {
 			await this.exchangeToken2(code);
@@ -386,7 +386,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * https://laravel.com/docs/9.x/passport#requesting-tokens-converting-authorization-codes-to-access-tokens
 	 */
 	exchangeToken2 = async (code) => {
-		console.log("exchangeToken2()");
+		console.log('exchangeToken2()');
 		if (!code) {
 			return null;
 		}
@@ -394,14 +394,14 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			client_id: this.context.client_id,
 			client_secret: this.context.client_secret,
 			redirect_uri: this.state.redirect_uri,
-			grant_type: "authorization_code",
+			grant_type: 'authorization_code',
 			code: code,
 		};
-		let arg1 = "POST: " + URL_OAUTH_LOGIN + " " + JSON.stringify(data_to_send);
+		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
 
-		let result = await this.api.callApi2("POST", URL_OAUTH_LOGIN, data_to_send);
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 		if (result.status != 200) {
-			let errorMsg = "HTTP ERROR: " + result.status + "\n" + result.error;
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 			console.log(errorMsg);
 
 			this.setState({
@@ -409,7 +409,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				response: JSON.stringify(result),
 			});
 
-			let errorMsg2 = "HTTP ERROR: " + result.status;
+			let errorMsg2 = 'HTTP ERROR: ' + result.status;
 			Alert.alert(errorMsg2);
 		} else {
 			let data = result.data;
@@ -424,7 +424,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			let expiresIn = data.expires_in;
 			let store = new StoreUtil(this.context);
 			store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
-			Alert.alert("OK: authorized");
+			Alert.alert('OK: authorized');
 		}
 	};
 
@@ -435,7 +435,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	 * https://laravel.com/docs/9.x/passport#code-grant-pkce-converting-authorization-codes-to-access-tokens
 	 */
 	exchangeToken = async (code, verifier) => {
-		console.log("exchangeToken()");
+		console.log('exchangeToken()');
 		if (!code) {
 			return null;
 		}
@@ -443,22 +443,22 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			client_id: this.context.client_id,
 			client_secret: this.context.client_secret,
 			redirect_uri: this.state.redirect_uri,
-			grant_type: "authorization_code",
+			grant_type: 'authorization_code',
 			code: code,
 			code_verifier: verifier,
 		};
-		let arg1 = "POST: " + URL_OAUTH_LOGIN + " " + JSON.stringify(data_to_send);
+		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
 
-		let result = await this.api.callApi2("POST", URL_OAUTH_LOGIN, data_to_send);
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 		if (result.status != 200) {
-			let errorMsg = "HTTP ERROR: " + result.status + "\n" + result.error;
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 			console.log(errorMsg);
 
 			this.setState({
 				data_to_send_printable: arg1,
 				response: JSON.stringify(result),
 			});
-			let errorMsg2 = "HTTP ERROR: " + result.status;
+			let errorMsg2 = 'HTTP ERROR: ' + result.status;
 			Alert.alert(errorMsg2);
 		} else {
 			let data = result.data;
@@ -473,7 +473,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 			let expiresIn = data.expires_in;
 			let store = new StoreUtil(this.context);
 			store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
-			Alert.alert("OK: authorized");
+			Alert.alert('OK: authorized');
 		}
 	};
 
@@ -485,12 +485,12 @@ class AuthorizationCodeGrantScreen extends React.Component {
 	};
 
 	render() {
-		console.log("rendering....");
+		console.log('rendering....');
 
-		let warning = "";
+		let warning = '';
 		if (this.state.redirect_uri != this.state.laravel_redirect_uri) {
 			warning =
-				"Attenzione, il redirect calcolato è diverso da quello configurato sul server. Se stai utilizzando ExpoGo potrebbe essere corretto.";
+				'Attenzione, il redirect calcolato è diverso da quello configurato sul server. Se stai utilizzando ExpoGo potrebbe essere corretto.';
 		}
 		return (
 			<SafeAreaView>
@@ -567,7 +567,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 							<Paragraph>{this.state.redirect_uri_desc}</Paragraph>
 							<Caption>Uri at runtime</Caption>
 							<Paragraph>{this.state.redirect_uri}</Paragraph>
-							{warning && <Paragraph theme={{ colors: { text: "red" } }}>{warning}</Paragraph>}
+							{warning && <Paragraph theme={{ colors: { text: 'red' } }}>{warning}</Paragraph>}
 
 							<Divider style={{ marginVertical: 20 }} />
 							<Subheading>Request</Subheading>
@@ -593,17 +593,17 @@ const styles = StyleSheet.create({
 		//height: 40,
 		borderWidth: 0.5,
 		padding: 20,
-		borderColor: "gray",
+		borderColor: 'gray',
 	},
 	centered: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	inline: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });
 

@@ -1,22 +1,22 @@
-import React from "react";
-import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from "react-native";
-import * as Crypto from "expo-crypto";
-import * as Random from "expo-random";
-import * as AuthSession from "expo-auth-session";
-import { Context } from "../Context";
-import HttpCall from "../HttpCall";
-import { URL_OAUTH_LOGIN } from "../Consts";
-import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput } from "react-native-paper";
-import StoreUtil from "../StoreUtil";
+import React from 'react';
+import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
+import * as Crypto from 'expo-crypto';
+import * as Random from 'expo-random';
+import * as AuthSession from 'expo-auth-session';
+import { Context } from '../Context';
+import HttpCall from '../HttpCall';
+import { URL_OAUTH_LOGIN } from '../Consts';
+import { Text, Title, Subheading, Button, Paragraph, Divider, List, TextInput } from 'react-native-paper';
+import StoreUtil from '../StoreUtil';
 
 export default class PasswordGrantScreen extends React.Component {
 	static contextType = Context;
 
 	state = {
-		response: "",
-		data_to_send_printable: "",
-		username: "",
-		password: "",
+		response: '',
+		data_to_send_printable: '',
+		username: '',
+		password: '',
 		expanded: false,
 		client_id: 0,
 		screen_disabled: true,
@@ -28,7 +28,7 @@ export default class PasswordGrantScreen extends React.Component {
 	}
 
 	async componentDidMount() {
-		this._unsubscribe = this.props.navigation.addListener("focus", () => {
+		this._unsubscribe = this.props.navigation.addListener('focus', () => {
 			this.updateGui();
 		});
 		this.updateGui(); // NOTA: l'evento 'focus' non viene invocato se lo screen ha già il focus quando l'app si apre
@@ -67,19 +67,19 @@ export default class PasswordGrantScreen extends React.Component {
 	 */
 	authPasswordGrant = async () => {
 		let data_to_send = {
-			grant_type: "password",
-			scope: "", // vedi anche https://laravel.com/docs/9.x/passport#requesting-all-scopes
+			grant_type: 'password',
+			scope: '', // vedi anche https://laravel.com/docs/9.x/passport#requesting-all-scopes
 			client_id: this.context.client_id,
 			client_secret: this.context.client_secret,
 			username: this.state.username,
 			password: this.state.password,
 		};
 
-		let arg1 = "POST: " + URL_OAUTH_LOGIN + " " + JSON.stringify(data_to_send);
+		let arg1 = 'POST: ' + URL_OAUTH_LOGIN + ' ' + JSON.stringify(data_to_send);
 
-		let result = await this.api.callApi2("POST", URL_OAUTH_LOGIN, data_to_send);
+		let result = await this.api.callApi2('POST', URL_OAUTH_LOGIN, data_to_send);
 		if (result.status != 200) {
-			let errorMsg = "HTTP ERROR: " + result.status + "\n" + result.error;
+			let errorMsg = 'HTTP ERROR: ' + result.status + '\n' + result.error;
 			console.log(errorMsg);
 
 			this.setState({
@@ -87,10 +87,10 @@ export default class PasswordGrantScreen extends React.Component {
 				response: JSON.stringify(result),
 			});
 
-			let errorMsg2 = "HTTP ERROR: " + result.status;
+			let errorMsg2 = 'HTTP ERROR: ' + result.status;
 			Alert.alert(errorMsg2);
 		} else {
-			console.log("loginSuccess(): " + JSON.stringify(data));
+			console.log('loginSuccess(): ' + JSON.stringify(data));
 			let data = result.data;
 
 			this.setState({
@@ -103,7 +103,7 @@ export default class PasswordGrantScreen extends React.Component {
 			let refreshToken = data.refresh_token;
 			let store = new StoreUtil(this.context);
 			store.updateContext(this.context.client_id, accessToken, refreshToken, expiresIn);
-			Alert.alert("OK: authorized");
+			Alert.alert('OK: authorized');
 		}
 	};
 
@@ -136,7 +136,7 @@ export default class PasswordGrantScreen extends React.Component {
 							<Divider style={{ marginVertical: 20 }} />
 							<Button
 								style={{ marginHorizontal: 20, marginVertical: 20 }}
-								disabled={this.state.username === "" || this.state.password === ""}
+								disabled={this.state.username === '' || this.state.password === ''}
 								mode="contained"
 								onPress={this.authPasswordGrant}>
 								Login
