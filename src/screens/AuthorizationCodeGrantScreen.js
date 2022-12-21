@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView} from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as AuthSession from 'expo-auth-session';
 import { Text, Title, Subheading, Headline, Caption, Button, Paragraph, Divider } from 'react-native-paper';
@@ -9,6 +9,7 @@ import StoreUtil from '../StoreUtil';
 import { Context } from '../Context';
 import { withTheme } from 'react-native-paper';
 import { Switch } from 'react-native-paper';
+import { useAutoDiscovery, useAuthRequest } from 'expo-auth-session';
 
 class AuthorizationCodeGrantScreen extends React.Component {
 	static contextType = Context;
@@ -287,10 +288,16 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 
 		console.log('request.state : ' + JSON.stringify(request.state));
-
-		const result = await request.promptAsync({
+		console.log('useProxy: ' + JSON.stringify(this.state.useProxy));
+		let result = null;
+		if(true){
+		  result = await request.promptAsync({
 			useProxy: this.state.useProxy,
 		}); // When invoked, a web browser will open up and prompt the user for authentication.
+		}else{
+			const discovery = useAutoDiscovery('https://hr.iubar.it');
+			result = await request.promptAsync(discovery, { useProxy: this.state.useProxy });
+		}
 		if (result.type != 'success') {
 			// es: "error"  or "dismiss"
 			console.log('WARNING: result.type is ' + JSON.stringify(result.type));
@@ -493,7 +500,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 				'Attenzione, il redirect calcolato è diverso da quello configurato sul server. Se stai utilizzando ExpoGo potrebbe essere corretto.';
 		}
 		return (
-			<SafeAreaView>
+			<View>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Auth Code Grant</Title>
 					<Divider style={{ marginVertical: 5 }} />
@@ -578,7 +585,7 @@ class AuthorizationCodeGrantScreen extends React.Component {
 						</View>
 					)}
 				</ScrollView>
-			</SafeAreaView>
+			</View>
 		);
 	}
 }

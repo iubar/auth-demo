@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { Paragraph, Divider, Caption, Title, Button, Subheading } from 'react-native-paper';
 
 import HttpCall from '../HttpCall';
@@ -130,7 +130,7 @@ class RestClientScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView>
+			<View>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Rest Api</Title>
 					<Divider style={{ marginVertical: 5 }} />
@@ -158,7 +158,7 @@ class RestClientScreen extends React.Component {
 					<Subheading>Response</Subheading>
 					<Paragraph>{this.state.response}</Paragraph>
 				</ScrollView>
-			</SafeAreaView>
+			</View>
 		);
 	}
 }

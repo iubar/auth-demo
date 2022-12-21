@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
@@ -109,7 +109,7 @@ export default class PasswordGrantScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView>
+			<View>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Password Grant</Title>
 					<Divider style={{ marginVertical: 5 }} />
@@ -150,7 +150,7 @@ export default class PasswordGrantScreen extends React.Component {
 						</View>
 					)}
 				</ScrollView>
-			</SafeAreaView>
+			</View>
 		);
 	}
 }

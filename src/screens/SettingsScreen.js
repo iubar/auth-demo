@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Random from 'expo-random';
 import * as AuthSession from 'expo-auth-session';
@@ -121,7 +121,7 @@ class SettingsScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView>
+			<View>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					<Title>Settings</Title>
 					<Divider style={{ marginVertical: 5 }} />
@@ -174,7 +174,7 @@ class SettingsScreen extends React.Component {
 					<Paragraph>Build {Application.nativeBuildVersion}</Paragraph>				
 					*/}
 				</ScrollView>
-			</SafeAreaView>
+			</View>
 		);
 	}
 }
