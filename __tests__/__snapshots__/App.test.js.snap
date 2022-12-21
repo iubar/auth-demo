@@ -252,7 +252,7 @@ exports[`<App /> renders correctly 1`] = `
                 }
               }
             >
-              <RCTSafeAreaView>
+              <View>
                 <RCTScrollView
                   style={
                     Object {
@@ -1335,7 +1335,7 @@ exports[`<App /> renders correctly 1`] = `
                     />
                   </View>
                 </RCTScrollView>
-              </RCTSafeAreaView>
+              </View>
             </View>
           </View>
         </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, ScrollView} from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as AuthSession from 'expo-auth-session';
 import { Text, Title, Subheading, Headline, Caption, Button, Paragraph, Divider } from 'react-native-paper';
@@ -290,11 +290,11 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		console.log('request.state : ' + JSON.stringify(request.state));
 		console.log('useProxy: ' + JSON.stringify(this.state.useProxy));
 		let result = null;
-		if(true){
-		  result = await request.promptAsync({
-			useProxy: this.state.useProxy,
-		}); // When invoked, a web browser will open up and prompt the user for authentication.
-		}else{
+		if (true) {
+			result = await request.promptAsync({
+				useProxy: this.state.useProxy,
+			}); // When invoked, a web browser will open up and prompt the user for authentication.
+		} else {
 			const discovery = useAutoDiscovery('https://hr.iubar.it');
 			result = await request.promptAsync(discovery, { useProxy: this.state.useProxy });
 		}
