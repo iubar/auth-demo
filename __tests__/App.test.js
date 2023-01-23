@@ -25,5 +25,4 @@ describe('App snapshot', () => {
 		});
 		expect(tree.toJSON()).toMatchSnapshot();
 	});
- 		
 });
