@@ -19,9 +19,10 @@
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "0.2.8",
-    "@react-navigation/material-bottom-tabs": "^6.2.9",
-    "@react-navigation/native": "^6.0.12",
-    "expo": "^47.0.8",
+    "@react-navigation/material-bottom-tabs": "^6.2.11",
+    "@react-navigation/native": "^6.1.2",
+    "expo": "^47.0.13",
+    "expo-application": "~5.0.1",
     "expo-auth-session": "~3.8.0",
     "expo-crypto": "~12.0.0",
     "expo-random": "~13.0.0",
@@ -32,22 +33,22 @@
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
     "react-native-gesture-handler": "~2.8.0",
-    "react-native-paper": "^5.0.2",
+    "react-native-paper": "^5.1.4",
     "react-native-reanimated": "~2.12.0",
     "react-native-safe-area-context": "4.4.1",
     "react-native-screens": "~3.18.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.7",
-    "expo-application": "~5.0.1"
+    "react-native-web": "~0.18.7"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.2.0",
     "babel-preset-expo": "~9.2.2",
-    "eslint": "^8.29.0",
+    "eslint": "^8.32.0",
     "jest": "^27.0.0",
-    "react-test-renderer": "18.1.0",
     "jest-expo": "^47.0.1",
+    "jest-fetch-mock": "^3.0.3",
     "prettier": "^2.8.1",
-    "rimraf": "^3.0.2"
+    "react-test-renderer": "18.1.0",
+    "rimraf": "^4.1.1"
   }
 }

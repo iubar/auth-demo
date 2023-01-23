@@ -1,31 +1,29 @@
+import 'react-native';
 import React from 'react';
-import renderer from 'react-test-renderer';
 import App from '../App';
-import { act } from 'react-test-renderer';
+import renderer from 'react-test-renderer';
+import fetchMock from 'jest-fetch-mock';
 
-describe('<App />', () => {
-	//it('has 1 child', () => {
-	//	const tree = renderer.create(<App />).toJSON();
-	//	expect(tree.children.length).toBe(1);
-	//});
-	it('renders correctly', async () => {
-		const tree = renderer.create(<App />).toJSON();
+fetchMock.enableMocks();
 
-		// see https://github.com/callstack/react-native-testing-library/issues/398
-		await act(async () => {
-			expect(tree).toMatchSnapshot();
-		});
+global.fetch = jest.fn(() =>
+	Promise.resolve({
+		json: () => Promise.resolve({ status: 400, error: 'mocked', data: [], response: '' }),
+	})
+);
+
+describe('App snapshot', () => {
+	beforeEach(() => {
+		fetchMock.mockClear();
+		fetchMock.mockReject(() => Promise.reject('API is down'));
 	});
-});
 
-/*
-describe('<App /> Basics', () => {
-  it('has 1 child', async () => {
-    let tree
-    renderer.act(()=>{
-       tree = renderer.create(<App />)
-    })
-    expect(tree).toMatchSnapshot();
-  });
-})
-*/
+	it('renders the root without loading screen', () => {
+		let tree;
+		renderer.act(() => {
+			tree = renderer.create(<App />);
+		});
+		expect(tree.toJSON()).toMatchSnapshot();
+	});
+ 		
+});
