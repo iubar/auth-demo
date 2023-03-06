@@ -13,13 +13,21 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "mycoolredirect"
+    "scheme": "mycoolredirect",
+    "extra": {
+      "eas": {
+        "projectId": "9d7f9f0e-98a4-46ed-8d30-732542d69903"
+      }
+    },
+    "owner": "borgo"
   }
 }
