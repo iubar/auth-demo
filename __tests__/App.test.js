@@ -12,17 +12,18 @@ global.fetch = jest.fn(() =>
 	})
 );
 
-describe('App snapshot', () => {
-	beforeEach(() => {
-		fetchMock.mockClear();
-		fetchMock.mockReject(() => Promise.reject('API is down'));
-	});
+beforeEach(() => {
+	fetchMock.mockClear();
+	fetchMock.mockReject(() => Promise.reject('API is down'));
+});
 
-	it('renders the root without loading screen', () => {
-		let tree;
-		renderer.act(() => {
-			tree = renderer.create(<App />);
-		});
-		expect(tree.toJSON()).toMatchSnapshot();
+describe('<App />', () => {
+	it('has 1 child', () => {
+		const tree = renderer.create(<App />).toJSON();
+		expect(tree.children.length).toBe(1);
+	});
+	it('matches snapshot and renders correctly', () => {
+		let tree = renderer.create(<App />);
+		expect(tree).toMatchSnapshot();
 	});
 });

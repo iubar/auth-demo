@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: Update NPM
-          command: "sudo npm install -g npm@6"
+          command: "sudo npm install -g npm@8"
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -34,8 +34,11 @@ jobs:
       - run:
           name: Publish
           command: |
-            npx expo-cli login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
-            npx expo-cli publish --non-interactive --quiet --release-channel default
+            export CI=1
+            npx eas-cli diagnostics
+            # npx expo-cli doctor # not supported in the local CLI
+            # npx expo-cli login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}  
+            npx eas-cli update --non-interactive --branch master --message "New version"
 
 #
 #

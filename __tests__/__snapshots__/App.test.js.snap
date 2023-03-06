@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`App snapshot renders the root without loading screen 1`] = `
+exports[`<App /> matches snapshot and renders correctly 1`] = `
 <RNCSafeAreaProvider
   onInsetsChange={[Function]}
   style={
-    Array [
-      Object {
+    [
+      {
         "flex": 1,
       },
       undefined,
@@ -16,37 +16,38 @@ exports[`App snapshot renders the root without loading screen 1`] = `
     collapsable={false}
     pointerEvents="box-none"
     style={
-      Object {
+      {
         "flex": 1,
       }
     }
   >
     <View
       style={
-        Array [
-          Object {
+        [
+          {
             "backgroundColor": "rgba(255, 251, 254, 1)",
             "elevation": 0,
             "paddingHorizontal": 0,
             "paddingTop": 0,
             "zIndex": 0,
           },
-          Object {},
+          {},
         ]
       }
     >
       <View
         collapsable={false}
         style={
-          Object {
+          {
             "alignSelf": undefined,
             "bottom": undefined,
             "end": undefined,
+            "flex": undefined,
             "left": undefined,
             "position": undefined,
             "right": undefined,
             "shadowColor": "#000",
-            "shadowOffset": Object {
+            "shadowOffset": {
               "height": 0,
               "width": 0,
             },
@@ -56,13 +57,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
             "top": undefined,
           }
         }
+        testID="surface-outer-layer"
       >
         <View
           collapsable={false}
           style={
-            Object {
+            {
+              "flex": undefined,
               "shadowColor": "#000",
-              "shadowOffset": Object {
+              "shadowOffset": {
                 "height": 0,
                 "width": 0,
               },
@@ -70,13 +73,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
               "shadowRadius": 0,
             }
           }
+          testID="surface-inner-layer"
         >
           <View
             collapsable={false}
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "backgroundColor": "rgba(255, 251, 254, 1)",
+                "flex": undefined,
                 "flexDirection": "row",
                 "height": 64,
                 "paddingBottom": undefined,
@@ -86,10 +91,11 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                 "paddingTop": undefined,
               }
             }
+            testID="surface"
           >
             <View
               style={
-                Object {
+                {
                   "width": 52,
                 }
               }
@@ -97,8 +103,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
             <View
               accessibilityRole="button"
               accessibilityState={
-                Object {
+                {
+                  "busy": undefined,
+                  "checked": undefined,
                   "disabled": true,
+                  "expanded": undefined,
+                  "selected": undefined,
                 }
               }
               accessible={true}
@@ -112,17 +122,17 @@ exports[`App snapshot renders the root without loading screen 1`] = `
               onStartShouldSetResponder={[Function]}
               pointerEvents="box-none"
               style={
-                Array [
-                  Object {
+                [
+                  {
                     "flex": 1,
                     "paddingHorizontal": 12,
                   },
-                  Object {
+                  {
                     "paddingHorizontal": 0,
                   },
-                  Array [
+                  [
                     false,
-                    Object {
+                    {
                       "alignItems": "center",
                     },
                     undefined,
@@ -136,8 +146,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                 accessible={true}
                 numberOfLines={1}
                 style={
-                  Array [
-                    Object {
+                  [
+                    {
                       "color": "rgba(28, 27, 31, 1)",
                       "fontFamily": "System",
                       "fontSize": 22,
@@ -145,14 +155,14 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       "letterSpacing": 0,
                       "lineHeight": 28,
                     },
-                    Object {
+                    {
                       "textAlign": "left",
                     },
-                    Object {
+                    {
                       "writingDirection": "ltr",
                     },
-                    Array [
-                      Object {
+                    [
+                      {
                         "color": "rgba(28, 27, 31, 1)",
                         "fontFamily": "System",
                         "fontSize": 22,
@@ -172,7 +182,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
             </View>
             <View
               style={
-                Object {
+                {
                   "width": 52,
                 }
               }
@@ -183,8 +193,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
     </View>
     <View
       style={
-        Array [
-          Object {
+        [
+          {
             "flex": 1,
           },
           undefined,
@@ -193,8 +203,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
     >
       <View
         style={
-          Array [
-            Object {
+          [
+            {
               "flex": 1,
               "overflow": "hidden",
             },
@@ -205,11 +215,11 @@ exports[`App snapshot renders the root without loading screen 1`] = `
       >
         <View
           style={
-            Array [
-              Object {
+            [
+              {
                 "flex": 1,
               },
-              Object {
+              {
                 "backgroundColor": "rgb(242, 242, 242)",
               },
             ]
@@ -222,8 +232,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
             pointerEvents="auto"
             removeClippedSubviews={false}
             style={
-              Array [
-                Object {
+              [
+                {
                   "bottom": 0,
                   "left": 0,
                   "position": "absolute",
@@ -231,7 +241,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                   "top": 0,
                   "zIndex": 1,
                 },
-                Object {
+                {
                   "display": undefined,
                 },
               ]
@@ -242,14 +252,14 @@ exports[`App snapshot renders the root without loading screen 1`] = `
               collapsable={false}
               renderToHardwareTextureAndroid={false}
               style={
-                Object {
+                {
                   "flex": 1,
                   "opacity": 1,
-                  "transform": Array [
-                    Object {
+                  "transform": [
+                    {
                       "translateX": 0,
                     },
-                    Object {
+                    {
                       "translateY": 0,
                     },
                   ],
@@ -259,7 +269,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
               <View>
                 <RCTScrollView
                   style={
-                    Object {
+                    {
                       "paddingHorizontal": 20,
                     }
                   }
@@ -267,23 +277,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                   <View>
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.87)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 20,
                                 "letterSpacing": 0.15,
                                 "lineHeight": 30,
@@ -299,15 +309,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </Text>
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "backgroundColor": "rgba(202, 196, 208, 1)",
                             "height": 0.5,
                           },
                           undefined,
                           false,
                           false,
-                          Object {
+                          {
                             "marginVertical": 5,
                           },
                         ]
@@ -315,23 +325,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     />
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.54)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 12,
                                 "letterSpacing": 0.4,
                                 "lineHeight": 20,
@@ -347,25 +357,25 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </Text>
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "marginVertical": 8,
                           },
                           undefined,
                         ]
                       }
                       theme={
-                        Object {
-                          "animation": Object {
+                        {
+                          "animation": {
                             "scale": 1,
                           },
-                          "colors": Object {
+                          "colors": {
                             "accent": "rgb(259, 247, 0)",
                             "backdrop": "rgba(50, 47, 55, 0.4)",
                             "background": "rgb(242, 242, 242)",
                             "border": "rgb(199, 199, 204)",
                             "card": "rgb(255, 255, 255)",
-                            "elevation": Object {
+                            "elevation": {
                               "level0": "transparent",
                               "level1": "rgb(247, 243, 249)",
                               "level2": "rgb(243, 237, 246)",
@@ -407,111 +417,111 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             "text": "rgb(28, 28, 30)",
                           },
                           "dark": false,
-                          "fonts": Object {
-                            "bodyLarge": Object {
+                          "fonts": {
+                            "bodyLarge": {
                               "fontFamily": "System",
                               "fontSize": 16,
                               "fontWeight": "400",
                               "letterSpacing": 0.15,
                               "lineHeight": 24,
                             },
-                            "bodyMedium": Object {
+                            "bodyMedium": {
                               "fontFamily": "System",
                               "fontSize": 14,
                               "fontWeight": "400",
                               "letterSpacing": 0.25,
                               "lineHeight": 20,
                             },
-                            "bodySmall": Object {
+                            "bodySmall": {
                               "fontFamily": "System",
                               "fontSize": 12,
                               "fontWeight": "400",
                               "letterSpacing": 0.4,
                               "lineHeight": 16,
                             },
-                            "default": Object {
+                            "default": {
                               "fontFamily": "System",
                               "fontWeight": "400",
                               "letterSpacing": 0,
                             },
-                            "displayLarge": Object {
+                            "displayLarge": {
                               "fontFamily": "System",
                               "fontSize": 57,
                               "fontWeight": "400",
                               "letterSpacing": 0,
                               "lineHeight": 64,
                             },
-                            "displayMedium": Object {
+                            "displayMedium": {
                               "fontFamily": "System",
                               "fontSize": 45,
                               "fontWeight": "400",
                               "letterSpacing": 0,
                               "lineHeight": 52,
                             },
-                            "displaySmall": Object {
+                            "displaySmall": {
                               "fontFamily": "System",
                               "fontSize": 36,
                               "fontWeight": "400",
                               "letterSpacing": 0,
                               "lineHeight": 44,
                             },
-                            "headlineLarge": Object {
+                            "headlineLarge": {
                               "fontFamily": "System",
                               "fontSize": 32,
                               "fontWeight": "400",
                               "letterSpacing": 0,
                               "lineHeight": 40,
                             },
-                            "headlineMedium": Object {
+                            "headlineMedium": {
                               "fontFamily": "System",
                               "fontSize": 28,
                               "fontWeight": "400",
                               "letterSpacing": 0,
                               "lineHeight": 36,
                             },
-                            "headlineSmall": Object {
+                            "headlineSmall": {
                               "fontFamily": "System",
                               "fontSize": 24,
                               "fontWeight": "400",
                               "letterSpacing": 0,
                               "lineHeight": 32,
                             },
-                            "labelLarge": Object {
+                            "labelLarge": {
                               "fontFamily": "System",
                               "fontSize": 14,
                               "fontWeight": "500",
                               "letterSpacing": 0.1,
                               "lineHeight": 20,
                             },
-                            "labelMedium": Object {
+                            "labelMedium": {
                               "fontFamily": "System",
                               "fontSize": 12,
                               "fontWeight": "500",
                               "letterSpacing": 0.5,
                               "lineHeight": 16,
                             },
-                            "labelSmall": Object {
+                            "labelSmall": {
                               "fontFamily": "System",
                               "fontSize": 11,
                               "fontWeight": "500",
                               "letterSpacing": 0.5,
                               "lineHeight": 16,
                             },
-                            "titleLarge": Object {
+                            "titleLarge": {
                               "fontFamily": "System",
                               "fontSize": 22,
                               "fontWeight": "400",
                               "letterSpacing": 0,
                               "lineHeight": 28,
                             },
-                            "titleMedium": Object {
+                            "titleMedium": {
                               "fontFamily": "System",
                               "fontSize": 16,
                               "fontWeight": "500",
                               "letterSpacing": 0.15,
                               "lineHeight": 24,
                             },
-                            "titleSmall": Object {
+                            "titleSmall": {
                               "fontFamily": "System",
                               "fontSize": 14,
                               "fontWeight": "500",
@@ -529,7 +539,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View>
                         <View
                           style={
-                            Object {
+                            {
                               "backgroundColor": "rgb(242, 242, 242)",
                             }
                           }
@@ -537,9 +547,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           <View
                             accessibilityRole="button"
                             accessibilityState={
-                              Object {
+                              {
+                                "busy": undefined,
+                                "checked": undefined,
                                 "disabled": false,
                                 "expanded": false,
+                                "selected": undefined,
+                              }
+                            }
+                            accessibilityValue={
+                              {
+                                "max": undefined,
+                                "min": undefined,
+                                "now": undefined,
+                                "text": undefined,
                               }
                             }
                             accessible={true}
@@ -555,13 +576,13 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             onResponderTerminationRequest={[Function]}
                             onStartShouldSetResponder={[Function]}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "overflow": "hidden",
                                 },
                                 false,
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "padding": 8,
                                   },
                                   undefined,
@@ -572,7 +593,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             <View
                               pointerEvents="none"
                               style={
-                                Object {
+                                {
                                   "alignItems": "center",
                                   "flexDirection": "row",
                                 }
@@ -580,11 +601,11 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             >
                               <View
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "margin": 8,
                                     },
-                                    Object {
+                                    {
                                       "flex": 1,
                                       "justifyContent": "center",
                                     },
@@ -595,24 +616,24 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   numberOfLines={1}
                                   selectable={false}
                                   style={
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "textAlign": "left",
                                       },
-                                      Object {
+                                      {
                                         "color": "rgba(28, 27, 31, 1)",
                                         "fontFamily": "System",
                                         "fontWeight": "400",
                                         "letterSpacing": 0,
                                       },
-                                      Object {
+                                      {
                                         "writingDirection": "ltr",
                                       },
-                                      Array [
-                                        Object {
+                                      [
+                                        {
                                           "fontSize": 16,
                                         },
-                                        Object {
+                                        {
                                           "color": "rgba(28, 27, 31, 1)",
                                         },
                                         undefined,
@@ -623,8 +644,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                               </View>
                               <View
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "margin": 8,
                                     },
                                     undefined,
@@ -640,15 +661,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </View>
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "backgroundColor": "rgba(202, 196, 208, 1)",
                             "height": 0.5,
                           },
                           undefined,
                           false,
                           false,
-                          Object {
+                          {
                             "marginVertical": 5,
                           },
                         ]
@@ -657,15 +678,16 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     <View
                       collapsable={false}
                       style={
-                        Object {
+                        {
                           "alignSelf": undefined,
                           "bottom": undefined,
                           "end": undefined,
+                          "flex": undefined,
                           "left": undefined,
                           "position": undefined,
                           "right": undefined,
                           "shadowColor": "#000",
-                          "shadowOffset": Object {
+                          "shadowOffset": {
                             "height": 0,
                             "width": 0,
                           },
@@ -675,13 +697,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           "top": undefined,
                         }
                       }
+                      testID="button-container-outer-layer"
                     >
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
+                            "flex": undefined,
                             "shadowColor": "#000",
-                            "shadowOffset": Object {
+                            "shadowOffset": {
                               "height": 0,
                               "width": 0,
                             },
@@ -689,27 +713,42 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             "shadowRadius": 0,
                           }
                         }
+                        testID="button-container-inner-layer"
                       >
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "backgroundColor": "red",
                               "borderColor": "transparent",
                               "borderRadius": 10,
                               "borderStyle": "solid",
                               "borderWidth": 0,
+                              "flex": undefined,
                               "marginHorizontal": 20,
                               "marginVertical": 20,
                               "minWidth": 64,
                             }
                           }
+                          testID="button-container"
                         >
                           <View
                             accessibilityRole="button"
                             accessibilityState={
-                              Object {
+                              {
+                                "busy": undefined,
+                                "checked": undefined,
                                 "disabled": false,
+                                "expanded": undefined,
+                                "selected": undefined,
+                              }
+                            }
+                            accessibilityValue={
+                              {
+                                "max": undefined,
+                                "min": undefined,
+                                "now": undefined,
+                                "text": undefined,
                               }
                             }
                             accessible={true}
@@ -725,12 +764,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             onResponderTerminationRequest={[Function]}
                             onStartShouldSetResponder={[Function]}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "overflow": "hidden",
                                 },
                                 false,
-                                Object {
+                                {
                                   "borderRadius": 10,
                                 },
                               ]
@@ -739,8 +778,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           >
                             <View
                               style={
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "alignItems": "center",
                                     "flexDirection": "row",
                                     "justifyContent": "center",
@@ -753,8 +792,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                 numberOfLines={1}
                                 selectable={false}
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "color": "rgba(28, 27, 31, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
@@ -762,26 +801,26 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    Object {
+                                    {
                                       "textAlign": "left",
                                     },
-                                    Object {
+                                    {
                                       "writingDirection": "ltr",
                                     },
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "marginHorizontal": 16,
                                         "marginVertical": 9,
                                         "textAlign": "center",
                                       },
                                       false,
-                                      Object {
+                                      {
                                         "marginHorizontal": 24,
                                         "marginVertical": 10,
                                       },
                                       undefined,
                                       false,
-                                      Object {
+                                      {
                                         "color": "rgba(255, 255, 255, 1)",
                                         "fontFamily": "System",
                                         "fontSize": 14,
@@ -793,6 +832,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                     ],
                                   ]
                                 }
+                                testID="button-text"
                               >
                                 Load data
                               </Text>
@@ -804,15 +844,16 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     <View
                       collapsable={false}
                       style={
-                        Object {
+                        {
                           "alignSelf": undefined,
                           "bottom": undefined,
                           "end": undefined,
+                          "flex": undefined,
                           "left": undefined,
                           "position": undefined,
                           "right": undefined,
                           "shadowColor": "#000",
-                          "shadowOffset": Object {
+                          "shadowOffset": {
                             "height": 0,
                             "width": 0,
                           },
@@ -822,13 +863,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           "top": undefined,
                         }
                       }
+                      testID="button-container-outer-layer"
                     >
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
+                            "flex": undefined,
                             "shadowColor": "#000",
-                            "shadowOffset": Object {
+                            "shadowOffset": {
                               "height": 0,
                               "width": 0,
                             },
@@ -836,28 +879,43 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             "shadowRadius": 0,
                           }
                         }
+                        testID="button-container-inner-layer"
                       >
                         <View
                           collapsable={false}
                           color="rgb(259, 247, 0)"
                           style={
-                            Object {
+                            {
                               "backgroundColor": "red",
                               "borderColor": "transparent",
                               "borderRadius": 10,
                               "borderStyle": "solid",
                               "borderWidth": 0,
+                              "flex": undefined,
                               "marginHorizontal": 20,
                               "marginVertical": 20,
                               "minWidth": 64,
                             }
                           }
+                          testID="button-container"
                         >
                           <View
                             accessibilityRole="button"
                             accessibilityState={
-                              Object {
+                              {
+                                "busy": undefined,
+                                "checked": undefined,
                                 "disabled": false,
+                                "expanded": undefined,
+                                "selected": undefined,
+                              }
+                            }
+                            accessibilityValue={
+                              {
+                                "max": undefined,
+                                "min": undefined,
+                                "now": undefined,
+                                "text": undefined,
                               }
                             }
                             accessible={true}
@@ -873,12 +931,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             onResponderTerminationRequest={[Function]}
                             onStartShouldSetResponder={[Function]}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "overflow": "hidden",
                                 },
                                 false,
-                                Object {
+                                {
                                   "borderRadius": 10,
                                 },
                               ]
@@ -887,8 +945,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           >
                             <View
                               style={
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "alignItems": "center",
                                     "flexDirection": "row",
                                     "justifyContent": "center",
@@ -901,8 +959,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                 numberOfLines={1}
                                 selectable={false}
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "color": "rgba(28, 27, 31, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
@@ -910,26 +968,26 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    Object {
+                                    {
                                       "textAlign": "left",
                                     },
-                                    Object {
+                                    {
                                       "writingDirection": "ltr",
                                     },
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "marginHorizontal": 16,
                                         "marginVertical": 9,
                                         "textAlign": "center",
                                       },
                                       false,
-                                      Object {
+                                      {
                                         "marginHorizontal": 24,
                                         "marginVertical": 10,
                                       },
                                       undefined,
                                       false,
-                                      Object {
+                                      {
                                         "color": "rgba(255, 255, 255, 1)",
                                         "fontFamily": "System",
                                         "fontSize": 14,
@@ -941,6 +999,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                     ],
                                   ]
                                 }
+                                testID="button-text"
                               >
                                 Save data
                               </Text>
@@ -952,15 +1011,16 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     <View
                       collapsable={false}
                       style={
-                        Object {
+                        {
                           "alignSelf": undefined,
                           "bottom": undefined,
                           "end": undefined,
+                          "flex": undefined,
                           "left": undefined,
                           "position": undefined,
                           "right": undefined,
                           "shadowColor": "#000",
-                          "shadowOffset": Object {
+                          "shadowOffset": {
                             "height": 0,
                             "width": 0,
                           },
@@ -970,13 +1030,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           "top": undefined,
                         }
                       }
+                      testID="button-container-outer-layer"
                     >
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
+                            "flex": undefined,
                             "shadowColor": "#000",
-                            "shadowOffset": Object {
+                            "shadowOffset": {
                               "height": 0,
                               "width": 0,
                             },
@@ -984,27 +1046,42 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             "shadowRadius": 0,
                           }
                         }
+                        testID="button-container-inner-layer"
                       >
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "backgroundColor": "red",
                               "borderColor": "transparent",
                               "borderRadius": 10,
                               "borderStyle": "solid",
                               "borderWidth": 0,
+                              "flex": undefined,
                               "marginHorizontal": 20,
                               "marginVertical": 20,
                               "minWidth": 64,
                             }
                           }
+                          testID="button-container"
                         >
                           <View
                             accessibilityRole="button"
                             accessibilityState={
-                              Object {
+                              {
+                                "busy": undefined,
+                                "checked": undefined,
                                 "disabled": false,
+                                "expanded": undefined,
+                                "selected": undefined,
+                              }
+                            }
+                            accessibilityValue={
+                              {
+                                "max": undefined,
+                                "min": undefined,
+                                "now": undefined,
+                                "text": undefined,
                               }
                             }
                             accessible={true}
@@ -1020,12 +1097,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             onResponderTerminationRequest={[Function]}
                             onStartShouldSetResponder={[Function]}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "overflow": "hidden",
                                 },
                                 false,
-                                Object {
+                                {
                                   "borderRadius": 10,
                                 },
                               ]
@@ -1034,8 +1111,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           >
                             <View
                               style={
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "alignItems": "center",
                                     "flexDirection": "row",
                                     "justifyContent": "center",
@@ -1048,8 +1125,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                 numberOfLines={1}
                                 selectable={false}
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "color": "rgba(28, 27, 31, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
@@ -1057,26 +1134,26 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    Object {
+                                    {
                                       "textAlign": "left",
                                     },
-                                    Object {
+                                    {
                                       "writingDirection": "ltr",
                                     },
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "marginHorizontal": 16,
                                         "marginVertical": 9,
                                         "textAlign": "center",
                                       },
                                       false,
-                                      Object {
+                                      {
                                         "marginHorizontal": 24,
                                         "marginVertical": 10,
                                       },
                                       undefined,
                                       false,
-                                      Object {
+                                      {
                                         "color": "rgba(255, 255, 255, 1)",
                                         "fontFamily": "System",
                                         "fontSize": 14,
@@ -1088,6 +1165,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                     ],
                                   ]
                                 }
+                                testID="button-text"
                               >
                                 Clear data
                               </Text>
@@ -1098,15 +1176,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </View>
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "backgroundColor": "rgba(202, 196, 208, 1)",
                             "height": 0.5,
                           },
                           undefined,
                           false,
                           false,
-                          Object {
+                          {
                             "marginVertical": 20,
                           },
                         ]
@@ -1114,23 +1192,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     />
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.87)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 20,
                                 "letterSpacing": 0.15,
                                 "lineHeight": 30,
@@ -1146,23 +1224,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </Text>
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.54)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 12,
                                 "letterSpacing": 0.4,
                                 "lineHeight": 20,
@@ -1178,23 +1256,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </Text>
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.87)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 14,
                                 "letterSpacing": 0.25,
                                 "lineHeight": 20,
@@ -1208,23 +1286,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     />
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.54)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 12,
                                 "letterSpacing": 0.4,
                                 "lineHeight": 20,
@@ -1240,23 +1318,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </Text>
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.87)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 14,
                                 "letterSpacing": 0.25,
                                 "lineHeight": 20,
@@ -1270,23 +1348,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     />
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.54)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 12,
                                 "letterSpacing": 0.4,
                                 "lineHeight": 20,
@@ -1302,23 +1380,23 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     </Text>
                     <Text
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "textAlign": "left",
                           },
-                          Array [
-                            Object {
+                          [
+                            {
                               "textAlign": "left",
                             },
-                            Object {
+                            {
                               "color": "rgba(28, 27, 31, 0.87)",
                               "writingDirection": "ltr",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "fontSize": 14,
                                 "letterSpacing": 0.25,
                                 "lineHeight": 20,
@@ -1332,15 +1410,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     />
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "backgroundColor": "rgba(202, 196, 208, 1)",
                             "height": 0.5,
                           },
                           undefined,
                           false,
                           false,
-                          Object {
+                          {
                             "marginVertical": 20,
                           },
                         ]
@@ -1355,15 +1433,16 @@ exports[`App snapshot renders the root without loading screen 1`] = `
         <View
           collapsable={false}
           style={
-            Object {
+            {
               "alignSelf": undefined,
               "bottom": 0,
               "end": undefined,
+              "flex": undefined,
               "left": 0,
               "position": undefined,
               "right": 0,
               "shadowColor": "#000",
-              "shadowOffset": Object {
+              "shadowOffset": {
                 "height": 0,
                 "width": 0,
               },
@@ -1373,13 +1452,15 @@ exports[`App snapshot renders the root without loading screen 1`] = `
               "top": undefined,
             }
           }
+          testID="bottom-navigation-surface-outer-layer"
         >
           <View
             collapsable={false}
             style={
-              Object {
+              {
+                "flex": undefined,
                 "shadowColor": "#000",
-                "shadowOffset": Object {
+                "shadowOffset": {
                   "height": 0,
                   "width": 0,
                 },
@@ -1387,21 +1468,24 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                 "shadowRadius": 0,
               }
             }
+            testID="bottom-navigation-surface-inner-layer"
           >
             <View
               collapsable={false}
               onLayout={[Function]}
               pointerEvents="none"
               style={
-                Object {
+                {
                   "backgroundColor": "transparent",
+                  "flex": undefined,
                 }
               }
+              testID="bottom-navigation-surface"
             >
               <View
                 collapsable={false}
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "backgroundColor": "rgb(243, 237, 246)",
                     "overflow": "hidden",
@@ -1412,22 +1496,27 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                 <View
                   accessibilityRole="tablist"
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "flexDirection": "row",
                       },
-                      Object {
+                      {
                         "marginBottom": 0,
                         "marginHorizontal": 0,
                       },
                       false,
                     ]
                   }
+                  testID="bottom-navigation-bar-content-wrapper"
                 >
                   <View
                     accessibilityRole="button"
                     accessibilityState={
-                      Object {
+                      {
+                        "busy": undefined,
+                        "checked": undefined,
+                        "disabled": undefined,
+                        "expanded": undefined,
                         "selected": false,
                       }
                     }
@@ -1441,12 +1530,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     onResponderTerminationRequest={[Function]}
                     onStartShouldSetResponder={[Function]}
                     style={
-                      Array [
-                        Object {
+                      [
+                        {
                           "flex": 1,
                           "paddingVertical": 6,
                         },
-                        Object {
+                        {
                           "paddingVertical": 0,
                         },
                       ]
@@ -1455,7 +1544,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     <View
                       pointerEvents="none"
                       style={
-                        Object {
+                        {
                           "paddingBottom": 16,
                           "paddingTop": 12,
                         }
@@ -1464,7 +1553,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "alignSelf": "center",
                             "height": 32,
                             "justifyContent": "center",
@@ -1478,7 +1567,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -1494,7 +1583,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -1509,12 +1598,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         </View>
                         <View
                           style={
-                            Array [
-                              Object {
+                            [
+                              {
                                 "left": 0,
                                 "position": "absolute",
                               },
-                              Object {
+                              {
                                 "right": 0,
                                 "top": 2,
                               },
@@ -1525,7 +1614,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             collapsable={false}
                             numberOfLines={1}
                             style={
-                              Object {
+                              {
                                 "alignSelf": "flex-end",
                                 "backgroundColor": "rgba(179, 38, 30, 1)",
                                 "borderRadius": 8,
@@ -1547,7 +1636,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "height": 16,
                             "paddingBottom": 2,
                           }
@@ -1556,7 +1645,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "position": "absolute",
@@ -1568,8 +1657,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           <Text
                             maxFontSizeMultiplier={1}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -1577,20 +1666,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(73, 69, 79, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
@@ -1608,7 +1697,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "opacity": 1,
@@ -1622,8 +1711,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             maxFontSizeMultiplier={1}
                             selectable={false}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -1631,20 +1720,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(73, 69, 79, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
@@ -1665,7 +1754,11 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                   <View
                     accessibilityRole="button"
                     accessibilityState={
-                      Object {
+                      {
+                        "busy": undefined,
+                        "checked": undefined,
+                        "disabled": undefined,
+                        "expanded": undefined,
                         "selected": false,
                       }
                     }
@@ -1679,12 +1772,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     onResponderTerminationRequest={[Function]}
                     onStartShouldSetResponder={[Function]}
                     style={
-                      Array [
-                        Object {
+                      [
+                        {
                           "flex": 1,
                           "paddingVertical": 6,
                         },
-                        Object {
+                        {
                           "paddingVertical": 0,
                         },
                       ]
@@ -1693,7 +1786,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     <View
                       pointerEvents="none"
                       style={
-                        Object {
+                        {
                           "paddingBottom": 16,
                           "paddingTop": 12,
                         }
@@ -1702,7 +1795,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "alignSelf": "center",
                             "height": 32,
                             "justifyContent": "center",
@@ -1716,7 +1809,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -1732,7 +1825,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -1747,12 +1840,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         </View>
                         <View
                           style={
-                            Array [
-                              Object {
+                            [
+                              {
                                 "left": 0,
                                 "position": "absolute",
                               },
-                              Object {
+                              {
                                 "right": 0,
                                 "top": 2,
                               },
@@ -1763,7 +1856,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             collapsable={false}
                             numberOfLines={1}
                             style={
-                              Object {
+                              {
                                 "alignSelf": "flex-end",
                                 "backgroundColor": "rgba(179, 38, 30, 1)",
                                 "borderRadius": 8,
@@ -1785,7 +1878,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "height": 16,
                             "paddingBottom": 2,
                           }
@@ -1794,7 +1887,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "position": "absolute",
@@ -1806,8 +1899,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           <Text
                             maxFontSizeMultiplier={1}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -1815,20 +1908,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(73, 69, 79, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
@@ -1846,7 +1939,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "opacity": 1,
@@ -1860,8 +1953,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             maxFontSizeMultiplier={1}
                             selectable={false}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -1869,20 +1962,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(73, 69, 79, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
@@ -1903,7 +1996,11 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                   <View
                     accessibilityRole="button"
                     accessibilityState={
-                      Object {
+                      {
+                        "busy": undefined,
+                        "checked": undefined,
+                        "disabled": undefined,
+                        "expanded": undefined,
                         "selected": false,
                       }
                     }
@@ -1917,12 +2014,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     onResponderTerminationRequest={[Function]}
                     onStartShouldSetResponder={[Function]}
                     style={
-                      Array [
-                        Object {
+                      [
+                        {
                           "flex": 1,
                           "paddingVertical": 6,
                         },
-                        Object {
+                        {
                           "paddingVertical": 0,
                         },
                       ]
@@ -1931,7 +2028,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     <View
                       pointerEvents="none"
                       style={
-                        Object {
+                        {
                           "paddingBottom": 16,
                           "paddingTop": 12,
                         }
@@ -1940,7 +2037,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "alignSelf": "center",
                             "height": 32,
                             "justifyContent": "center",
@@ -1954,7 +2051,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -1970,7 +2067,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -1985,12 +2082,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         </View>
                         <View
                           style={
-                            Array [
-                              Object {
+                            [
+                              {
                                 "left": 0,
                                 "position": "absolute",
                               },
-                              Object {
+                              {
                                 "right": 0,
                                 "top": 2,
                               },
@@ -2001,7 +2098,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             collapsable={false}
                             numberOfLines={1}
                             style={
-                              Object {
+                              {
                                 "alignSelf": "flex-end",
                                 "backgroundColor": "rgba(179, 38, 30, 1)",
                                 "borderRadius": 8,
@@ -2023,7 +2120,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "height": 16,
                             "paddingBottom": 2,
                           }
@@ -2032,7 +2129,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "position": "absolute",
@@ -2044,8 +2141,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           <Text
                             maxFontSizeMultiplier={1}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -2053,20 +2150,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(73, 69, 79, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
@@ -2084,7 +2181,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "opacity": 1,
@@ -2098,8 +2195,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             maxFontSizeMultiplier={1}
                             selectable={false}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -2107,20 +2204,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(73, 69, 79, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
@@ -2141,7 +2238,11 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                   <View
                     accessibilityRole="button"
                     accessibilityState={
-                      Object {
+                      {
+                        "busy": undefined,
+                        "checked": undefined,
+                        "disabled": undefined,
+                        "expanded": undefined,
                         "selected": true,
                       }
                     }
@@ -2155,12 +2256,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     onResponderTerminationRequest={[Function]}
                     onStartShouldSetResponder={[Function]}
                     style={
-                      Array [
-                        Object {
+                      [
+                        {
                           "flex": 1,
                           "paddingVertical": 6,
                         },
-                        Object {
+                        {
                           "paddingVertical": 0,
                         },
                       ]
@@ -2169,7 +2270,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                     <View
                       pointerEvents="none"
                       style={
-                        Object {
+                        {
                           "paddingBottom": 16,
                           "paddingTop": 12,
                         }
@@ -2178,7 +2279,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "alignSelf": "center",
                             "height": 32,
                             "justifyContent": "center",
@@ -2192,13 +2293,13 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignSelf": "center",
                               "backgroundColor": "rgba(232, 222, 248, 1)",
                               "borderRadius": 16,
                               "height": 32,
-                              "transform": Array [
-                                Object {
+                              "transform": [
+                                {
                                   "scaleX": 1,
                                 },
                               ],
@@ -2209,7 +2310,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -2225,7 +2326,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "alignItems": "center",
                               "bottom": 0,
                               "left": 0,
@@ -2240,12 +2341,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         </View>
                         <View
                           style={
-                            Array [
-                              Object {
+                            [
+                              {
                                 "left": 0,
                                 "position": "absolute",
                               },
-                              Object {
+                              {
                                 "right": 0,
                                 "top": 2,
                               },
@@ -2256,7 +2357,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             collapsable={false}
                             numberOfLines={1}
                             style={
-                              Object {
+                              {
                                 "alignSelf": "flex-end",
                                 "backgroundColor": "rgba(179, 38, 30, 1)",
                                 "borderRadius": 8,
@@ -2278,7 +2379,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "height": 16,
                             "paddingBottom": 2,
                           }
@@ -2287,7 +2388,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "position": "absolute",
@@ -2299,8 +2400,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           <Text
                             maxFontSizeMultiplier={1}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -2308,20 +2409,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(28, 27, 31, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
@@ -2339,7 +2440,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           collapsable={false}
                           style={
-                            Object {
+                            {
                               "bottom": 0,
                               "left": 0,
                               "opacity": 0,
@@ -2353,8 +2454,8 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                             maxFontSizeMultiplier={1}
                             selectable={false}
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
@@ -2362,20 +2463,20 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                Object {
+                                {
                                   "textAlign": "left",
                                 },
-                                Object {
+                                {
                                   "writingDirection": "ltr",
                                 },
-                                Array [
-                                  Object {
+                                [
+                                  {
                                     "backgroundColor": "transparent",
                                     "fontSize": 12,
                                     "height": 56,
                                     "textAlign": "center",
                                   },
-                                  Object {
+                                  {
                                     "color": "rgba(28, 27, 31, 1)",
                                     "fontFamily": "System",
                                     "fontSize": 12,
