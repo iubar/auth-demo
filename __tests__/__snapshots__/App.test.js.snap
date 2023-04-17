@@ -32,18 +32,23 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
             "zIndex": 0,
           },
           {},
+          {},
         ]
       }
+      testID="appbar-header-root-layer"
     >
       <View
         collapsable={false}
         style={
           {
             "alignSelf": undefined,
+            "backgroundColor": "rgba(255, 251, 254, 1)",
             "bottom": undefined,
             "end": undefined,
             "flex": undefined,
+            "height": 64,
             "left": undefined,
+            "opacity": undefined,
             "position": undefined,
             "right": undefined,
             "shadowColor": "#000",
@@ -55,15 +60,25 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
             "shadowRadius": 0,
             "start": undefined,
             "top": undefined,
+            "transform": undefined,
+            "width": undefined,
           }
         }
-        testID="surface-outer-layer"
+        testID="appbar-header-outer-layer"
       >
         <View
           collapsable={false}
           style={
             {
-              "flex": undefined,
+              "alignItems": "center",
+              "backgroundColor": "rgba(255, 251, 254, 1)",
+              "flex": 1,
+              "flexDirection": "row",
+              "paddingBottom": undefined,
+              "paddingHorizontal": 4,
+              "paddingLeft": undefined,
+              "paddingRight": undefined,
+              "paddingTop": undefined,
               "shadowColor": "#000",
               "shadowOffset": {
                 "height": 0,
@@ -73,79 +88,58 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
               "shadowRadius": 0,
             }
           }
-          testID="surface-inner-layer"
+          testID="appbar-header"
         >
           <View
-            collapsable={false}
             style={
               {
-                "alignItems": "center",
-                "backgroundColor": "rgba(255, 251, 254, 1)",
-                "flex": undefined,
-                "flexDirection": "row",
-                "height": 64,
-                "paddingBottom": undefined,
-                "paddingHorizontal": 4,
-                "paddingLeft": undefined,
-                "paddingRight": undefined,
-                "paddingTop": undefined,
+                "width": 52,
               }
             }
-            testID="surface"
+          />
+          <View
+            pointerEvents="box-none"
+            style={
+              [
+                {
+                  "flex": 1,
+                  "paddingHorizontal": 12,
+                },
+                {
+                  "paddingHorizontal": 0,
+                },
+                [
+                  false,
+                  {
+                    "alignItems": "center",
+                  },
+                  undefined,
+                ],
+              ]
+            }
+            testID="appbar-content"
           >
-            <View
-              style={
-                {
-                  "width": 52,
-                }
-              }
-            />
-            <View
-              accessibilityRole="button"
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "checked": undefined,
-                  "disabled": true,
-                  "expanded": undefined,
-                  "selected": undefined,
-                }
-              }
+            <Text
+              accessibilityRole="header"
+              accessibilityTraits="header"
               accessible={true}
-              focusable={false}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              pointerEvents="box-none"
+              numberOfLines={1}
               style={
                 [
                   {
-                    "flex": 1,
-                    "paddingHorizontal": 12,
+                    "fontFamily": "System",
+                    "fontSize": 22,
+                    "fontWeight": "400",
+                    "letterSpacing": 0,
+                    "lineHeight": 28,
                   },
                   {
-                    "paddingHorizontal": 0,
+                    "textAlign": "left",
                   },
-                  [
-                    false,
-                    {
-                      "alignItems": "center",
-                    },
-                    undefined,
-                  ],
-                ]
-              }
-              testID="appbar-content"
-            >
-              <Text
-                accessibilityRole="header"
-                accessible={true}
-                numberOfLines={1}
-                style={
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "writingDirection": "ltr",
+                  },
                   [
                     {
                       "color": "rgba(28, 27, 31, 1)",
@@ -155,39 +149,23 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                       "letterSpacing": 0,
                       "lineHeight": 28,
                     },
-                    {
-                      "textAlign": "left",
-                    },
-                    {
-                      "writingDirection": "ltr",
-                    },
-                    [
-                      {
-                        "color": "rgba(28, 27, 31, 1)",
-                        "fontFamily": "System",
-                        "fontSize": 22,
-                        "fontWeight": "400",
-                        "letterSpacing": 0,
-                        "lineHeight": 28,
-                      },
-                      false,
-                      undefined,
-                    ],
-                  ]
-                }
-                testID="appbar-content-title-text"
-              >
-                Auth Demo
-              </Text>
-            </View>
-            <View
-              style={
-                {
-                  "width": 52,
-                }
+                    false,
+                    undefined,
+                  ],
+                ]
               }
-            />
+              testID="appbar-content-title-text"
+            >
+              Auth Demo
+            </Text>
           </View>
+          <View
+            style={
+              {
+                "width": 52,
+              }
+            }
+          />
         </View>
       </View>
     </View>
@@ -680,10 +658,16 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                       style={
                         {
                           "alignSelf": undefined,
+                          "backgroundColor": "red",
+                          "borderRadius": 10,
                           "bottom": undefined,
                           "end": undefined,
                           "flex": undefined,
+                          "height": undefined,
                           "left": undefined,
+                          "marginHorizontal": 20,
+                          "marginVertical": 20,
+                          "opacity": undefined,
                           "position": undefined,
                           "right": undefined,
                           "shadowColor": "#000",
@@ -695,6 +679,8 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           "shadowRadius": 0,
                           "start": undefined,
                           "top": undefined,
+                          "transform": undefined,
+                          "width": undefined,
                         }
                       }
                       testID="button-container-outer-layer"
@@ -703,7 +689,13 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                         collapsable={false}
                         style={
                           {
+                            "backgroundColor": "red",
+                            "borderColor": "transparent",
+                            "borderRadius": 10,
+                            "borderStyle": "solid",
+                            "borderWidth": 0,
                             "flex": undefined,
+                            "minWidth": 64,
                             "shadowColor": "#000",
                             "shadowOffset": {
                               "height": 0,
@@ -713,130 +705,112 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                             "shadowRadius": 0,
                           }
                         }
-                        testID="button-container-inner-layer"
+                        testID="button-container"
                       >
                         <View
-                          collapsable={false}
-                          style={
+                          accessibilityRole="button"
+                          accessibilityState={
                             {
-                              "backgroundColor": "red",
-                              "borderColor": "transparent",
-                              "borderRadius": 10,
-                              "borderStyle": "solid",
-                              "borderWidth": 0,
-                              "flex": undefined,
-                              "marginHorizontal": 20,
-                              "marginVertical": 20,
-                              "minWidth": 64,
+                              "busy": undefined,
+                              "checked": undefined,
+                              "disabled": false,
+                              "expanded": undefined,
+                              "selected": undefined,
                             }
                           }
-                          testID="button-container"
+                          accessibilityValue={
+                            {
+                              "max": undefined,
+                              "min": undefined,
+                              "now": undefined,
+                              "text": undefined,
+                            }
+                          }
+                          accessible={true}
+                          collapsable={false}
+                          focusable={true}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onFocus={[Function]}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            [
+                              {
+                                "overflow": "hidden",
+                              },
+                              false,
+                              {
+                                "borderRadius": 10,
+                              },
+                            ]
+                          }
+                          testID="button"
                         >
                           <View
-                            accessibilityRole="button"
-                            accessibilityState={
-                              {
-                                "busy": undefined,
-                                "checked": undefined,
-                                "disabled": false,
-                                "expanded": undefined,
-                                "selected": undefined,
-                              }
-                            }
-                            accessibilityValue={
-                              {
-                                "max": undefined,
-                                "min": undefined,
-                                "now": undefined,
-                                "text": undefined,
-                              }
-                            }
-                            accessible={true}
-                            collapsable={false}
-                            focusable={true}
-                            onBlur={[Function]}
-                            onClick={[Function]}
-                            onFocus={[Function]}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
                             style={
                               [
                                 {
-                                  "overflow": "hidden",
+                                  "alignItems": "center",
+                                  "flexDirection": "row",
+                                  "justifyContent": "center",
                                 },
-                                false,
-                                {
-                                  "borderRadius": 10,
-                                },
+                                undefined,
                               ]
                             }
-                            testID="button"
                           >
-                            <View
+                            <Text
+                              numberOfLines={1}
+                              selectable={false}
                               style={
                                 [
                                   {
-                                    "alignItems": "center",
-                                    "flexDirection": "row",
-                                    "justifyContent": "center",
+                                    "fontFamily": "System",
+                                    "fontSize": 14,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.1,
+                                    "lineHeight": 20,
                                   },
-                                  undefined,
-                                ]
-                              }
-                            >
-                              <Text
-                                numberOfLines={1}
-                                selectable={false}
-                                style={
+                                  {
+                                    "textAlign": "left",
+                                  },
+                                  {
+                                    "color": "rgba(28, 27, 31, 1)",
+                                    "writingDirection": "ltr",
+                                  },
                                   [
                                     {
-                                      "color": "rgba(28, 27, 31, 1)",
+                                      "marginHorizontal": 16,
+                                      "marginVertical": 9,
+                                      "textAlign": "center",
+                                    },
+                                    false,
+                                    {
+                                      "marginHorizontal": 24,
+                                      "marginVertical": 10,
+                                    },
+                                    undefined,
+                                    false,
+                                    {
+                                      "color": "rgba(255, 255, 255, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
                                       "fontWeight": "500",
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    {
-                                      "textAlign": "left",
-                                    },
-                                    {
-                                      "writingDirection": "ltr",
-                                    },
-                                    [
-                                      {
-                                        "marginHorizontal": 16,
-                                        "marginVertical": 9,
-                                        "textAlign": "center",
-                                      },
-                                      false,
-                                      {
-                                        "marginHorizontal": 24,
-                                        "marginVertical": 10,
-                                      },
-                                      undefined,
-                                      false,
-                                      {
-                                        "color": "rgba(255, 255, 255, 1)",
-                                        "fontFamily": "System",
-                                        "fontSize": 14,
-                                        "fontWeight": "500",
-                                        "letterSpacing": 0.1,
-                                        "lineHeight": 20,
-                                      },
-                                      undefined,
-                                    ],
-                                  ]
-                                }
-                                testID="button-text"
-                              >
-                                Load data
-                              </Text>
-                            </View>
+                                    undefined,
+                                  ],
+                                ]
+                              }
+                              testID="button-text"
+                            >
+                              Load data
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -846,10 +820,16 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                       style={
                         {
                           "alignSelf": undefined,
+                          "backgroundColor": "red",
+                          "borderRadius": 10,
                           "bottom": undefined,
                           "end": undefined,
                           "flex": undefined,
+                          "height": undefined,
                           "left": undefined,
+                          "marginHorizontal": 20,
+                          "marginVertical": 20,
+                          "opacity": undefined,
                           "position": undefined,
                           "right": undefined,
                           "shadowColor": "#000",
@@ -861,15 +841,24 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           "shadowRadius": 0,
                           "start": undefined,
                           "top": undefined,
+                          "transform": undefined,
+                          "width": undefined,
                         }
                       }
                       testID="button-container-outer-layer"
                     >
                       <View
                         collapsable={false}
+                        color="rgb(259, 247, 0)"
                         style={
                           {
+                            "backgroundColor": "red",
+                            "borderColor": "transparent",
+                            "borderRadius": 10,
+                            "borderStyle": "solid",
+                            "borderWidth": 0,
                             "flex": undefined,
+                            "minWidth": 64,
                             "shadowColor": "#000",
                             "shadowOffset": {
                               "height": 0,
@@ -879,131 +868,112 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                             "shadowRadius": 0,
                           }
                         }
-                        testID="button-container-inner-layer"
+                        testID="button-container"
                       >
                         <View
-                          collapsable={false}
-                          color="rgb(259, 247, 0)"
-                          style={
+                          accessibilityRole="button"
+                          accessibilityState={
                             {
-                              "backgroundColor": "red",
-                              "borderColor": "transparent",
-                              "borderRadius": 10,
-                              "borderStyle": "solid",
-                              "borderWidth": 0,
-                              "flex": undefined,
-                              "marginHorizontal": 20,
-                              "marginVertical": 20,
-                              "minWidth": 64,
+                              "busy": undefined,
+                              "checked": undefined,
+                              "disabled": false,
+                              "expanded": undefined,
+                              "selected": undefined,
                             }
                           }
-                          testID="button-container"
+                          accessibilityValue={
+                            {
+                              "max": undefined,
+                              "min": undefined,
+                              "now": undefined,
+                              "text": undefined,
+                            }
+                          }
+                          accessible={true}
+                          collapsable={false}
+                          focusable={true}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onFocus={[Function]}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            [
+                              {
+                                "overflow": "hidden",
+                              },
+                              false,
+                              {
+                                "borderRadius": 10,
+                              },
+                            ]
+                          }
+                          testID="button"
                         >
                           <View
-                            accessibilityRole="button"
-                            accessibilityState={
-                              {
-                                "busy": undefined,
-                                "checked": undefined,
-                                "disabled": false,
-                                "expanded": undefined,
-                                "selected": undefined,
-                              }
-                            }
-                            accessibilityValue={
-                              {
-                                "max": undefined,
-                                "min": undefined,
-                                "now": undefined,
-                                "text": undefined,
-                              }
-                            }
-                            accessible={true}
-                            collapsable={false}
-                            focusable={true}
-                            onBlur={[Function]}
-                            onClick={[Function]}
-                            onFocus={[Function]}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
                             style={
                               [
                                 {
-                                  "overflow": "hidden",
+                                  "alignItems": "center",
+                                  "flexDirection": "row",
+                                  "justifyContent": "center",
                                 },
-                                false,
-                                {
-                                  "borderRadius": 10,
-                                },
+                                undefined,
                               ]
                             }
-                            testID="button"
                           >
-                            <View
+                            <Text
+                              numberOfLines={1}
+                              selectable={false}
                               style={
                                 [
                                   {
-                                    "alignItems": "center",
-                                    "flexDirection": "row",
-                                    "justifyContent": "center",
+                                    "fontFamily": "System",
+                                    "fontSize": 14,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.1,
+                                    "lineHeight": 20,
                                   },
-                                  undefined,
-                                ]
-                              }
-                            >
-                              <Text
-                                numberOfLines={1}
-                                selectable={false}
-                                style={
+                                  {
+                                    "textAlign": "left",
+                                  },
+                                  {
+                                    "color": "rgba(28, 27, 31, 1)",
+                                    "writingDirection": "ltr",
+                                  },
                                   [
                                     {
-                                      "color": "rgba(28, 27, 31, 1)",
+                                      "marginHorizontal": 16,
+                                      "marginVertical": 9,
+                                      "textAlign": "center",
+                                    },
+                                    false,
+                                    {
+                                      "marginHorizontal": 24,
+                                      "marginVertical": 10,
+                                    },
+                                    undefined,
+                                    false,
+                                    {
+                                      "color": "rgba(255, 255, 255, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
                                       "fontWeight": "500",
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    {
-                                      "textAlign": "left",
-                                    },
-                                    {
-                                      "writingDirection": "ltr",
-                                    },
-                                    [
-                                      {
-                                        "marginHorizontal": 16,
-                                        "marginVertical": 9,
-                                        "textAlign": "center",
-                                      },
-                                      false,
-                                      {
-                                        "marginHorizontal": 24,
-                                        "marginVertical": 10,
-                                      },
-                                      undefined,
-                                      false,
-                                      {
-                                        "color": "rgba(255, 255, 255, 1)",
-                                        "fontFamily": "System",
-                                        "fontSize": 14,
-                                        "fontWeight": "500",
-                                        "letterSpacing": 0.1,
-                                        "lineHeight": 20,
-                                      },
-                                      undefined,
-                                    ],
-                                  ]
-                                }
-                                testID="button-text"
-                              >
-                                Save data
-                              </Text>
-                            </View>
+                                    undefined,
+                                  ],
+                                ]
+                              }
+                              testID="button-text"
+                            >
+                              Save data
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -1013,10 +983,16 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                       style={
                         {
                           "alignSelf": undefined,
+                          "backgroundColor": "red",
+                          "borderRadius": 10,
                           "bottom": undefined,
                           "end": undefined,
                           "flex": undefined,
+                          "height": undefined,
                           "left": undefined,
+                          "marginHorizontal": 20,
+                          "marginVertical": 20,
+                          "opacity": undefined,
                           "position": undefined,
                           "right": undefined,
                           "shadowColor": "#000",
@@ -1028,6 +1004,8 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           "shadowRadius": 0,
                           "start": undefined,
                           "top": undefined,
+                          "transform": undefined,
+                          "width": undefined,
                         }
                       }
                       testID="button-container-outer-layer"
@@ -1036,7 +1014,13 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                         collapsable={false}
                         style={
                           {
+                            "backgroundColor": "red",
+                            "borderColor": "transparent",
+                            "borderRadius": 10,
+                            "borderStyle": "solid",
+                            "borderWidth": 0,
                             "flex": undefined,
+                            "minWidth": 64,
                             "shadowColor": "#000",
                             "shadowOffset": {
                               "height": 0,
@@ -1046,130 +1030,112 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                             "shadowRadius": 0,
                           }
                         }
-                        testID="button-container-inner-layer"
+                        testID="button-container"
                       >
                         <View
-                          collapsable={false}
-                          style={
+                          accessibilityRole="button"
+                          accessibilityState={
                             {
-                              "backgroundColor": "red",
-                              "borderColor": "transparent",
-                              "borderRadius": 10,
-                              "borderStyle": "solid",
-                              "borderWidth": 0,
-                              "flex": undefined,
-                              "marginHorizontal": 20,
-                              "marginVertical": 20,
-                              "minWidth": 64,
+                              "busy": undefined,
+                              "checked": undefined,
+                              "disabled": false,
+                              "expanded": undefined,
+                              "selected": undefined,
                             }
                           }
-                          testID="button-container"
+                          accessibilityValue={
+                            {
+                              "max": undefined,
+                              "min": undefined,
+                              "now": undefined,
+                              "text": undefined,
+                            }
+                          }
+                          accessible={true}
+                          collapsable={false}
+                          focusable={true}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onFocus={[Function]}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            [
+                              {
+                                "overflow": "hidden",
+                              },
+                              false,
+                              {
+                                "borderRadius": 10,
+                              },
+                            ]
+                          }
+                          testID="button"
                         >
                           <View
-                            accessibilityRole="button"
-                            accessibilityState={
-                              {
-                                "busy": undefined,
-                                "checked": undefined,
-                                "disabled": false,
-                                "expanded": undefined,
-                                "selected": undefined,
-                              }
-                            }
-                            accessibilityValue={
-                              {
-                                "max": undefined,
-                                "min": undefined,
-                                "now": undefined,
-                                "text": undefined,
-                              }
-                            }
-                            accessible={true}
-                            collapsable={false}
-                            focusable={true}
-                            onBlur={[Function]}
-                            onClick={[Function]}
-                            onFocus={[Function]}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
                             style={
                               [
                                 {
-                                  "overflow": "hidden",
+                                  "alignItems": "center",
+                                  "flexDirection": "row",
+                                  "justifyContent": "center",
                                 },
-                                false,
-                                {
-                                  "borderRadius": 10,
-                                },
+                                undefined,
                               ]
                             }
-                            testID="button"
                           >
-                            <View
+                            <Text
+                              numberOfLines={1}
+                              selectable={false}
                               style={
                                 [
                                   {
-                                    "alignItems": "center",
-                                    "flexDirection": "row",
-                                    "justifyContent": "center",
+                                    "fontFamily": "System",
+                                    "fontSize": 14,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.1,
+                                    "lineHeight": 20,
                                   },
-                                  undefined,
-                                ]
-                              }
-                            >
-                              <Text
-                                numberOfLines={1}
-                                selectable={false}
-                                style={
+                                  {
+                                    "textAlign": "left",
+                                  },
+                                  {
+                                    "color": "rgba(28, 27, 31, 1)",
+                                    "writingDirection": "ltr",
+                                  },
                                   [
                                     {
-                                      "color": "rgba(28, 27, 31, 1)",
+                                      "marginHorizontal": 16,
+                                      "marginVertical": 9,
+                                      "textAlign": "center",
+                                    },
+                                    false,
+                                    {
+                                      "marginHorizontal": 24,
+                                      "marginVertical": 10,
+                                    },
+                                    undefined,
+                                    false,
+                                    {
+                                      "color": "rgba(255, 255, 255, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
                                       "fontWeight": "500",
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    {
-                                      "textAlign": "left",
-                                    },
-                                    {
-                                      "writingDirection": "ltr",
-                                    },
-                                    [
-                                      {
-                                        "marginHorizontal": 16,
-                                        "marginVertical": 9,
-                                        "textAlign": "center",
-                                      },
-                                      false,
-                                      {
-                                        "marginHorizontal": 24,
-                                        "marginVertical": 10,
-                                      },
-                                      undefined,
-                                      false,
-                                      {
-                                        "color": "rgba(255, 255, 255, 1)",
-                                        "fontFamily": "System",
-                                        "fontSize": 14,
-                                        "fontWeight": "500",
-                                        "letterSpacing": 0.1,
-                                        "lineHeight": 20,
-                                      },
-                                      undefined,
-                                    ],
-                                  ]
-                                }
-                                testID="button-text"
-                              >
-                                Clear data
-                              </Text>
-                            </View>
+                                    undefined,
+                                  ],
+                                ]
+                              }
+                              testID="button-text"
+                            >
+                              Clear data
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -1435,10 +1401,13 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
           style={
             {
               "alignSelf": undefined,
+              "backgroundColor": "transparent",
               "bottom": 0,
               "end": undefined,
               "flex": undefined,
+              "height": undefined,
               "left": 0,
+              "opacity": undefined,
               "position": undefined,
               "right": 0,
               "shadowColor": "#000",
@@ -1450,14 +1419,19 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
               "shadowRadius": 0,
               "start": undefined,
               "top": undefined,
+              "transform": undefined,
+              "width": undefined,
             }
           }
-          testID="bottom-navigation-surface-outer-layer"
+          testID="bottom-navigation-bar-outer-layer"
         >
           <View
             collapsable={false}
+            onLayout={[Function]}
+            pointerEvents="none"
             style={
               {
+                "backgroundColor": "transparent",
                 "flex": undefined,
                 "shadowColor": "#000",
                 "shadowOffset": {
@@ -1468,85 +1442,87 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                 "shadowRadius": 0,
               }
             }
-            testID="bottom-navigation-surface-inner-layer"
+            testID="bottom-navigation-bar"
           >
             <View
               collapsable={false}
-              onLayout={[Function]}
-              pointerEvents="none"
               style={
                 {
-                  "backgroundColor": "transparent",
-                  "flex": undefined,
+                  "alignItems": "center",
+                  "backgroundColor": "rgb(243, 237, 246)",
+                  "overflow": "hidden",
                 }
               }
-              testID="bottom-navigation-surface"
+              testID="bottom-navigation-bar-content"
             >
               <View
-                collapsable={false}
+                accessibilityRole="tablist"
                 style={
-                  {
-                    "alignItems": "center",
-                    "backgroundColor": "rgb(243, 237, 246)",
-                    "overflow": "hidden",
-                  }
+                  [
+                    {
+                      "flexDirection": "row",
+                    },
+                    {
+                      "marginBottom": 0,
+                      "marginHorizontal": 0,
+                    },
+                    false,
+                  ]
                 }
-                testID="bottom-navigation-bar-content"
+                testID="bottom-navigation-bar-content-wrapper"
               >
                 <View
-                  accessibilityRole="tablist"
+                  accessibilityRole="button"
+                  accessibilityState={
+                    {
+                      "busy": undefined,
+                      "checked": undefined,
+                      "disabled": undefined,
+                      "expanded": undefined,
+                      "selected": false,
+                    }
+                  }
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
                   style={
                     [
                       {
-                        "flexDirection": "row",
+                        "flex": 1,
+                        "paddingVertical": 6,
                       },
                       {
-                        "marginBottom": 0,
-                        "marginHorizontal": 0,
+                        "paddingVertical": 0,
                       },
-                      false,
                     ]
                   }
-                  testID="bottom-navigation-bar-content-wrapper"
                 >
                   <View
-                    accessibilityRole="button"
-                    accessibilityState={
-                      {
-                        "busy": undefined,
-                        "checked": undefined,
-                        "disabled": undefined,
-                        "expanded": undefined,
-                        "selected": false,
-                      }
-                    }
-                    accessible={true}
-                    focusable={true}
-                    onClick={[Function]}
-                    onResponderGrant={[Function]}
-                    onResponderMove={[Function]}
-                    onResponderRelease={[Function]}
-                    onResponderTerminate={[Function]}
-                    onResponderTerminationRequest={[Function]}
-                    onStartShouldSetResponder={[Function]}
+                    pointerEvents="none"
                     style={
-                      [
-                        {
-                          "flex": 1,
-                          "paddingVertical": 6,
-                        },
-                        {
-                          "paddingVertical": 0,
-                        },
-                      ]
+                      {
+                        "paddingBottom": 16,
+                        "paddingTop": 12,
+                      }
                     }
                   >
                     <View
-                      pointerEvents="none"
+                      collapsable={false}
                       style={
                         {
-                          "paddingBottom": 16,
-                          "paddingTop": 12,
+                          "alignSelf": "center",
+                          "height": 32,
+                          "justifyContent": "center",
+                          "marginBottom": 4,
+                          "marginHorizontal": 12,
+                          "marginTop": 0,
+                          "width": 32,
                         }
                       }
                     >
@@ -1554,907 +1530,860 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                         collapsable={false}
                         style={
                           {
-                            "alignSelf": "center",
-                            "height": 32,
-                            "justifyContent": "center",
-                            "marginBottom": 4,
-                            "marginHorizontal": 12,
-                            "marginTop": 0,
-                            "width": 32,
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
                           }
                         }
                       >
-                        <View
+                        <Text />
+                      </View>
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 1,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
+                          }
+                        }
+                      >
+                        <Text />
+                      </View>
+                      <View
+                        style={
+                          [
+                            {
+                              "left": 0,
+                              "position": "absolute",
+                            },
+                            {
+                              "right": 0,
+                              "top": 2,
+                            },
+                          ]
+                        }
+                      >
+                        <Text
                           collapsable={false}
+                          numberOfLines={1}
                           style={
                             {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
+                              "alignSelf": "flex-end",
+                              "backgroundColor": "rgba(179, 38, 30, 1)",
+                              "borderRadius": 8,
+                              "color": "rgba(255, 255, 255, 1)",
+                              "fontSize": 8,
+                              "height": 16,
+                              "lineHeight": 8,
+                              "minWidth": 16,
                               "opacity": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
-                          }
-                        >
-                          <Text />
-                        </View>
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 1,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
-                          }
-                        >
-                          <Text />
-                        </View>
-                        <View
-                          style={
-                            [
-                              {
-                                "left": 0,
-                                "position": "absolute",
-                              },
-                              {
-                                "right": 0,
-                                "top": 2,
-                              },
-                            ]
-                          }
-                        >
-                          <Text
-                            collapsable={false}
-                            numberOfLines={1}
-                            style={
-                              {
-                                "alignSelf": "flex-end",
-                                "backgroundColor": "rgba(179, 38, 30, 1)",
-                                "borderRadius": 8,
-                                "color": "rgba(255, 255, 255, 1)",
-                                "fontSize": 8,
-                                "height": 16,
-                                "lineHeight": 8,
-                                "minWidth": 16,
-                                "opacity": 0,
-                                "overflow": "hidden",
-                                "paddingHorizontal": 3,
-                                "textAlign": "center",
-                                "textAlignVertical": "center",
-                              }
-                            }
-                          />
-                        </View>
-                      </View>
-                      <View
-                        collapsable={false}
-                        style={
-                          {
-                            "height": 16,
-                            "paddingBottom": 2,
-                          }
-                        }
-                      >
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "bottom": 0,
-                              "left": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
-                          }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            style={
-                              [
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
-                                  "fontFamily": "System",
-                                  "fontSize": 12,
-                                  "fontWeight": "500",
-                                  "letterSpacing": 0.5,
-                                  "lineHeight": 16,
-                                },
-                                {
-                                  "textAlign": "left",
-                                },
-                                {
-                                  "writingDirection": "ltr",
-                                },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(73, 69, 79, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Password Grant
-                          </Text>
-                        </View>
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 1,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
-                          }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            selectable={false}
-                            style={
-                              [
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
-                                  "fontFamily": "System",
-                                  "fontSize": 12,
-                                  "fontWeight": "500",
-                                  "letterSpacing": 0.5,
-                                  "lineHeight": 16,
-                                },
-                                {
-                                  "textAlign": "left",
-                                },
-                                {
-                                  "writingDirection": "ltr",
-                                },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(73, 69, 79, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Password Grant
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                  <View
-                    accessibilityRole="button"
-                    accessibilityState={
-                      {
-                        "busy": undefined,
-                        "checked": undefined,
-                        "disabled": undefined,
-                        "expanded": undefined,
-                        "selected": false,
-                      }
-                    }
-                    accessible={true}
-                    focusable={true}
-                    onClick={[Function]}
-                    onResponderGrant={[Function]}
-                    onResponderMove={[Function]}
-                    onResponderRelease={[Function]}
-                    onResponderTerminate={[Function]}
-                    onResponderTerminationRequest={[Function]}
-                    onStartShouldSetResponder={[Function]}
-                    style={
-                      [
-                        {
-                          "flex": 1,
-                          "paddingVertical": 6,
-                        },
-                        {
-                          "paddingVertical": 0,
-                        },
-                      ]
-                    }
-                  >
-                    <View
-                      pointerEvents="none"
-                      style={
-                        {
-                          "paddingBottom": 16,
-                          "paddingTop": 12,
-                        }
-                      }
-                    >
-                      <View
-                        collapsable={false}
-                        style={
-                          {
-                            "alignSelf": "center",
-                            "height": 32,
-                            "justifyContent": "center",
-                            "marginBottom": 4,
-                            "marginHorizontal": 12,
-                            "marginTop": 0,
-                            "width": 32,
-                          }
-                        }
-                      >
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
-                          }
-                        >
-                          <Text />
-                        </View>
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 1,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
-                          }
-                        >
-                          <Text />
-                        </View>
-                        <View
-                          style={
-                            [
-                              {
-                                "left": 0,
-                                "position": "absolute",
-                              },
-                              {
-                                "right": 0,
-                                "top": 2,
-                              },
-                            ]
-                          }
-                        >
-                          <Text
-                            collapsable={false}
-                            numberOfLines={1}
-                            style={
-                              {
-                                "alignSelf": "flex-end",
-                                "backgroundColor": "rgba(179, 38, 30, 1)",
-                                "borderRadius": 8,
-                                "color": "rgba(255, 255, 255, 1)",
-                                "fontSize": 8,
-                                "height": 16,
-                                "lineHeight": 8,
-                                "minWidth": 16,
-                                "opacity": 0,
-                                "overflow": "hidden",
-                                "paddingHorizontal": 3,
-                                "textAlign": "center",
-                                "textAlignVertical": "center",
-                              }
-                            }
-                          />
-                        </View>
-                      </View>
-                      <View
-                        collapsable={false}
-                        style={
-                          {
-                            "height": 16,
-                            "paddingBottom": 2,
-                          }
-                        }
-                      >
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "bottom": 0,
-                              "left": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
-                          }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            style={
-                              [
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
-                                  "fontFamily": "System",
-                                  "fontSize": 12,
-                                  "fontWeight": "500",
-                                  "letterSpacing": 0.5,
-                                  "lineHeight": 16,
-                                },
-                                {
-                                  "textAlign": "left",
-                                },
-                                {
-                                  "writingDirection": "ltr",
-                                },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(73, 69, 79, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Auth Code Grant
-                          </Text>
-                        </View>
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 1,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
-                          }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            selectable={false}
-                            style={
-                              [
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
-                                  "fontFamily": "System",
-                                  "fontSize": 12,
-                                  "fontWeight": "500",
-                                  "letterSpacing": 0.5,
-                                  "lineHeight": 16,
-                                },
-                                {
-                                  "textAlign": "left",
-                                },
-                                {
-                                  "writingDirection": "ltr",
-                                },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(73, 69, 79, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Auth Code Grant
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                  <View
-                    accessibilityRole="button"
-                    accessibilityState={
-                      {
-                        "busy": undefined,
-                        "checked": undefined,
-                        "disabled": undefined,
-                        "expanded": undefined,
-                        "selected": false,
-                      }
-                    }
-                    accessible={true}
-                    focusable={true}
-                    onClick={[Function]}
-                    onResponderGrant={[Function]}
-                    onResponderMove={[Function]}
-                    onResponderRelease={[Function]}
-                    onResponderTerminate={[Function]}
-                    onResponderTerminationRequest={[Function]}
-                    onStartShouldSetResponder={[Function]}
-                    style={
-                      [
-                        {
-                          "flex": 1,
-                          "paddingVertical": 6,
-                        },
-                        {
-                          "paddingVertical": 0,
-                        },
-                      ]
-                    }
-                  >
-                    <View
-                      pointerEvents="none"
-                      style={
-                        {
-                          "paddingBottom": 16,
-                          "paddingTop": 12,
-                        }
-                      }
-                    >
-                      <View
-                        collapsable={false}
-                        style={
-                          {
-                            "alignSelf": "center",
-                            "height": 32,
-                            "justifyContent": "center",
-                            "marginBottom": 4,
-                            "marginHorizontal": 12,
-                            "marginTop": 0,
-                            "width": 32,
-                          }
-                        }
-                      >
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
-                          }
-                        >
-                          <Text />
-                        </View>
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 1,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
-                          }
-                        >
-                          <Text />
-                        </View>
-                        <View
-                          style={
-                            [
-                              {
-                                "left": 0,
-                                "position": "absolute",
-                              },
-                              {
-                                "right": 0,
-                                "top": 2,
-                              },
-                            ]
-                          }
-                        >
-                          <Text
-                            collapsable={false}
-                            numberOfLines={1}
-                            style={
-                              {
-                                "alignSelf": "flex-end",
-                                "backgroundColor": "rgba(179, 38, 30, 1)",
-                                "borderRadius": 8,
-                                "color": "rgba(255, 255, 255, 1)",
-                                "fontSize": 8,
-                                "height": 16,
-                                "lineHeight": 8,
-                                "minWidth": 16,
-                                "opacity": 0,
-                                "overflow": "hidden",
-                                "paddingHorizontal": 3,
-                                "textAlign": "center",
-                                "textAlignVertical": "center",
-                              }
-                            }
-                          />
-                        </View>
-                      </View>
-                      <View
-                        collapsable={false}
-                        style={
-                          {
-                            "height": 16,
-                            "paddingBottom": 2,
-                          }
-                        }
-                      >
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "bottom": 0,
-                              "left": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
-                          }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            style={
-                              [
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
-                                  "fontFamily": "System",
-                                  "fontSize": 12,
-                                  "fontWeight": "500",
-                                  "letterSpacing": 0.5,
-                                  "lineHeight": 16,
-                                },
-                                {
-                                  "textAlign": "left",
-                                },
-                                {
-                                  "writingDirection": "ltr",
-                                },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(73, 69, 79, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Api
-                          </Text>
-                        </View>
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 1,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
-                          }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            selectable={false}
-                            style={
-                              [
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
-                                  "fontFamily": "System",
-                                  "fontSize": 12,
-                                  "fontWeight": "500",
-                                  "letterSpacing": 0.5,
-                                  "lineHeight": 16,
-                                },
-                                {
-                                  "textAlign": "left",
-                                },
-                                {
-                                  "writingDirection": "ltr",
-                                },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(73, 69, 79, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Api
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                  <View
-                    accessibilityRole="button"
-                    accessibilityState={
-                      {
-                        "busy": undefined,
-                        "checked": undefined,
-                        "disabled": undefined,
-                        "expanded": undefined,
-                        "selected": true,
-                      }
-                    }
-                    accessible={true}
-                    focusable={true}
-                    onClick={[Function]}
-                    onResponderGrant={[Function]}
-                    onResponderMove={[Function]}
-                    onResponderRelease={[Function]}
-                    onResponderTerminate={[Function]}
-                    onResponderTerminationRequest={[Function]}
-                    onStartShouldSetResponder={[Function]}
-                    style={
-                      [
-                        {
-                          "flex": 1,
-                          "paddingVertical": 6,
-                        },
-                        {
-                          "paddingVertical": 0,
-                        },
-                      ]
-                    }
-                  >
-                    <View
-                      pointerEvents="none"
-                      style={
-                        {
-                          "paddingBottom": 16,
-                          "paddingTop": 12,
-                        }
-                      }
-                    >
-                      <View
-                        collapsable={false}
-                        style={
-                          {
-                            "alignSelf": "center",
-                            "height": 32,
-                            "justifyContent": "center",
-                            "marginBottom": 4,
-                            "marginHorizontal": 12,
-                            "marginTop": 0,
-                            "width": 32,
-                          }
-                        }
-                      >
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignSelf": "center",
-                              "backgroundColor": "rgba(232, 222, 248, 1)",
-                              "borderRadius": 16,
-                              "height": 32,
-                              "transform": [
-                                {
-                                  "scaleX": 1,
-                                },
-                              ],
-                              "width": 64,
+                              "overflow": "hidden",
+                              "paddingHorizontal": 3,
+                              "textAlign": "center",
+                              "textAlignVertical": "center",
                             }
                           }
                         />
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 1,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
+                      </View>
+                    </View>
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "height": 16,
+                          "paddingBottom": 2,
+                        }
+                      }
+                    >
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "bottom": 0,
+                            "left": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
                           }
-                        >
-                          <Text />
-                        </View>
-                        <View
-                          collapsable={false}
-                          style={
-                            {
-                              "alignItems": "center",
-                              "bottom": 0,
-                              "left": 0,
-                              "opacity": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 4,
-                            }
-                          }
-                        >
-                          <Text />
-                        </View>
-                        <View
+                        }
+                      >
+                        <Text
+                          maxFontSizeMultiplier={1}
                           style={
                             [
                               {
-                                "left": 0,
-                                "position": "absolute",
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
                               },
                               {
-                                "right": 0,
-                                "top": 2,
+                                "textAlign": "left",
                               },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                {
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
+                                },
+                                {
+                                  "color": "rgba(73, 69, 79, 1)",
+                                  "fontFamily": "System",
+                                  "fontSize": 12,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.5,
+                                  "lineHeight": 16,
+                                },
+                              ],
                             ]
                           }
                         >
-                          <Text
-                            collapsable={false}
-                            numberOfLines={1}
-                            style={
-                              {
-                                "alignSelf": "flex-end",
-                                "backgroundColor": "rgba(179, 38, 30, 1)",
-                                "borderRadius": 8,
-                                "color": "rgba(255, 255, 255, 1)",
-                                "fontSize": 8,
-                                "height": 16,
-                                "lineHeight": 8,
-                                "minWidth": 16,
-                                "opacity": 0,
-                                "overflow": "hidden",
-                                "paddingHorizontal": 3,
-                                "textAlign": "center",
-                                "textAlignVertical": "center",
-                              }
-                            }
-                          />
-                        </View>
+                          Password Grant
+                        </Text>
                       </View>
                       <View
                         collapsable={false}
                         style={
                           {
-                            "height": 16,
-                            "paddingBottom": 2,
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 1,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
                           }
                         }
                       >
-                        <View
-                          collapsable={false}
+                        <Text
+                          maxFontSizeMultiplier={1}
+                          selectable={false}
                           style={
-                            {
-                              "bottom": 0,
-                              "left": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
-                          }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            style={
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
                               [
                                 {
-                                  "color": "rgba(28, 27, 31, 1)",
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
+                                },
+                                {
+                                  "color": "rgba(73, 69, 79, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
-                                {
-                                  "textAlign": "left",
-                                },
-                                {
-                                  "writingDirection": "ltr",
-                                },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(28, 27, 31, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Settings
-                          </Text>
-                        </View>
-                        <View
+                              ],
+                            ]
+                          }
+                        >
+                          Password Grant
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  accessibilityRole="button"
+                  accessibilityState={
+                    {
+                      "busy": undefined,
+                      "checked": undefined,
+                      "disabled": undefined,
+                      "expanded": undefined,
+                      "selected": false,
+                    }
+                  }
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    [
+                      {
+                        "flex": 1,
+                        "paddingVertical": 6,
+                      },
+                      {
+                        "paddingVertical": 0,
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    pointerEvents="none"
+                    style={
+                      {
+                        "paddingBottom": 16,
+                        "paddingTop": 12,
+                      }
+                    }
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignSelf": "center",
+                          "height": 32,
+                          "justifyContent": "center",
+                          "marginBottom": 4,
+                          "marginHorizontal": 12,
+                          "marginTop": 0,
+                          "width": 32,
+                        }
+                      }
+                    >
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
+                          }
+                        }
+                      >
+                        <Text />
+                      </View>
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 1,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
+                          }
+                        }
+                      >
+                        <Text />
+                      </View>
+                      <View
+                        style={
+                          [
+                            {
+                              "left": 0,
+                              "position": "absolute",
+                            },
+                            {
+                              "right": 0,
+                              "top": 2,
+                            },
+                          ]
+                        }
+                      >
+                        <Text
                           collapsable={false}
+                          numberOfLines={1}
                           style={
                             {
-                              "bottom": 0,
-                              "left": 0,
+                              "alignSelf": "flex-end",
+                              "backgroundColor": "rgba(179, 38, 30, 1)",
+                              "borderRadius": 8,
+                              "color": "rgba(255, 255, 255, 1)",
+                              "fontSize": 8,
+                              "height": 16,
+                              "lineHeight": 8,
+                              "minWidth": 16,
                               "opacity": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
+                              "overflow": "hidden",
+                              "paddingHorizontal": 3,
+                              "textAlign": "center",
+                              "textAlignVertical": "center",
                             }
                           }
-                        >
-                          <Text
-                            maxFontSizeMultiplier={1}
-                            selectable={false}
-                            style={
+                        />
+                      </View>
+                    </View>
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "height": 16,
+                          "paddingBottom": 2,
+                        }
+                      }
+                    >
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "bottom": 0,
+                            "left": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          }
+                        }
+                      >
+                        <Text
+                          maxFontSizeMultiplier={1}
+                          style={
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
                               [
+                                {
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
+                                },
+                                {
+                                  "color": "rgba(73, 69, 79, 1)",
+                                  "fontFamily": "System",
+                                  "fontSize": 12,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.5,
+                                  "lineHeight": 16,
+                                },
+                              ],
+                            ]
+                          }
+                        >
+                          Auth Code Grant
+                        </Text>
+                      </View>
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 1,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          }
+                        }
+                      >
+                        <Text
+                          maxFontSizeMultiplier={1}
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                {
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
+                                },
+                                {
+                                  "color": "rgba(73, 69, 79, 1)",
+                                  "fontFamily": "System",
+                                  "fontSize": 12,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.5,
+                                  "lineHeight": 16,
+                                },
+                              ],
+                            ]
+                          }
+                        >
+                          Auth Code Grant
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  accessibilityRole="button"
+                  accessibilityState={
+                    {
+                      "busy": undefined,
+                      "checked": undefined,
+                      "disabled": undefined,
+                      "expanded": undefined,
+                      "selected": false,
+                    }
+                  }
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    [
+                      {
+                        "flex": 1,
+                        "paddingVertical": 6,
+                      },
+                      {
+                        "paddingVertical": 0,
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    pointerEvents="none"
+                    style={
+                      {
+                        "paddingBottom": 16,
+                        "paddingTop": 12,
+                      }
+                    }
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignSelf": "center",
+                          "height": 32,
+                          "justifyContent": "center",
+                          "marginBottom": 4,
+                          "marginHorizontal": 12,
+                          "marginTop": 0,
+                          "width": 32,
+                        }
+                      }
+                    >
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
+                          }
+                        }
+                      >
+                        <Text />
+                      </View>
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 1,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
+                          }
+                        }
+                      >
+                        <Text />
+                      </View>
+                      <View
+                        style={
+                          [
+                            {
+                              "left": 0,
+                              "position": "absolute",
+                            },
+                            {
+                              "right": 0,
+                              "top": 2,
+                            },
+                          ]
+                        }
+                      >
+                        <Text
+                          collapsable={false}
+                          numberOfLines={1}
+                          style={
+                            {
+                              "alignSelf": "flex-end",
+                              "backgroundColor": "rgba(179, 38, 30, 1)",
+                              "borderRadius": 8,
+                              "color": "rgba(255, 255, 255, 1)",
+                              "fontSize": 8,
+                              "height": 16,
+                              "lineHeight": 8,
+                              "minWidth": 16,
+                              "opacity": 0,
+                              "overflow": "hidden",
+                              "paddingHorizontal": 3,
+                              "textAlign": "center",
+                              "textAlignVertical": "center",
+                            }
+                          }
+                        />
+                      </View>
+                    </View>
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "height": 16,
+                          "paddingBottom": 2,
+                        }
+                      }
+                    >
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "bottom": 0,
+                            "left": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          }
+                        }
+                      >
+                        <Text
+                          maxFontSizeMultiplier={1}
+                          style={
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                {
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
+                                },
+                                {
+                                  "color": "rgba(73, 69, 79, 1)",
+                                  "fontFamily": "System",
+                                  "fontSize": 12,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.5,
+                                  "lineHeight": 16,
+                                },
+                              ],
+                            ]
+                          }
+                        >
+                          Api
+                        </Text>
+                      </View>
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 1,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          }
+                        }
+                      >
+                        <Text
+                          maxFontSizeMultiplier={1}
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                {
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
+                                },
+                                {
+                                  "color": "rgba(73, 69, 79, 1)",
+                                  "fontFamily": "System",
+                                  "fontSize": 12,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.5,
+                                  "lineHeight": 16,
+                                },
+                              ],
+                            ]
+                          }
+                        >
+                          Api
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  accessibilityRole="button"
+                  accessibilityState={
+                    {
+                      "busy": undefined,
+                      "checked": undefined,
+                      "disabled": undefined,
+                      "expanded": undefined,
+                      "selected": true,
+                    }
+                  }
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    [
+                      {
+                        "flex": 1,
+                        "paddingVertical": 6,
+                      },
+                      {
+                        "paddingVertical": 0,
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    pointerEvents="none"
+                    style={
+                      {
+                        "paddingBottom": 16,
+                        "paddingTop": 12,
+                      }
+                    }
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignSelf": "center",
+                          "height": 32,
+                          "justifyContent": "center",
+                          "marginBottom": 4,
+                          "marginHorizontal": 12,
+                          "marginTop": 0,
+                          "width": 32,
+                        }
+                      }
+                    >
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignSelf": "center",
+                            "backgroundColor": "rgba(232, 222, 248, 1)",
+                            "borderRadius": 16,
+                            "height": 32,
+                            "transform": [
+                              {
+                                "scaleX": 1,
+                              },
+                            ],
+                            "width": 64,
+                          }
+                        }
+                      />
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 1,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
+                          }
+                        }
+                      >
+                        <Text />
+                      </View>
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "alignItems": "center",
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 4,
+                          }
+                        }
+                      >
+                        <Text />
+                      </View>
+                      <View
+                        style={
+                          [
+                            {
+                              "left": 0,
+                              "position": "absolute",
+                            },
+                            {
+                              "right": 0,
+                              "top": 2,
+                            },
+                          ]
+                        }
+                      >
+                        <Text
+                          collapsable={false}
+                          numberOfLines={1}
+                          style={
+                            {
+                              "alignSelf": "flex-end",
+                              "backgroundColor": "rgba(179, 38, 30, 1)",
+                              "borderRadius": 8,
+                              "color": "rgba(255, 255, 255, 1)",
+                              "fontSize": 8,
+                              "height": 16,
+                              "lineHeight": 8,
+                              "minWidth": 16,
+                              "opacity": 0,
+                              "overflow": "hidden",
+                              "paddingHorizontal": 3,
+                              "textAlign": "center",
+                              "textAlignVertical": "center",
+                            }
+                          }
+                        />
+                      </View>
+                    </View>
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "height": 16,
+                          "paddingBottom": 2,
+                        }
+                      }
+                    >
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "bottom": 0,
+                            "left": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          }
+                        }
+                      >
+                        <Text
+                          maxFontSizeMultiplier={1}
+                          style={
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                {
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
+                                },
                                 {
                                   "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
@@ -2463,34 +2392,66 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                              ],
+                            ]
+                          }
+                        >
+                          Settings
+                        </Text>
+                      </View>
+                      <View
+                        collapsable={false}
+                        style={
+                          {
+                            "bottom": 0,
+                            "left": 0,
+                            "opacity": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          }
+                        }
+                      >
+                        <Text
+                          maxFontSizeMultiplier={1}
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 12,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.5,
+                                "lineHeight": 16,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
                                 {
-                                  "textAlign": "left",
+                                  "backgroundColor": "transparent",
+                                  "fontSize": 12,
+                                  "height": 56,
+                                  "textAlign": "center",
                                 },
                                 {
-                                  "writingDirection": "ltr",
+                                  "color": "rgba(28, 27, 31, 1)",
+                                  "fontFamily": "System",
+                                  "fontSize": 12,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.5,
+                                  "lineHeight": 16,
                                 },
-                                [
-                                  {
-                                    "backgroundColor": "transparent",
-                                    "fontSize": 12,
-                                    "height": 56,
-                                    "textAlign": "center",
-                                  },
-                                  {
-                                    "color": "rgba(28, 27, 31, 1)",
-                                    "fontFamily": "System",
-                                    "fontSize": 12,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.5,
-                                    "lineHeight": 16,
-                                  },
-                                ],
-                              ]
-                            }
-                          >
-                            Settings
-                          </Text>
-                        </View>
+                              ],
+                            ]
+                          }
+                        >
+                          Settings
+                        </Text>
                       </View>
                     </View>
                   </View>
