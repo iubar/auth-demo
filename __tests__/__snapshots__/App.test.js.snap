@@ -41,16 +41,8 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
         collapsable={false}
         style={
           {
-            "alignSelf": undefined,
             "backgroundColor": "rgba(255, 251, 254, 1)",
-            "bottom": undefined,
-            "end": undefined,
-            "flex": undefined,
             "height": 64,
-            "left": undefined,
-            "opacity": undefined,
-            "position": undefined,
-            "right": undefined,
             "shadowColor": "#000",
             "shadowOffset": {
               "height": 0,
@@ -58,10 +50,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
             },
             "shadowOpacity": 0,
             "shadowRadius": 0,
-            "start": undefined,
-            "top": undefined,
-            "transform": undefined,
-            "width": undefined,
           }
         }
         testID="appbar-header-outer-layer"
@@ -127,13 +115,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
               style={
                 [
                   {
-                    "fontFamily": "System",
-                    "fontSize": 22,
-                    "fontWeight": "400",
-                    "letterSpacing": 0,
-                    "lineHeight": 28,
-                  },
-                  {
                     "textAlign": "left",
                   },
                   {
@@ -142,15 +123,24 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                   },
                   [
                     {
-                      "color": "rgba(28, 27, 31, 1)",
                       "fontFamily": "System",
                       "fontSize": 22,
                       "fontWeight": "400",
                       "letterSpacing": 0,
                       "lineHeight": 28,
                     },
-                    false,
-                    undefined,
+                    [
+                      {
+                        "color": "rgba(28, 27, 31, 1)",
+                        "fontFamily": "System",
+                        "fontSize": 22,
+                        "fontWeight": "400",
+                        "letterSpacing": 0,
+                        "lineHeight": 28,
+                      },
+                      false,
+                      undefined,
+                    ],
                   ],
                 ]
               }
@@ -558,10 +548,10 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                                 {
                                   "overflow": "hidden",
                                 },
-                                false,
                                 [
                                   {
-                                    "padding": 8,
+                                    "paddingRight": 24,
+                                    "paddingVertical": 8,
                                   },
                                   undefined,
                                 ],
@@ -572,8 +562,8 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               pointerEvents="none"
                               style={
                                 {
-                                  "alignItems": "center",
                                   "flexDirection": "row",
+                                  "marginVertical": 6,
                                 }
                               }
                             >
@@ -581,7 +571,7 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                                 style={
                                   [
                                     {
-                                      "margin": 8,
+                                      "paddingLeft": 16,
                                     },
                                     {
                                       "flex": 1,
@@ -624,7 +614,8 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                                 style={
                                   [
                                     {
-                                      "margin": 8,
+                                      "marginVertical": 6,
+                                      "paddingLeft": 8,
                                     },
                                     undefined,
                                   ]
@@ -657,19 +648,10 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                       collapsable={false}
                       style={
                         {
-                          "alignSelf": undefined,
                           "backgroundColor": "red",
                           "borderRadius": 10,
-                          "bottom": undefined,
-                          "end": undefined,
-                          "flex": undefined,
-                          "height": undefined,
-                          "left": undefined,
                           "marginHorizontal": 20,
                           "marginVertical": 20,
-                          "opacity": undefined,
-                          "position": undefined,
-                          "right": undefined,
                           "shadowColor": "#000",
                           "shadowOffset": {
                             "height": 0,
@@ -677,10 +659,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           },
                           "shadowOpacity": 0,
                           "shadowRadius": 0,
-                          "start": undefined,
-                          "top": undefined,
-                          "transform": undefined,
-                          "width": undefined,
                         }
                       }
                       testID="button-container-outer-layer"
@@ -743,7 +721,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               {
                                 "overflow": "hidden",
                               },
-                              false,
                               {
                                 "borderRadius": 10,
                               },
@@ -769,13 +746,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               style={
                                 [
                                   {
-                                    "fontFamily": "System",
-                                    "fontSize": 14,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.1,
-                                    "lineHeight": 20,
-                                  },
-                                  {
                                     "textAlign": "left",
                                   },
                                   {
@@ -784,26 +754,35 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                                   },
                                   [
                                     {
-                                      "marginHorizontal": 16,
-                                      "marginVertical": 9,
-                                      "textAlign": "center",
-                                    },
-                                    false,
-                                    {
-                                      "marginHorizontal": 24,
-                                      "marginVertical": 10,
-                                    },
-                                    undefined,
-                                    false,
-                                    {
-                                      "color": "rgba(255, 255, 255, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
                                       "fontWeight": "500",
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    undefined,
+                                    [
+                                      {
+                                        "marginHorizontal": 16,
+                                        "marginVertical": 9,
+                                        "textAlign": "center",
+                                      },
+                                      false,
+                                      {
+                                        "marginHorizontal": 24,
+                                        "marginVertical": 10,
+                                      },
+                                      undefined,
+                                      false,
+                                      {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontFamily": "System",
+                                        "fontSize": 14,
+                                        "fontWeight": "500",
+                                        "letterSpacing": 0.1,
+                                        "lineHeight": 20,
+                                      },
+                                      undefined,
+                                    ],
                                   ],
                                 ]
                               }
@@ -819,19 +798,10 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                       collapsable={false}
                       style={
                         {
-                          "alignSelf": undefined,
                           "backgroundColor": "red",
                           "borderRadius": 10,
-                          "bottom": undefined,
-                          "end": undefined,
-                          "flex": undefined,
-                          "height": undefined,
-                          "left": undefined,
                           "marginHorizontal": 20,
                           "marginVertical": 20,
-                          "opacity": undefined,
-                          "position": undefined,
-                          "right": undefined,
                           "shadowColor": "#000",
                           "shadowOffset": {
                             "height": 0,
@@ -839,10 +809,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           },
                           "shadowOpacity": 0,
                           "shadowRadius": 0,
-                          "start": undefined,
-                          "top": undefined,
-                          "transform": undefined,
-                          "width": undefined,
                         }
                       }
                       testID="button-container-outer-layer"
@@ -906,7 +872,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               {
                                 "overflow": "hidden",
                               },
-                              false,
                               {
                                 "borderRadius": 10,
                               },
@@ -932,13 +897,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               style={
                                 [
                                   {
-                                    "fontFamily": "System",
-                                    "fontSize": 14,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.1,
-                                    "lineHeight": 20,
-                                  },
-                                  {
                                     "textAlign": "left",
                                   },
                                   {
@@ -947,26 +905,35 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                                   },
                                   [
                                     {
-                                      "marginHorizontal": 16,
-                                      "marginVertical": 9,
-                                      "textAlign": "center",
-                                    },
-                                    false,
-                                    {
-                                      "marginHorizontal": 24,
-                                      "marginVertical": 10,
-                                    },
-                                    undefined,
-                                    false,
-                                    {
-                                      "color": "rgba(255, 255, 255, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
                                       "fontWeight": "500",
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    undefined,
+                                    [
+                                      {
+                                        "marginHorizontal": 16,
+                                        "marginVertical": 9,
+                                        "textAlign": "center",
+                                      },
+                                      false,
+                                      {
+                                        "marginHorizontal": 24,
+                                        "marginVertical": 10,
+                                      },
+                                      undefined,
+                                      false,
+                                      {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontFamily": "System",
+                                        "fontSize": 14,
+                                        "fontWeight": "500",
+                                        "letterSpacing": 0.1,
+                                        "lineHeight": 20,
+                                      },
+                                      undefined,
+                                    ],
                                   ],
                                 ]
                               }
@@ -982,19 +949,10 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                       collapsable={false}
                       style={
                         {
-                          "alignSelf": undefined,
                           "backgroundColor": "red",
                           "borderRadius": 10,
-                          "bottom": undefined,
-                          "end": undefined,
-                          "flex": undefined,
-                          "height": undefined,
-                          "left": undefined,
                           "marginHorizontal": 20,
                           "marginVertical": 20,
-                          "opacity": undefined,
-                          "position": undefined,
-                          "right": undefined,
                           "shadowColor": "#000",
                           "shadowOffset": {
                             "height": 0,
@@ -1002,10 +960,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           },
                           "shadowOpacity": 0,
                           "shadowRadius": 0,
-                          "start": undefined,
-                          "top": undefined,
-                          "transform": undefined,
-                          "width": undefined,
                         }
                       }
                       testID="button-container-outer-layer"
@@ -1068,7 +1022,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               {
                                 "overflow": "hidden",
                               },
-                              false,
                               {
                                 "borderRadius": 10,
                               },
@@ -1094,13 +1047,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               style={
                                 [
                                   {
-                                    "fontFamily": "System",
-                                    "fontSize": 14,
-                                    "fontWeight": "500",
-                                    "letterSpacing": 0.1,
-                                    "lineHeight": 20,
-                                  },
-                                  {
                                     "textAlign": "left",
                                   },
                                   {
@@ -1109,26 +1055,35 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                                   },
                                   [
                                     {
-                                      "marginHorizontal": 16,
-                                      "marginVertical": 9,
-                                      "textAlign": "center",
-                                    },
-                                    false,
-                                    {
-                                      "marginHorizontal": 24,
-                                      "marginVertical": 10,
-                                    },
-                                    undefined,
-                                    false,
-                                    {
-                                      "color": "rgba(255, 255, 255, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
                                       "fontWeight": "500",
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
                                     },
-                                    undefined,
+                                    [
+                                      {
+                                        "marginHorizontal": 16,
+                                        "marginVertical": 9,
+                                        "textAlign": "center",
+                                      },
+                                      false,
+                                      {
+                                        "marginHorizontal": 24,
+                                        "marginVertical": 10,
+                                      },
+                                      undefined,
+                                      false,
+                                      {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontFamily": "System",
+                                        "fontSize": 14,
+                                        "fontWeight": "500",
+                                        "letterSpacing": 0.1,
+                                        "lineHeight": 20,
+                                      },
+                                      undefined,
+                                    ],
                                   ],
                                 ]
                               }
@@ -1400,15 +1355,9 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
           collapsable={false}
           style={
             {
-              "alignSelf": undefined,
               "backgroundColor": "transparent",
               "bottom": 0,
-              "end": undefined,
-              "flex": undefined,
-              "height": undefined,
               "left": 0,
-              "opacity": undefined,
-              "position": undefined,
               "right": 0,
               "shadowColor": "#000",
               "shadowOffset": {
@@ -1417,10 +1366,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
               },
               "shadowOpacity": 0,
               "shadowRadius": 0,
-              "start": undefined,
-              "top": undefined,
-              "transform": undefined,
-              "width": undefined,
             }
           }
           testID="bottom-navigation-bar-outer-layer"
@@ -1621,13 +1566,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -1636,19 +1574,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(73, 69, 79, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
@@ -1675,13 +1622,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -1690,19 +1630,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(73, 69, 79, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
@@ -1863,13 +1812,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -1878,19 +1820,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(73, 69, 79, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
@@ -1917,13 +1868,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -1932,19 +1876,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(73, 69, 79, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
@@ -2105,13 +2058,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -2120,19 +2066,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(73, 69, 79, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
@@ -2159,13 +2114,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -2174,19 +2122,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(73, 69, 79, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
@@ -2364,13 +2321,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -2379,19 +2329,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(28, 27, 31, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
@@ -2418,13 +2377,6 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                           style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 12,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.5,
-                                "lineHeight": 16,
-                              },
-                              {
                                 "textAlign": "left",
                               },
                               {
@@ -2433,19 +2385,28 @@ exports[`<App /> matches snapshot and renders correctly 1`] = `
                               },
                               [
                                 {
-                                  "backgroundColor": "transparent",
-                                  "fontSize": 12,
-                                  "height": 56,
-                                  "textAlign": "center",
-                                },
-                                {
-                                  "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 12,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.5,
                                   "lineHeight": 16,
                                 },
+                                [
+                                  {
+                                    "backgroundColor": "transparent",
+                                    "fontSize": 12,
+                                    "height": 56,
+                                    "textAlign": "center",
+                                  },
+                                  {
+                                    "color": "rgba(28, 27, 31, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 12,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.5,
+                                    "lineHeight": 16,
+                                  },
+                                ],
                               ],
                             ]
                           }
