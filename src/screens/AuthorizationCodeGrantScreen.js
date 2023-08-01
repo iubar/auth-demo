@@ -21,7 +21,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		redirect_uri: '',
 		redirect_uri_desc: '',
 		laravel_redirect_uri: '',
-		useProxy: false,
 		data_to_send_printable: '',
 		client_id: 0,
 		screen_disabled: true,
@@ -59,20 +58,13 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let redirects = [];
 		let redirects_info = [];
 
-		let more = '';
-		if (this.state.useProxy) {
-			more = ' {useProxy: true}';
-		}
+		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
+		redirects[2] = (await AuthSession.makeRedirectUri()) + '/--/expo-auth-session';
+		redirects_info[2] = '/--/expo-auth-session';
 
 		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirects[2] = (await AuthSession.makeRedirectUri({ useProxy: this.state.useProxy })) + '/--/expo-auth-session';
-		redirects_info[2] = '/--/expo-auth-session' + more;
-
-		// Published project in the Expo Client (Environment: Production projects that you expo publish'd and opened in the Expo client.)
-		redirects[5] = await AuthSession.makeRedirectUri({
-			useProxy: this.state.useProxy,
-		});
-		redirects_info[5] = '{}' + more;
+		redirects[5] = await AuthSession.makeRedirectUri();
+		redirects_info[5] = '{}';
 
 		redirects[7] = redirects[2];
 		redirects_info[7] = redirects_info[2];
@@ -89,8 +81,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// - redirecting traffic from your application to the authentication service
 		// - redirecting response from the auth service to your application using a deep link
 		// The link is constructed from your Expo username and the Expo app name, which are appended to the proxy website.
-		// The auth.expo.io proxy is only used when startAsync is called, or when useProxy: true is passed to the promptAsync() method of an AuthRequest.
-		// Should use the `auth.expo.io` proxy: this is useful for testing managed native apps that require a custom URI scheme.
 		redirects[3] = redirects[2];
 		redirects_info[3] = redirects_info[5];
 
@@ -99,10 +89,9 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		// npx uri-scheme list
 		// se also the app.json config file
 		redirects[4] = await AuthSession.makeRedirectUri({
-			useProxy: this.state.useProxy,
 			native: 'mycoolredirect://',
 		});
-		redirects_info[4] = "{native: 'mycoolredirect://'}" + more;
+		redirects_info[4] = "{native: 'mycoolredirect://'}";
 
 		this.state.redirects = redirects;
 		this.state.redirects_info = redirects_info;
@@ -288,15 +277,12 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let request = await AuthSession.loadAsync(config, issuerOrDiscovery);
 
 		console.log('request.state : ' + JSON.stringify(request.state));
-		console.log('useProxy: ' + JSON.stringify(this.state.useProxy));
 		let result = null;
 		if (true) {
-			result = await request.promptAsync({
-				useProxy: this.state.useProxy,
-			}); // When invoked, a web browser will open up and prompt the user for authentication.
+			result = await request.promptAsync(); // When invoked, a web browser will open up and prompt the user for authentication.
 		} else {
 			const discovery = useAutoDiscovery('https://hr.iubar.it');
-			result = await request.promptAsync(discovery, { useProxy: this.state.useProxy });
+			result = await request.promptAsync(discovery);
 		}
 		if (result.type != 'success') {
 			// es: "error"  or "dismiss"
@@ -308,79 +294,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 		let code = result.params.code;
 		if (this.state.usePkce) {
 			let verifier = request.codeVerifier;
-			await this.exchangeToken(code, verifier);
-		} else {
-			await this.exchangeToken2(code);
-		}
-	};
-
-	/**
-	 * When requesting an access token using the authorization code grant,
-	 * consumers should specify their desired scopes as the scope query string parameter.
-	 * The scope parameter should be a space-delimited list of scopes (!)
-	 *
-	 * https://laravel.com/docs/9.x/passport#requesting-tokens
-	 *
-	 */
-	authCodeGrant2 = async () => {
-		let verifier = this.calcVerifier();
-		console.log('verifier: ' + verifier);
-		let codeChallenge = await this.calcCodeChallenge(verifier);
-		console.log('codeChallenge: ' + codeChallenge);
-		let state = this.calcState();
-		console.log('state: ' + state);
-		let config = null;
-		if (this.state.usePkce) {
-			config = {
-				client_id: this.context.client_id,
-				redirect_uri: this.state.redirect_uri,
-				response_type: 'code',
-				scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
-				state: state,
-				code_challenge_method: 'S256',
-				code_challenge: codeChallenge,
-			};
-		} else {
-			config = {
-				client_id: this.context.client_id,
-				redirect_uri: this.state.redirect_uri,
-				response_type: 'code',
-				scope: '*', // TODO: la documentazione dice di usare: 'scope' => '',
-				state: state,
-			};
-		}
-
-		console.log('config : ' + JSON.stringify(config));
-
-		let url = this.buildUrl(URL_AUTH, config);
-
-		console.log('authUrl: ' + url);
-
-		// let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
-		// console.log('discovery2; ' + JSON.stringify(discovery2))  // let discovery2 = await AuthSession.fetchDiscoveryAsync('https://hr.iubar.it'); // Fetch a DiscoveryDocument from a well-known resource provider that supports auto discovery.
-
-		// se returnUrl non è specificato, startAsync() calcolerà il valore di dafault con sessionUrlProvider.getDefaultReturnUrl();
-
-		let returnUrl = AuthSession.getDefaultReturnUrl();
-		console.log('returnUrl (default): ' + JSON.stringify(returnUrl));
-
-		this.state.data_to_send_printable = 'AuthSession.startAsync({authUrl: ' + url + '})';
-
-		let result = await AuthSession.startAsync({ authUrl: url }); // NOTICE: The auth.expo.io proxy is ALWAYS used (it calls openAuthSessionAsync)
-		// Attenzione: redirectUrl rappresenta il deepLink all'app e non ha nulla a che vedere con redirect_uri
-
-		if (result.type != 'success') {
-			// es: "error"  or "dismiss"
-			console.log('WARNING: result.type is ' + JSON.stringify(result.type));
-			return null;
-		} else {
-			console.log('result: ' + JSON.stringify(result));
-		}
-
-		let code = result.params.code;
-
-		if (this.state.usePkce) {
-			console.log('use pkce...');
 			await this.exchangeToken(code, verifier);
 		} else {
 			await this.exchangeToken2(code);
@@ -486,11 +399,6 @@ class AuthorizationCodeGrantScreen extends React.Component {
 
 	onToggleSwitch = () => this.setState({ usePkce: !this.state.usePkce });
 
-	onToggleSwitch2 = async () => {
-		await this.setState({ useProxy: !this.state.useProxy });
-		await this.updateGui();
-	};
-
 	render() {
 		console.log('rendering....');
 
@@ -524,36 +432,9 @@ class AuthorizationCodeGrantScreen extends React.Component {
 										Authorize 1
 									</Button>
 									<Caption>loadAsync() + promptAsync()</Caption>
-
-									<View style={styles.inline}>
-										<Caption>use Proxy </Caption>
-										<Switch
-											color={this.props.theme.colors.primary}
-											value={this.state.useProxy}
-											onValueChange={this.onToggleSwitch2}
-										/>
-									</View>
-									<Caption>
-										The auth.expo.io proxy is used when startAsync is called (always), or when useProxy: true is passed
-										to the promptAsync() method of an AuthRequest.
-									</Caption>
 								</View>
 							</View>
 							<Divider style={{ marginVertical: 20 }} />
-							<View style={styles.box}>
-								<View style={styles.centered}>
-									<Button
-										color={this.props.theme.colors.accent}
-										style={{ marginHorizontal: 20, marginVertical: 20 }}
-										mode="contained"
-										onPress={this.authCodeGrant2}>
-										Authorize 2
-									</Button>
-									<Caption>startAsync(), usa sempre il proxy</Caption>
-								</View>
-							</View>
-							<Divider style={{ marginVertical: 20 }} />
-
 							<View style={styles.centered}>
 								<View style={styles.inline}>
 									<Caption>use Pkce </Caption>
