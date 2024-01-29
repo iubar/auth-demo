@@ -3,6 +3,11 @@
     "name": "Auth Demo",
     "slug": "auth-demo",
     "version": "1.0.4",
+    "privacy": "public",
+    "platforms": [
+      "ios",
+      "android"
+    ],	
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -16,6 +21,7 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {},	
     "ios": {
       "supportsTablet": true
     },
