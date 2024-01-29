@@ -28,6 +28,9 @@
         "projectId": "9d7f9f0e-98a4-46ed-8d30-732542d69903"
       }
     },
-    "owner": "borgo"
+    "owner": "borgo",
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }
